@@ -68,6 +68,30 @@
       background-color: #ffffff;
     }
 
+    /* Slider Container */
+    .slider-wrapper {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .slider-track {
+      display: flex;
+      transition: transform 0.4s ease-in-out;
+      width: 100%;
+    }
+
+    .slide-item {
+      min-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .slide-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
     .banner-btn {
       width: 100%;
       display: block;
@@ -96,13 +120,13 @@
       border-radius: 16px;
     }
 
-    /* Indicator dots for header banner */
+    /* Indicator dots for slider */
     .dots-container {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 8px;
-      padding: 4px 0;
+      padding: 8px 0;
       background-color: #ffffff;
     }
 
@@ -112,6 +136,8 @@
       background-color: #cccccc;
       border-radius: 50%;
       opacity: 0.5;
+      cursor: pointer;
+      transition: background-color 0.3s, opacity 0.3s;
     }
 
     .dot.active {
@@ -129,19 +155,32 @@
       <img src="https://via.placeholder.com/40" alt="Profile" class="profile-img" id="pictureUrl" style="display:none;">
     </div>
 
-    <!-- รายการปุ่มแบนเนอร์เมนูหลัก -->
+    <!-- รายการแบนเนอร์และเมนูหลัก -->
     <div class="menu-container">
       
-      <!-- Header Banner (ข่าวสารประชาสัมพันธ์) -->
-      <a href="#" class="banner-btn" onclick="openLink('news')">
-        <img src="https://lh3.googleusercontent.com/d/1Vd05uDkD7ty3dXa8BWF6e4UZBPnHghdj" alt="ข่าวสารประชาสัมพันธ์">
-      </a>
+      <!-- News Image Slider (เลื่อนได้ 3 ภาพอัตโนมัติ / ปัดได้) -->
+      <div class="slider-wrapper" id="sliderWrapper">
+        <div class="slider-track" id="sliderTrack">
+          <!-- ภาพที่ 1 -->
+          <div class="slide-item">
+            <img src="https://lh3.googleusercontent.com/d/1Vd05uDkD7ty3dXa8BWF6e4UZBPnHghdj" alt="ข่าวสารประชาสัมพันธ์ 1">
+          </div>
+          <!-- ภาพที่ 2 (สามารถเปลี่ยนลิงก์รูปภาพ Google Drive ตรงนี้ได้เลยครับ) -->
+          <div class="slide-item">
+            <img src="https://lh3.googleusercontent.com/d/1Vd05uDkD7ty3dXa8BWF6e4UZBPnHghdj" alt="ข่าวสารประชาสัมพันธ์ 2">
+          </div>
+          <!-- ภาพที่ 3 (สามารถเปลี่ยนลิงก์รูปภาพ Google Drive ตรงนี้ได้เลยครับ) -->
+          <div class="slide-item">
+            <img src="https://lh3.googleusercontent.com/d/1Vd05uDkD7ty3dXa8BWF6e4UZBPnHghdj" alt="ข่าวสารประชาสัมพันธ์ 3">
+          </div>
+        </div>
+      </div>
 
-      <!-- จุดสไลด์ -->
-      <div class="dots-container">
-        <div class="dot active"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+      <!-- จุดสไลด์ (Dots) 3 จุด -->
+      <div class="dots-container" id="dotsContainer">
+        <div class="dot active" onclick="currentSlide(0)"></div>
+        <div class="dot" onclick="currentSlide(1)"></div>
+        <div class="dot" onclick="currentSlide(2)"></div>
       </div>
 
       <!-- 1. ปุ่มระบบการลาหยุดของพนักงาน (ขอบมน) -->
@@ -178,8 +217,95 @@
 
     document.addEventListener("DOMContentLoaded", function() {
       initializeLiff(MY_LIFF_ID);
+      initSlider();
     });
 
+    // --- ส่วนจัดการ Image Slider ---
+    let currentIndex = 0;
+    const totalSlides = 3;
+    let slideInterval;
+
+    function initSlider() {
+      const wrapper = document.getElementById('sliderWrapper');
+      
+      // ตั้งเวลาเลื่อนภาพอัตโนมัติทุกๆ 5 วินาที
+      startAutoSlide();
+
+      // รองรับการปัดหน้าจอ (Touch Swipe) บนมือถือ
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      wrapper.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        stopAutoSlide(); // หยุดชั่วคราวเมื่อผู้ใช้กำลังสัมผัส
+      }, {passive: true});
+
+      wrapper.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+        startAutoSlide(); // เริ่มจับเวลาต่อหลังปัดเสร็จ
+      }, {passive: true});
+    }
+
+    function handleSwipe() {
+      if (touchEndX < touchStartX - 50) {
+        // ปัดซ้าย -> ไปภาพถัดไป
+        nextSlide();
+      }
+      if (touchEndX > touchStartX + 50) {
+        // ปัดขวา -> ไปภาพก่อนหน้า
+        prevSlide();
+      }
+    }
+
+    function showSlide(index) {
+      if (index >= totalSlides) {
+        currentIndex = 0;
+      } else if (index < 0) {
+        currentIndex = totalSlides - 1;
+      } else {
+        currentIndex = index;
+      }
+
+      const track = document.getElementById('sliderTrack');
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+      // อัปเดตจุด Indicator Dots
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentIndex);
+      });
+    }
+
+    function nextSlide() {
+      showSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+      showSlide(currentIndex - 1);
+    }
+
+    function currentSlide(index) {
+      showSlide(index);
+      stopAutoSlide();
+      startAutoSrcTimer();
+    }
+
+    function startAutoSlide() {
+      slideInterval = setInterval(() => {
+        nextSlide();
+      }, 5000); // ทุกๆ 5 วินาที
+    }
+
+    function stopAutoSlide() {
+      clearInterval(slideInterval);
+    }
+
+    function startAutoSrcTimer() {
+      startAutoSlide();
+    }
+
+    // --- ส่วนจัดการ LINE LIFF Profile ---
     function initializeLiff(liffId) {
       liff.init({ liffId: liffId })
         .then(() => {
@@ -215,9 +341,6 @@
 
     function openLink(menuType) {
       switch(menuType) {
-        case 'news':
-          alert('เปิดหน้า: ข่าวสารประชาสัมพันธ์');
-          break;
         case 'leave_system':
           alert('เปิดหน้า: ระบบการลาหยุดของพนักงาน');
           break;
@@ -225,10 +348,10 @@
           alert('เปิดหน้า: ตรวจสอบอายุงานและผลประโยชน์');
           break;
         case 'download_banner':
-          alert('เปิดหน้า: ดาวน์โหลดเอกสารต่างๆ');
+          alert('เปิดหน้า:ดาวน์โหลดเอกสารต่างๆ');
           break;
         case 'contact_admin':
-          alert('เปิดหน้า:ติดต่อผู้ดูแล');
+          alert('เปิดหน้า: ติดต่อผู้ดูแล');
           break;
       }
     }
