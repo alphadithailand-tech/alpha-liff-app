@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LINE LIFF App - Alpha D.I.</title>
+  <!-- โหลด LIFF SDK -->
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tahoma', 'Segoe UI', Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background-color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation Bar */
+    .header {
+      background-color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      height: 64px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .user-name {
+      font-size: 15px;
+      font-weight: bold;
+      color: #333333;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 75%;
+    }
+
+    .profile-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      background-color: #e0e0e0;
+      border: 1px solid #ddd;
+    }
+
+    /* Banner Menu List */
+    .menu-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 12px;
+      background-color: #ffffff;
+    }
+
+    .banner-btn {
+      width: 100%;
+      display: block;
+      border: none;
+      background: none;
+      cursor: pointer;
+      outline: none;
+      padding: 0;
+      text-align: center;
+    }
+
+    .banner-btn img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ตกแต่งปุ่มเมนูหลักตรงกลางให้ขอบโค้งมน */
+    .rounded-banner {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .rounded-banner img {
+      border-radius: 16px;
+    }
+
+    /* Indicator dots for header banner */
+    .dots-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+      background-color: #ffffff;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      background-color: #cccccc;
+      border-radius: 50%;
+      opacity: 0.5;
+    }
+
+    .dot.active {
+      opacity: 1;
+      background-color: #333333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header ส่วนแสดงชื่อและรูปโปรไฟล์ LINE -->
+    <div class="header">
+      <div class="user-name" id="displayName">กำลังโหลดข้อมูลโปรไฟล์...</div>
+      <img src="https://via.placeholder.com/40" alt="Profile" class="profile-img" id="pictureUrl" style="display:none;">
+    </div>
+
+    <!-- รายการปุ่มแบนเนอร์เมนูหลัก -->
+    <div class="menu-container">
+      
+      <!-- Header Banner (ข่าวสารประชาสัมพันธ์) -->
+      <a href="#" class="banner-btn" onclick="openLink('news')">
+        <img src="https://lh3.googleusercontent.com/d/1Vd05uDkD7ty3dXa8BWF6e4UZBPnHghdj" alt="ข่าวสารประชาสัมพันธ์">
+      </a>
+
+      <!-- จุดสไลด์ -->
+      <div class="dots-container">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <!-- 1. ปุ่มระบบการลาหยุดของพนักงาน (ขอบมน) -->
+      <button class="banner-btn rounded-banner" onclick="openLink('leave_system')">
+        <img src="https://lh3.googleusercontent.com/d/1KoanDHszHb1jpiFcCNB_UtvldAzeivN7" alt="ระบบการลาหยุดของพนักงาน">
+      </button>
+
+      <!-- 2. ปุ่มตรวจสอบอายุงานและผลประโยชน์ (ขอบมน) -->
+      <button class="banner-btn rounded-banner" onclick="openLink('check_benefit')">
+        <img src="https://lh3.googleusercontent.com/d/1EtTTuYlvQJ2TAYCij9Jr3n15JTpMUJJj" alt="ตรวจสอบอายุงานและผลประโยชน์">
+      </button>
+
+      <!-- 3. ปุ่มดาวน์โหลดเอกสารต่างๆ (ขอบมน) -->
+      <button class="banner-btn rounded-banner" onclick="openLink('download_banner')">
+        <img src="https://lh3.googleusercontent.com/d/1kbKqVY4VjHmIHUmksjJnbOQOTKPFQAYO" alt="ดาวน์โหลดเอกสารต่างๆ">
+      </button>
+
+      <!-- 4. ปุ่มติดต่อผู้ดูแล (ขอบมน) -->
+      <button class="banner-btn rounded-banner" onclick="openLink('contact_admin')">
+        <img src="https://lh3.googleusercontent.com/d/1DRopnuglTV32GPY5rIcrF6vN6xBpyaa3" alt="ติดต่อผู้ดูแล">
+      </button>
+
+      <!-- Footer Banner (คนของเราคือพลังขององค์กร) -->
+      <div class="banner-btn" style="margin-top: 6px;">
+        <img src="https://lh3.googleusercontent.com/d/1ok2FxA1AQ5RaaCjCdodbJlZ3ObjrMNyV" alt="คนของเราคือพลังขององค์กร">
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // LIFF ID ของคุณ
+    const MY_LIFF_ID = '2012053598-ClINT0ab';
+
+    document.addEventListener("DOMContentLoaded", function() {
+      initializeLiff(MY_LIFF_ID);
+    });
+
+    function initializeLiff(liffId) {
+      liff.init({ liffId: liffId })
+        .then(() => {
+          if (!liff.isLoggedIn()) {
+            liff.login();
+          } else {
+            getUserProfile();
+          }
+        })
+        .catch((err) => {
+          console.error('LIFF Initialization failed', err);
+          document.getElementById('displayName').innerText = 'ไม่สามารถเชื่อมต่อ LIFF ได้';
+        });
+    }
+
+    function getUserProfile() {
+      liff.getProfile()
+        .then((profile) => {
+          if (profile.displayName) {
+            document.getElementById('displayName').innerText = profile.displayName;
+          }
+          if (profile.pictureUrl) {
+            const imgEl = document.getElementById('pictureUrl');
+            imgEl.src = profile.pictureUrl;
+            imgEl.style.display = 'block';
+          }
+        })
+        .catch((err) => {
+          console.error('Error getting profile', err);
+          document.getElementById('displayName').innerText = 'ดึงข้อมูลโปรไฟล์ไม่สำเร็จ';
+        });
+    }
+
+    function openLink(menuType) {
+      switch(menuType) {
+        case 'news':
+          alert('เปิดหน้า: ข่าวสารประชาสัมพันธ์');
+          break;
+        case 'leave_system':
+          alert('เปิดหน้า: ระบบการลาหยุดของพนักงาน');
+          break;
+        case 'check_benefit':
+          alert('เปิดหน้า: ตรวจสอบอายุงานและผลประโยชน์');
+          break;
+        case 'download_banner':
+          alert('เปิดหน้า: ดาวน์โหลดเอกสารต่างๆ');
+          break;
+        case 'contact_admin':
+          alert('เปิดหน้า:ติดต่อผู้ดูแล');
+          break;
+      }
+    }
+  </script>
+</body>
+</html>
