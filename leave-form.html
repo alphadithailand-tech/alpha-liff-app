@@ -1,196 +1,704 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ยื่นคำขอลาหยุด</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Font: Prompt -->
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Prompt', sans-serif;
-            background-color: #f0f4f9;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แบบฟอร์มยื่นการลา - Alpha D.I.</title>
+  <!-- โหลด LIFF SDK -->
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tahoma', 'Segoe UI', Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      padding-bottom: 30px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background-color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    /* Top Navigation / Header */
+    .header-banner {
+      width: 100%;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .user-card {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #eee;
+      gap: 12px;
+    }
+
+    .profile-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #00c853;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-size: 15px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .user-subtext {
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* Form Content */
+    .form-container {
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .form-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #1a2530;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    .form-label span.required {
+      color: #e53935;
+    }
+
+    .form-control, .form-select {
+      width: 100%;
+      padding: 11px 12px;
+      font-size: 14px;
+      border: 1px solid #dcdfe6;
+      border-radius: 10px;
+      background-color: #fff;
+      color: #333;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: #00c853;
+      box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.1);
+    }
+
+    /* Leave Type Cards */
+    .leave-type-select {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .leave-option {
+      display: flex;
+      align-items: center;
+      padding: 12px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      background-color: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .leave-option.selected {
+      border-color: #00c853;
+      background-color: #f0fdf4;
+      box-shadow: 0 2px 6px rgba(0, 200, 83, 0.15);
+    }
+
+    .leave-icon {
+      font-size: 24px;
+      margin-right: 12px;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+
+    .leave-details {
+      flex: 1;
+    }
+
+    .leave-name {
+      font-size: 14px;
+      font-weight: bold;
+      color: #2d3748;
+    }
+
+    .leave-desc {
+      font-size: 12px;
+      color: #718096;
+    }
+
+    .radio-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #cbd5e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .leave-option.selected .radio-check {
+      border-color: #00c853;
+      background-color: #00c853;
+    }
+
+    .leave-option.selected .radio-check::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background-color: #fff;
+      border-radius: 50%;
+    }
+
+    /* Dynamic Date Slots Card */
+    .date-slot-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .slot-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .slot-title {
+      font-size: 13px;
+      font-weight: bold;
+      color: #475569;
+    }
+
+    .btn-remove-slot {
+      background: #fee2e2;
+      color: #ef4444;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .slot-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-add-slot {
+      background: #e0f2fe;
+      color: #0284c7;
+      border: 1px dashed #0284c7;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .btn-add-slot:hover {
+      background: #bae6fd;
+    }
+
+    .total-summary-box {
+      background-color: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 10px 14px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: bold;
+      color: #166534;
+    }
+
+    /* Submit Button */
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffffff;
+      background-color: #00c853;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
+      margin-top: 10px;
+    }
+
+    /* Popup Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #1e293b;
+      margin-bottom: 12px;
+      text-align: center;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 8px;
+    }
+
+    .summary-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 14px;
+      color: #334155;
+      margin-bottom: 16px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed #e2e8f0;
+      padding-bottom: 6px;
+    }
+
+    .summary-item-title {
+      font-weight: bold;
+      color: #64748b;
+    }
+
+    .summary-slot-list {
+      background: #f8fafc;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn-edit {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e0;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-confirm {
+      background: #00c853;
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body>
 
-    <!-- Container Card -->
-    <div class="w-full max-w-lg bg-white rounded-3xl shadow-lg border border-blue-100 overflow-hidden flex flex-col p-6 my-6">
+  <div class="container">
+    <!-- รูปส่วนหัว -->
+    <div class="header-banner">
+      <img src="https://lh3.googleusercontent.com/d/1KoanDHszHb1jpiFcCNB_UtvldAzeivN7" alt="เงื่อนไขการลา">
+    </div>
+
+    <!-- โปรไฟล์ LINE -->
+    <div class="user-card">
+      <img src="https://via.placeholder.com/44" alt="Profile" class="profile-img" id="pictureUrl">
+      <div class="user-info">
+        <div class="user-name" id="displayName">กำลังโหลดชื่อ...</div>
+        <div class="user-subtext">ผู้ขออนุมัติลา</div>
+      </div>
+    </div>
+
+    <!-- ฟอร์มการลา -->
+    <form class="form-container" id="leaveForm" onsubmit="openConfirmationModal(event)">
+      <div class="form-title">แบบฟอร์มยื่นขอลาหยุด</div>
+
+      <!-- ประเภทการลา -->
+      <div class="form-group">
+        <label class="form-label">ประเภทการลา <span class="required">*</span></label>
+        <input type="hidden" id="selectedLeaveType" name="leaveType" required>
         
-        <h1 class="text-xl font-bold text-slate-800 mb-1 text-center">แบบฟอร์มยื่นใบลา</h1>
-        <p class="text-xs text-slate-500 mb-6 text-center">กรุณากรอกข้อมูล เลือกช่วงเวลา และแนบหลักฐาน (ถ้ามี)</p>
-
-        <!-- Form -->
-        <form id="leaveForm" onsubmit="openSummaryModal(event)" class="space-y-4">
-            
-            <!-- ประเภทการลา -->
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1.5">ประเภทการลา</label>
-                <select id="leaveType" required class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:border-blue-500">
-                    <option value="">-- เลือกประเภทการลา --</option>
-                    <option value="ลาพักร้อน">ลาพักร้อน</option>
-                    <option value="ลากิจ">ลากิจ</option>
-                    <option value="ลากิจ ไม่รับค่าจ้าง">ลากิจ ไม่รับค่าจ้าง</option>
-                    <option value="ลาป่วย">ลาป่วย</option>
-                    <option value="ลาคลอดบุตร">ลาคลอดบุตร</option>
-                    <option value="ลาอุปสมบท">ลาอุปสมบท</option>
-                    <option value="ลาร่วมงานพิธีศพ">ลาร่วมงานพิธีศพ</option>
-                    <option value="ลาพักร้อนพิเศษ">ลาพักร้อนพิเศษ</option>
-                </select>
-            </div>
-
-            <!-- ส่วนเลือกช่วงเวลาการลา (หลายช่วง) -->
-            <div>
-                <div class="flex justify-between items-center mb-1.5">
-                    <label class="block text-xs font-semibold text-slate-700">ช่วงวันที่ต้องการลา</label>
-                    <button type="button" onclick="addLeavePeriod()" class="text-xs text-blue-600 font-semibold hover:underline">+ เพิ่มช่วงเวลาลา</button>
-                </div>
-                
-                <div id="leavePeriodsContainer" class="space-y-3">
-                    <!-- รายการช่วงเวลา (ชุดแรก) -->
-                    <div class="leave-period-item bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-2 relative">
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-[10px] text-slate-500 mb-1">วันที่เริ่มต้น/วันที่ลา</label>
-                                <input type="date" required class="leave-date w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] text-slate-500 mb-1">ช่วงเวลา</label>
-                                <select class="leave-session w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none">
-                                    <option value="เต็มวัน">เต็มวัน</option>
-                                    <option value="ครึ่งวันเช้า">ครึ่งวันเช้า</option>
-                                    <option value="ครึ่งวันบ่าย">ครึ่งวันบ่าย</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- เหตุผลการลา -->
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1.5">เหตุผลการลา</label>
-                <textarea id="leaveReason" rows="3" required placeholder="ระบุเหตุผลความจำเป็น..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:border-blue-500"></textarea>
-            </div>
-
-            <!-- แนบหลักฐานประกอบการลา -->
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1.5">แนบหลักฐานประกอบการลา (ถ้ามี)</label>
-                <input type="file" id="leaveFile" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 cursor-pointer bg-slate-50 border border-slate-200 rounded-xl">
-                <p class="text-[10px] text-slate-400 mt-1">รองรับไฟล์รูปภาพ (JPG, PNG) หรือ PDF</p>
-            </div>
-
-            <!-- ปุ่มกดส่งคำขอ -->
-            <div class="pt-2">
-                <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-2xl transition text-sm shadow-md shadow-blue-200">
-                    ส่งใบขออนุมัติลา
-                </button>
-            </div>
-        </form>
-    </div>
-
-    <!-- POP-UP สรุปข้อมูลการลา -->
-    <div id="summaryModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl border border-slate-100 space-y-4">
-            <h3 class="text-lg font-bold text-slate-800 text-center">📄 สรุปข้อมูลการขอลา</h3>
-            <p class="text-xs text-slate-500 text-center -mt-2">กรุณาตรวจสอบความถูกต้องก่อนกดยืนยัน</p>
-
-            <div class="bg-slate-50 p-4 rounded-2xl space-y-2 text-xs border border-slate-100">
-                <div><span class="text-slate-400">ประเภทการลา:</span> <span id="sumType" class="font-semibold text-slate-700"></span></div>
-                <div><span class="text-slate-400">ช่วงเวลาที่ลา:</span>
-                    <ul id="sumPeriods" class="list-disc list-inside mt-1 font-semibold text-slate-700 space-y-1"></ul>
-                </div>
-                <div><span class="text-slate-400">เหตุผลการลา:</span> <span id="sumReason" class="font-semibold text-slate-700"></span></div>
-                <div><span class="text-slate-400">หลักฐานที่แนบ:</span> <span id="sumFile" class="font-semibold text-slate-700"></span></div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3 pt-2">
-                <button type="button" onclick="closeSummaryModal()" class="py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-2xl transition text-xs">
-                    แก้ไขข้อมูล
-                </button>
-                <button type="button" onclick="confirmSubmit()" class="py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-2xl transition text-xs shadow-md shadow-blue-200">
-                    ยืนยันส่งใบลา
-                </button>
-            </div>
+        <div class="leave-type-select">
+          <div class="leave-option" onclick="selectType(this, 'ลาพักร้อน')">
+            <div class="leave-icon">🌴</div>
+            <div class="leave-details"><div class="leave-name">ลาพักร้อน</div><div class="leave-desc">พักผ่อนประจำปี / ฉุกเฉิน</div></div>
+            <div class="radio-check"></div>
+          </div>
+          <div class="leave-option" onclick="selectType(this, 'ลากิจ')">
+            <div class="leave-icon">🏠</div>
+            <div class="leave-details"><div class="leave-name">ลากิจ</div><div class="leave-desc">ประกอบกิจธุระส่วนตัว</div></div>
+            <div class="radio-check"></div>
+          </div>
+          <div class="leave-option" onclick="selectType(this, 'ลากิจ ไม่รับค่าจ้าง')">
+            <div class="leave-icon">📁</div>
+            <div class="leave-details"><div class="leave-name">ลากิจ ไม่รับค่าจ้าง</div><div class="leave-desc">กิจธุระส่วนตัวเพิ่มเติม</div></div>
+            <div class="radio-check"></div>
+          </div>
+          <div class="leave-option" onclick="selectType(this, 'ลาป่วย')">
+            <div class="leave-icon">🏥</div>
+            <div class="leave-details"><div class="leave-name">ลาป่วย</div><div class="leave-desc">กรณีเจ็บป่วยจริง</div></div>
+            <div class="radio-check"></div>
+          </div>
+          <div class="leave-option" onclick="selectType(this, 'ลาคลอดบุตร')">
+            <div class="leave-icon">👶</div>
+            <div class="leave-details"><div class="leave-name">ลาคลอดบุตร</div><div class="leave-desc">สำหรับลูกจ้างหญิงและชาย</div></div>
+            <div class="radio-check"></div>
+          </div>
+          <div class="leave-option" onclick="selectType(this, 'ลาอุปสมบท')">
+            <div class="leave-icon">🪷</div>
+            <div class="leave-details"><div class="leave-name">ลาอุปสมบท</div><div class="leave-desc">กรณีอุปสมบทตามประเพณี</div></div>
+            <div class="radio-check"></div>
+          </div>
+          <div class="leave-option" onclick="selectType(this, 'ลาร่วมงานพิธีศพ')">
+            <div class="leave-icon">🕊️</div>
+            <div class="leave-details"><div class="leave-name">ลาร่วมงานพิธีศพ</div><div class="leave-desc">งานศพญาติสายตรงตามกฎหมาย</div></div>
+            <div class="radio-check"></div>
+          </div>
+          <div class="leave-option" onclick="selectType(this, 'ลาพักร้อนพิเศษ')">
+            <div class="leave-icon">⭐</div>
+            <div class="leave-details"><div class="leave-name">ลาพักร้อนพิเศษ</div><div class="leave-desc">เมื่ออายุงานครบ 5 และ 10 ปี</div></div>
+            <div class="radio-check"></div>
+          </div>
         </div>
+      </div>
+
+      <!-- ส่วนจัดการช่วงวันลาหลายรายการ -->
+      <div class="form-group">
+        <label class="form-label">กำหนดช่วงวันลา <span class="required">*</span></label>
+        <div id="slotsContainer"></div>
+        
+        <button type="button" class="btn-add-slot" onclick="addDateSlot()">+ เพิ่มช่วงวันลาอีก</button>
+      </div>
+
+      <!-- สรุปรวมวันลา -->
+      <div class="total-summary-box">
+        <span>รวมจำนวนวันลาทั้งหมด:</span>
+        <span id="grandTotalDaysDisplay">0 วัน</span>
+      </div>
+
+      <!-- เหตุผลการลา -->
+      <div class="form-group">
+        <label class="form-label">เหตุผลการลา <span class="required">*</span></label>
+        <textarea class="form-control" id="reason" name="reason" rows="3" placeholder="ระบุเหตุผลการลา..." required></textarea>
+      </div>
+
+      <!-- แนบไฟล์ -->
+      <div class="form-group">
+        <label class="form-label">แนบเอกสาร / ใบรับรองแพทย์ (ถ้ามี)</label>
+        <input type="file" class="form-control" id="attachment" accept="image/*,.pdf">
+      </div>
+
+      <button type="submit" class="btn-submit">ส่งใบขออนุมัติลา</button>
+    </form>
+  </div>
+
+  <!-- Pop-up ตรวจสอบข้อมูลก่อนส่ง -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-content">
+      <div class="modal-title">📋 สรุปรายการขอลาหยุด</div>
+      <div class="summary-list">
+        <div class="summary-item">
+          <span class="summary-item-title">ผู้ขออนุมัติ:</span>
+          <span id="summaryName">-</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-item-title">ประเภทการลา:</span>
+          <span id="summaryLeaveType" style="color: #00c853; font-weight: bold;">-</span>
+        </div>
+        <div>
+          <span class="summary-item-title">ช่วงวันลาที่ระบุ:</span>
+          <div class="summary-slot-list" id="summarySlotsList"></div>
+        </div>
+        <div class="summary-item" style="margin-top: 6px;">
+          <span class="summary-item-title">รวมจำนวนวันลา:</span>
+          <span id="summaryTotalDays" style="font-weight: bold; color: #ef4444;">-</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-item-title">เหตุผลการลา:</span>
+          <span id="summaryReason">-</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-edit" onclick="closeModal()">กลับไปแก้ไข</button>
+        <button type="button" class="btn-confirm" id="btnFinalSubmit" onclick="confirmAndSend()">ยืนยันส่งใบลา</button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // ฟังก์ชันเพิ่มช่วงเวลาการลา
-        function addLeavePeriod() {
-            const container = document.getElementById('leavePeriodsContainer');
-            const periodItem = document.createElement('div');
-            periodItem.className = "leave-period-item bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-2 relative";
-            periodItem.innerHTML = `
-                <div class="flex justify-between items-center">
-                    <span class="text-[10px] font-semibold text-blue-600">ช่วงเวลาเพิ่มเติม</span>
-                    <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-xs text-rose-500 font-semibold hover:underline">ลบ</button>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-[10px] text-slate-500 mb-1">วันที่</label>
-                        <input type="date" required class="leave-date w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] text-slate-500 mb-1">ช่วงเวลา</label>
-                        <select class="leave-session w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none">
-                            <option value="เต็มวัน">เต็มวัน</option>
-                            <option value="ครึ่งวันเช้า">ครึ่งวันเช้า</option>
-                            <option value="ครึ่งวันบ่าย">ครึ่งวันบ่าย</option>
-                        </select>
-                    </div>
-                </div>
-            `;
-            container.appendChild(periodItem);
+  <script>
+    const MY_LIFF_ID = '2012053598-ClINT0ab';
+    let lineUserId = '';
+    let slotCount = 0;
+
+    document.addEventListener("DOMContentLoaded", function() {
+      initializeLiff(MY_LIFF_ID);
+      addDateSlot(); // เพิ่มช่วงแรกให้อัตโนมัติ 1 สล็อต
+    });
+
+    function initializeLiff(liffId) {
+      liff.init({ liffId: liffId })
+        .then(() => {
+          if (!liff.isLoggedIn()) {
+            liff.login();
+          } else {
+            liff.getProfile().then(profile => {
+              lineUserId = profile.userId;
+              document.getElementById('displayName').innerText = profile.displayName;
+              if (profile.pictureUrl) {
+                document.getElementById('pictureUrl').src = profile.pictureUrl;
+              }
+            });
+          }
+        })
+        .catch(err => console.error(err));
+    }
+
+    function selectType(element, typeName) {
+      document.querySelectorAll('.leave-option').forEach(opt => opt.classList.remove('selected'));
+      element.classList.add('selected');
+      document.getElementById('selectedLeaveType').value = typeName;
+    }
+
+    // ฟังก์ชันเพิ่มสล็อตเลือกวันลา
+    function addDateSlot() {
+      slotCount++;
+      const container = document.getElementById('slotsContainer');
+      const slotId = `slot_${slotCount}`;
+      
+      const slotHtml = `
+        <div class="date-slot-card" id="${slotId}">
+          <div class="slot-header">
+            <span class="slot-title">ช่วงที่ ${container.children.length + 1}</span>
+            ${container.children.length > 0 ? `<button type="button" class="btn-remove-slot" onclick="removeDateSlot('${slotId}')">ลบช่วงนี้</button>` : ''}
+          </div>
+          <div class="slot-row">
+            <input type="date" class="form-control slot-date" required onchange="calculateGrandTotal()">
+            <select class="form-select slot-type" onchange="calculateGrandTotal()">
+              <option value="1">เต็มวัน (1 วัน)</option>
+              <option value="0.5_morning">ครึ่งวันเช้า (0.5 วัน)</option>
+              <option value="0.5_afternoon">ครึ่งวันบ่าย (0.5 วัน)</option>
+            </select>
+          </div>
+        </div>
+      `;
+      
+      container.insertAdjacentHTML('beforeend', slotHtml);
+      updateSlotTitles();
+      calculateGrandTotal();
+    }
+
+    // ฟังก์ชันลบสล็อต
+    function removeDateSlot(slotId) {
+      const slotElement = document.getElementById(slotId);
+      if (slotElement) {
+        slotElement.remove();
+        updateSlotTitles();
+        calculateGrandTotal();
+      }
+    }
+
+    function updateSlotTitles() {
+      const slots = document.querySelectorAll('.date-slot-card');
+      slots.forEach((slot, index) => {
+        const titleEl = slot.querySelector('.slot-title');
+        if (titleEl) titleEl.innerText = `ช่วงที่ ${index + 1}`;
+      });
+    }
+
+    // คำนวณวันลารวมทั้งหมด
+    function calculateGrandTotal() {
+      let grandTotal = 0;
+      const slots = document.querySelectorAll('.date-slot-card');
+      
+      slots.forEach(slot => {
+        const dateVal = slot.querySelector('.slot-date').value;
+        const typeVal = slot.querySelector('.slot-type').value;
+
+        if (dateVal) {
+          if (typeVal === '1') grandTotal += 1;
+          else if (typeVal.startsWith('0.5')) grandTotal += 0.5;
         }
+      });
 
-        // เปิด Pop-up สรุปข้อมูล
-        function openSummaryModal(event) {
-            event.preventDefault();
+      document.getElementById('grandTotalDaysDisplay').innerText = `${grandTotal} วัน`;
+      return grandTotal;
+    }
 
-            // ดึงค่าประเภทการลาและเหตุผล
-            const type = document.getElementById('leaveType').value;
-            const reason = document.getElementById('leaveReason').value;
-            const fileInput = document.getElementById('leaveFile');
-            const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : 'ไม่มีไฟล์แนบ';
+    // เปิด Pop-up สรุปข้อมูล
+    function openConfirmationModal(event) {
+      event.preventDefault();
 
-            document.getElementById('sumType').innerText = type;
-            document.getElementById('sumReason').innerText = reason;
-            document.getElementById('sumFile').innerText = fileName;
+      const leaveType = document.getElementById('selectedLeaveType').value;
+      if (!leaveType) {
+        alert('กรุณาเลือกประเภทการลา');
+        return;
+      }
 
-            // รวบรวมช่วงเวลาทั้งหมด
-            const dates = document.querySelectorAll('.leave-date');
-            const sessions = document.querySelectorAll('.leave-session');
-            const sumPeriodsList = document.getElementById('sumPeriods');
-            sumPeriodsList.innerHTML = '';
+      const totalDays = calculateGrandTotal();
+      if (totalDays === 0) {
+        alert('กรุณาระบุวันที่ต้องการลาอย่างน้อย 1 ช่วง');
+        return;
+      }
 
-            for (let i = 0; i < dates.length; i++) {
-                if (dates[i].value) {
-                    const li = document.createElement('li');
-                    li.innerText = `${dates[i].value} (${sessions[i].value})`;
-                    sumPeriodsList.appendChild(li);
-                }
-            }
+      // นำข้อมูลไปแสดงใน Modal
+      document.getElementById('summaryName').innerText = document.getElementById('displayName').innerText;
+      document.getElementById('summaryLeaveType').innerText = leaveType;
+      document.getElementById('summaryTotalDays').innerText = `${totalDays} วัน`;
+      document.getElementById('summaryReason').innerText = document.getElementById('reason').value;
 
-            // แสดง Modal
-            document.getElementById('summaryModal').classList.remove('hidden');
-            document.getElementById('summaryModal').classList.add('flex');
+      // สร้างรายการช่วงวันลาเพื่อโชว์ใน Modal
+      const slotsContainer = document.getElementById('summarySlotsList');
+      slotsContainer.innerHTML = '';
+      
+      const slots = document.querySelectorAll('.date-slot-card');
+      slots.forEach((slot, index) => {
+        const dateVal = slot.querySelector('.slot-date').value;
+        const typeSelect = slot.querySelector('.slot-type');
+        const typeText = typeSelect.options[typeSelect.selectedIndex].text;
+
+        if (dateVal) {
+          const item = document.createElement('div');
+          item.style.padding = '2px 0';
+          item.innerText = `• ช่วงที่ ${index + 1}: ${dateVal} (${typeText})`;
+          slotsContainer.appendChild(item);
         }
+      });
 
-        // ปิด Pop-up (ปุ่มแก้ไข)
-        function closeSummaryModal() {
-            document.getElementById('summaryModal').classList.remove('flex');
-            document.getElementById('summaryModal').classList.add('hidden');
-        }
+      // แสดง Pop-up
+      document.getElementById('confirmModal').classList.add('active');
+    }
 
-        // ยืนยันส่งข้อมูลจริง
-        function confirmSubmit() {
-            alert('ส่งใบขออนุมัติลาเรียบร้อยแล้ว!');
-            window.location.href = 'index.html';
-        }
-    </script>
+    function closeModal() {
+      document.getElementById('confirmModal').classList.remove('active');
+    }
+
+    // กด ยืนยันส่งใบลา จริงๆ
+    function confirmAndSend() {
+      const btn = document.getElementById('btnFinalSubmit');
+      btn.disabled = true;
+      btn.innerText = 'กำลังส่งข้อมูล...';
+
+      // รวบรวมข้อมูลช่วงวันลาทั้งหมดส่งออก
+      const slotData = [];
+      const slots = document.querySelectorAll('.date-slot-card');
+      slots.forEach(slot => {
+        slotData.push({
+          date: slot.querySelector('.slot-date').value,
+          timeType: slot.querySelector('.slot-type').value
+        });
+      });
+
+      const payload = {
+        userId: lineUserId,
+        name: document.getElementById('displayName').innerText,
+        leaveType: document.getElementById('selectedLeaveType').value,
+        slots: slotData,
+        totalDays: calculateGrandTotal(),
+        reason: document.getElementById('reason').value
+      };
+
+      console.log('Sending Leave Request Payload:', payload);
+
+      setTimeout(() => {
+        alert('ยื่นคำขออนุมัติลาเรียบร้อยแล้ว!');
+        liff.closeWindow();
+      }, 1000);
+    }
+  </script>
 </body>
 </html>
