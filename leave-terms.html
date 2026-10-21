@@ -45,7 +45,7 @@
         <!-- Tab Contents Area -->
         <div class="p-6 flex-1 flex flex-col justify-between">
             
-            <!-- TAB 1: เงื่อนไขการลา (มี Checkbox + ปุ่มปฏิเสธ/ยอมรับ อยู่ด้านในเฉพาะ Tab นี้) -->
+            <!-- TAB 1: เงื่อนไขการลา -->
             <div id="tab-1-content" class="flex flex-col h-full justify-between space-y-4">
                 <div class="bg-blue-50/40 p-4 rounded-2xl border border-blue-50">
                     <h2 class="font-bold text-slate-800 mb-3 text-base flex items-center">
@@ -83,105 +83,194 @@
                     </label>
                 </div>
 
-                <!-- Action Buttons (แสดงเฉพาะหน้าเงื่อนไขการลา) -->
+                <!-- Action Buttons -->
                 <div class="pt-2 grid grid-cols-2 gap-3 mt-auto">
-                    <!-- ปุ่มปฏิเสธ (กดย้อนกลับไปหน้าหลัก) -->
                     <button onclick="onReject()" class="py-3 px-4 bg-blue-50/80 hover:bg-blue-100 text-blue-600 font-semibold rounded-2xl transition text-sm">
                         ปฏิเสธ
                     </button>
-                    
-                    <!-- ปุ่มยอมรับ (ไปหน้าถัดไปเมื่อยอมรับ) -->
                     <button id="accept-btn" disabled onclick="onAccept()" class="py-3 px-4 bg-blue-600 text-white font-semibold rounded-2xl transition text-sm opacity-50 cursor-not-allowed shadow-md shadow-blue-200">
                         ยอมรับ
                     </button>
                 </div>
             </div>
 
-            <!-- TAB 2: ประเภทการลา (ไม่มี Checkbox และปุ่มล่างสุด) -->
+            <!-- TAB 2: ประเภทการลา (รูปแบบ Accordion) -->
             <div id="tab-2-content" class="hidden space-y-2.5">
-                <!-- ลาพักร้อน -->
-                <div class="flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-100 hover:border-blue-200 hover:shadow-sm transition cursor-pointer">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center">
-                            🌴
+                
+                <!-- 1. ลาพักร้อน -->
+                <div class="border border-slate-100 rounded-2xl overflow-hidden transition bg-white shadow-sm">
+                    <div onclick="toggleAccordion(1)" class="flex items-center justify-between p-3 cursor-pointer hover:bg-slate-50 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-lg">🌴</div>
+                            <div>
+                                <div class="font-bold text-slate-800 text-sm">ลาพักร้อน</div>
+                                <div class="text-xs text-slate-400">ใช้สิทธิ์พักผ่อนประจำปีตามกำหนด</div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="font-bold text-slate-800 text-sm">ลาพักร้อน</div>
-                            <div class="text-xs text-slate-400">ใช้สิทธิ์พักผ่อนประจำปีตามกำหนด</div>
+                        <span id="acc-icon-1" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
+                    </div>
+                    <!-- รายละเอียดขยายย่อย -->
+                    <div id="acc-content-1" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-400">สิทธิ์วันลา:</span>
+                            <span class="font-semibold text-slate-700">6 วัน / ปี</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-400">ยื่นล่วงหน้า:</span>
+                            <span class="font-semibold text-slate-700">อย่างน้อย 3 วันทำการ</span>
+                        </div>
+                        <div class="flex justify-between py-1">
+                            <span class="text-slate-400">เอกสารประกอบ:</span>
+                            <span class="font-semibold text-emerald-600">ไม่ต้องแนบเอกสาร</span>
                         </div>
                     </div>
-                    <span class="text-slate-300">&rsaquo;</span>
                 </div>
 
-                <!-- ลาป่วย -->
-                <div class="flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-100 hover:border-blue-200 hover:shadow-sm transition cursor-pointer">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center">
-                            🏥
+                <!-- 2. ลาป่วย -->
+                <div class="border border-slate-100 rounded-2xl overflow-hidden transition bg-white shadow-sm">
+                    <div onclick="toggleAccordion(2)" class="flex items-center justify-between p-3 cursor-pointer hover:bg-slate-50 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-lg">🏥</div>
+                            <div>
+                                <div class="font-bold text-slate-800 text-sm">ลาป่วย</div>
+                                <div class="text-xs text-slate-400">กรณีเจ็บป่วย ไม่สามารถมาทำงานได้</div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="font-bold text-slate-800 text-sm">ลาป่วย</div>
-                            <div class="text-xs text-slate-400">กรณีเจ็บป่วย ต้องแนบใบรับรองแพทย์</div>
+                        <span id="acc-icon-2" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
+                    </div>
+                    <!-- รายละเอียดขยายย่อย -->
+                    <div id="acc-content-2" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-400">สิทธิ์วันลา:</span>
+                            <span class="font-semibold text-slate-700">30 วัน / ปี (ได้รับค่าจ้าง)</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-400">ยื่นล่วงหน้า:</span>
+                            <span class="font-semibold text-slate-700">ยื่นย้อนหลังได้ในวันที่มาทำงาน</span>
+                        </div>
+                        <div class="flex justify-between py-1">
+                            <span class="text-slate-400">เอกสารประกอบ:</span>
+                            <span class="font-semibold text-rose-500">ใบรับรองแพทย์ (หากลาตั้งแต่ 3 วันขึ้นไป)</span>
                         </div>
                     </div>
-                    <span class="text-slate-300">&rsaquo;</span>
                 </div>
 
-                <!-- ลากิจ -->
-                <div class="flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-100 hover:border-blue-200 hover:shadow-sm transition cursor-pointer">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center">
-                            🏠
+                <!-- 3. ลากิจ -->
+                <div class="border border-slate-100 rounded-2xl overflow-hidden transition bg-white shadow-sm">
+                    <div onclick="toggleAccordion(3)" class="flex items-center justify-between p-3 cursor-pointer hover:bg-slate-50 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center text-lg">🏠</div>
+                            <div>
+                                <div class="font-bold text-slate-800 text-sm">ลากิจ</div>
+                                <div class="text-xs text-slate-400">ธุระส่วนตัว / เรื่องจำเป็น</div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="font-bold text-slate-800 text-sm">ลากิจ</div>
-                            <div class="text-xs text-slate-400">ธุระส่วนตัว / เรื่องจำเป็น</div>
+                        <span id="acc-icon-3" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
+                    </div>
+                    <!-- รายละเอียดขยายย่อย -->
+                    <div id="acc-content-3" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-400">สิทธิ์วันลา:</span>
+                            <span class="font-semibold text-slate-700">3 วัน / ปี</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-400">ยื่นล่วงหน้า:</span>
+                            <span class="font-semibold text-slate-700">อย่างน้อย 1 วันทำการ</span>
+                        </div>
+                        <div class="flex justify-between py-1">
+                            <span class="text-slate-400">เอกสารประกอบ:</span>
+                            <span class="font-semibold text-slate-600">เอกสารอ้างอิงธุระ (ถ้ามี)</span>
                         </div>
                     </div>
-                    <span class="text-slate-300">&rsaquo;</span>
                 </div>
 
-                <!-- ลาคลอดบุตร -->
-                <div class="flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-100 hover:border-blue-200 hover:shadow-sm transition cursor-pointer">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-pink-50 text-pink-500 flex items-center justify-center">
-                            👶
+                <!-- 4. ลาคลอดบุตร -->
+                <div class="border border-slate-100 rounded-2xl overflow-hidden transition bg-white shadow-sm">
+                    <div onclick="toggleAccordion(4)" class="flex items-center justify-between p-3 cursor-pointer hover:bg-slate-50 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-pink-50 text-pink-500 flex items-center justify-center text-lg">👶</div>
+                            <div>
+                                <div class="font-bold text-slate-800 text-sm">ลาคลอดบุตร</div>
+                                <div class="text-xs text-slate-400">สำหรับพนักงานหญิงตามสิทธิ์กฎหมาย</div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="font-bold text-slate-800 text-sm">ลาคลอดบุตร</div>
-                            <div class="text-xs text-slate-400">สำหรับพนักงานหญิงตามสิทธิ์</div>
+                        <span id="acc-icon-4" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
+                    </div>
+                    <!-- รายละเอียดขยายย่อย -->
+                    <div id="acc-content-4" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-400">สิทธิ์วันลา:</span>
+                            <span class="font-semibold text-slate-700">สูงสุด 98 วัน (ได้รับค่าจ้าง 45 วัน)</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-400">ยื่นล่วงหน้า:</span>
+                            <span class="font-semibold text-slate-700">อย่างน้อย 15 วันทำการ</span>
+                        </div>
+                        <div class="flex justify-between py-1">
+                            <span class="text-slate-400">เอกสารประกอบ:</span>
+                            <span class="font-semibold text-rose-500">ใบรับรองแพทย์ / สูติบัตร</span>
                         </div>
                     </div>
-                    <span class="text-slate-300">&rsaquo;</span>
                 </div>
 
-                <!-- ลาอุปสมบท -->
-                <div class="flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-100 hover:border-blue-200 hover:shadow-sm transition cursor-pointer">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center">
-                            🪷
+                <!-- 5. ลาอุปสมบท -->
+                <div class="border border-slate-100 rounded-2xl overflow-hidden transition bg-white shadow-sm">
+                    <div onclick="toggleAccordion(5)" class="flex items-center justify-between p-3 cursor-pointer hover:bg-slate-50 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-lg">🪷</div>
+                            <div>
+                                <div class="font-bold text-slate-800 text-sm">ลาอุปสมบท</div>
+                                <div class="text-xs text-slate-400">ตามระเบียบของบริษัท</div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="font-bold text-slate-800 text-sm">ลาอุปสมบท</div>
-                            <div class="text-xs text-slate-400">ตามระเบียบของบริษัท</div>
+                        <span id="acc-icon-5" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
+                    </div>
+                    <!-- รายละเอียดขยายย่อย -->
+                    <div id="acc-content-5" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-400">สิทธิ์วันลา:</span>
+                            <span class="font-semibold text-slate-700">สูงสุด 15 วัน (อายุงานครบ 1 ปีขึ้นไป)</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-400">ยื่นล่วงหน้า:</span>
+                            <span class="font-semibold text-slate-700">อย่างน้อย 30 วันทำการ</span>
+                        </div>
+                        <div class="flex justify-between py-1">
+                            <span class="text-slate-400">เอกสารประกอบ:</span>
+                            <span class="font-semibold text-slate-600">เอกสารกำหนดการอุปสมบท</span>
                         </div>
                     </div>
-                    <span class="text-slate-300">&rsaquo;</span>
                 </div>
 
-                <!-- ลาพักร้อนพิเศษ -->
-                <div class="flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-100 hover:border-blue-200 hover:shadow-sm transition cursor-pointer">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center">
-                            ⭐
+                <!-- 6. ลาพักร้อนพิเศษ -->
+                <div class="border border-slate-100 rounded-2xl overflow-hidden transition bg-white shadow-sm">
+                    <div onclick="toggleAccordion(6)" class="flex items-center justify-between p-3 cursor-pointer hover:bg-slate-50 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center text-lg">⭐</div>
+                            <div>
+                                <div class="font-bold text-slate-800 text-sm">ลาพักร้อนพิเศษ</div>
+                                <div class="text-xs text-slate-400">ตามเงื่อนไขสวัสดิการพิเศษที่บริษัทกำหนด</div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="font-bold text-slate-800 text-sm">ลาพักร้อนพิเศษ</div>
-                            <div class="text-xs text-slate-400">ตามเงื่อนไขที่บริษัทกำหนด</div>
+                        <span id="acc-icon-6" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
+                    </div>
+                    <!-- รายละเอียดขยายย่อย -->
+                    <div id="acc-content-6" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-400">สิทธิ์วันลา:</span>
+                            <span class="font-semibold text-slate-700">ตามการพิจารณาเป็นกรณีพิเศษ</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-400">ยื่นล่วงหน้า:</span>
+                            <span class="font-semibold text-slate-700">อย่างน้อย 7 วันทำการ</span>
+                        </div>
+                        <div class="flex justify-between py-1">
+                            <span class="text-slate-400">เอกสารประกอบ:</span>
+                            <span class="font-semibold text-slate-600">เอกสารชี้แจงเหตุผลความจำเป็น</span>
                         </div>
                     </div>
-                    <span class="text-slate-300">&rsaquo;</span>
                 </div>
+
             </div>
 
         </div>
@@ -205,6 +294,20 @@
                 tab1Btn.className = "flex-1 py-2.5 text-sm font-semibold rounded-xl transition-all duration-200 text-slate-500 hover:text-slate-700";
                 tab2Content.classList.remove('hidden');
                 tab1Content.classList.add('hidden');
+            }
+        }
+
+        // ฟังก์ชันยืด-หด Accordion ใน Tab 2
+        function toggleAccordion(index) {
+            const content = document.getElementById(`acc-content-${index}`);
+            const icon = document.getElementById(`acc-icon-${index}`);
+
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
             }
         }
 
