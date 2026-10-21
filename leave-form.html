@@ -46,7 +46,6 @@
       display: block;
     }
 
-    /* ปุ่มเปลี่ยนภาษาธงชาติ มุมขวาบนของแบนเนอร์ */
     .lang-bar {
       position: absolute;
       top: 10px;
@@ -176,6 +175,7 @@
       background-color: #ffffff;
       cursor: pointer;
       transition: all 0.2s ease;
+      position: relative;
     }
 
     .leave-option:hover {
@@ -198,6 +198,7 @@
       justify-content: center;
       background: #f1f5f9;
       border-radius: 12px;
+      flex-shrink: 0;
     }
 
     .leave-details {
@@ -213,6 +214,25 @@
     .leave-desc {
       font-size: 12px;
       color: #64748b;
+      margin-top: 2px;
+    }
+
+    .btn-info-detail {
+      background: none;
+      border: none;
+      color: #0ea5e9;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .btn-info-detail:hover {
+      background: #e0f2fe;
     }
 
     .radio-check {
@@ -223,6 +243,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-left: 8px;
+      flex-shrink: 0;
     }
 
     .leave-option.selected .radio-check {
@@ -338,7 +360,7 @@
       opacity: 0.9;
     }
 
-    /* Popup Modal Styles */
+    /* Modal Styles */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -409,32 +431,58 @@
       border: 1px solid #e2e8f0;
     }
 
+    .rule-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 14px;
+      color: #334155;
+      margin-bottom: 20px;
+    }
+
+    .rule-row {
+      background: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .rule-label {
+      font-weight: bold;
+      color: #0ea5e9;
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+
     .modal-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
+    .modal-actions.single {
+      grid-template-columns: 1fr;
+    }
+
+    .btn-edit, .btn-confirm, .btn-close-modal {
+      padding: 13px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+    }
+
     .btn-edit {
       background: #f1f5f9;
       color: #475569;
       border: 1px solid #cbd5e1;
-      padding: 13px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
     }
 
-    .btn-confirm {
+    .btn-confirm, .btn-close-modal {
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       color: #ffffff;
       border: none;
-      padding: 13px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
     }
   </style>
 </head>
@@ -465,52 +513,101 @@
     <form class="form-container" id="leaveForm" onsubmit="openConfirmationModal(event)">
       <div class="form-title" data-i18n="formTitle">แบบฟอร์มยื่นขอลาหยุด</div>
 
-      <!-- ประเภทการลา -->
+      <!-- ประเภทการลา (11 ประเภท) -->
       <div class="form-group">
         <label class="form-label"><span data-i18n="leaveTypeLabel">ประเภทการลา</span> <span class="required">*</span></label>
         <input type="hidden" id="selectedLeaveType" name="leaveType" required>
         
         <div class="leave-type-select">
+          
+          <!-- 1. ลาพักร้อน -->
           <div class="leave-option" onclick="selectType(this, 'Annual Leave')">
             <div class="leave-icon">🌴</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t1">ลาพักร้อน</div><div class="leave-desc" data-i18n="d1">พักผ่อนประจำปี / ฉุกเฉิน</div></div>
+            <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave1')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 2. ลากิจ -->
           <div class="leave-option" onclick="selectType(this, 'Personal Leave')">
             <div class="leave-icon">🏠</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t2">ลากิจ</div><div class="leave-desc" data-i18n="d2">ประกอบกิจธุระส่วนตัว</div></div>
+            <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave2')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 3. ลากิจ ไม่รับค่าจ้าง -->
           <div class="leave-option" onclick="selectType(this, 'Unpaid Leave')">
             <div class="leave-icon">📁</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t3">ลากิจ ไม่รับค่าจ้าง</div><div class="leave-desc" data-i18n="d3">กิจธุระส่วนตัวเพิ่มเติม</div></div>
+            <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave3')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 4. ลาป่วย -->
           <div class="leave-option" onclick="selectType(this, 'Sick Leave')">
             <div class="leave-icon">🏥</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t4">ลาป่วย</div><div class="leave-desc" data-i18n="d4">กรณีเจ็บป่วยจริง</div></div>
+            <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave4')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 5. ลาคลอดบุตร -->
           <div class="leave-option" onclick="selectType(this, 'Maternity/Paternity Leave')">
             <div class="leave-icon">👶</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t5">ลาคลอดบุตร</div><div class="leave-desc" data-i18n="d5">สำหรับลูกจ้างหญิงและชาย</div></div>
+            <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave5')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 6. ลาอุปสมบท -->
           <div class="leave-option" onclick="selectType(this, 'Ordination Leave')">
             <div class="leave-icon">🪷</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t6">ลาอุปสมบท</div><div class="leave-desc" data-i18n="d6">กรณีอุปสมบทตามประเพณี</div></div>
+            <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave6')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 7. ลาร่วมงานพิธีศพ -->
           <div class="leave-option" onclick="selectType(this, 'Funeral Leave')">
             <div class="leave-icon">🕊️</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t7">ลาร่วมงานพิธีศพ</div><div class="leave-desc" data-i18n="d7">งานศพญาติสายตรงตามกฎหมาย</div></div>
+            <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave7')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 8. ลาพิธีมงคลสมรส -->
+          <div class="leave-option" onclick="selectType(this, 'Wedding Leave')">
+            <div class="leave-icon">💍</div>
+            <div class="leave-details"><div class="leave-name" data-i18n="t8">ลาพิธีมงคลสมรส</div><div class="leave-desc" data-i18n="d8">เป็นการลาเพื่อแต่งงาน</div></div>
+            <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave8')" title="ดูรายละเอียด">ℹ️</button>
+            <div class="radio-check"></div>
+          </div>
+
+          <!-- 9. การลาเพื่อไปรับราชการทหาร -->
+          <div class="leave-option" onclick="selectType(this, 'Military Service Leave')">
+            <div class="leave-icon">🪖</div>
+            <div class="leave-details"><div class="leave-name" data-i18n="t9">ลาเพื่อรับราชการทหาร</div><div class="leave-desc" data-i18n="d9">สำหรับการเรียกทหารกองเกิน</div></div>
+            <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave9')" title="ดูรายละเอียด">ℹ️</button>
+            <div class="radio-check"></div>
+          </div>
+
+          <!-- 10. ลาเพื่อทำหมัน -->
+          <div class="leave-option" onclick="selectType(this, 'Sterilization Leave')">
+            <div class="leave-icon">⚕️</div>
+            <div class="leave-details"><div class="leave-name" data-i18n="t10">ลาเพื่อทำหมัน</div><div class="leave-desc" data-i18n="d10">พนักงานชายและหญิง</div></div>
+            <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave10')" title="ดูรายละเอียด">ℹ️</button>
+            <div class="radio-check"></div>
+          </div>
+
+          <!-- 11. ลาพักร้อนพิเศษ -->
           <div class="leave-option" onclick="selectType(this, 'Special Leave (5/10 Years)')">
             <div class="leave-icon">⭐</div>
-            <div class="leave-details"><div class="leave-name" data-i18n="t8">ลาพักร้อนพิเศษ</div><div class="leave-desc" data-i18n="d8">เมื่ออายุงานครบ 5 และ 10 ปี</div></div>
+            <div class="leave-details"><div class="leave-name" data-i18n="t11">ลาพักร้อนพิเศษ</div><div class="leave-desc" data-i18n="d11">อายุงานครบ 5 และ 10 ปี</div></div>
+            <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave11')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
         </div>
       </div>
 
@@ -542,6 +639,17 @@
 
       <button type="submit" class="btn-submit" data-i18n="btnSubmit">ส่งใบขออนุมัติลา</button>
     </form>
+  </div>
+
+  <!-- Pop-up แสดงรายละเอียดเงื่อนไขการลา -->
+  <div class="modal-overlay" id="ruleModal">
+    <div class="modal-content">
+      <div class="modal-title" id="ruleModalTitle">ℹ️ รายละเอียดการลา</div>
+      <div class="rule-box" id="ruleModalBody"></div>
+      <div class="modal-actions single">
+        <button type="button" class="btn-close-modal" onclick="closeRuleModal()" data-i18n="btnClose">ปิดหน้าต่าง</button>
+      </div>
+    </div>
   </div>
 
   <!-- Pop-up ตรวจสอบข้อมูลก่อนส่ง -->
@@ -584,7 +692,49 @@
     let slotCount = 0;
     let currentLang = 'th';
 
-    // Dictionary 3 ภาษา (ไทย, อังกฤษ, ญี่ปุ่น)
+    // ข้อมูลรายละเอียดเงื่อนไขการลา 11 ประเภท (3 ภาษา)
+    const leaveRulesData = {
+      th: {
+        leave1: { title: "1. ลาพักร้อน", desc: "เป็นการลาเพื่อพักผ่อนประจำปี หรือลากรณีฉุกเฉินต่างๆ", duration: "6 วันต่อปี สะสมจากปีก่อนได้ไม่เกิน 12 วัน", condition: "ลาล่วงหน้าอย่างน้อย 1 วันทำการ", benefit: "ได้รับค่าจ้าง / ได้รับเบี้ยขยัน", evidence: "ไม่ใช้หลักฐานประกอบการลา" },
+        leave2: { title: "2. ลากิจ", desc: "เป็นการลาเพื่อประกอบกิจธุระตามหน่วยงาน ห้างร้านต่างๆ", duration: "5 วันต่อปี ไม่สามารถสะสมจากปีก่อนได้", condition: "ลาล่วงหน้าอย่างน้อย 1 วันทำการ", benefit: "ได้รับค่าจ้าง / ไม่ได้รับเบี้ยขยัน", evidence: "ใช้หลักฐานประกอบการลา" },
+        leave3: { title: "3. ลากิจ ไม่รับค่าจ้าง", desc: "เป็นการลาเพื่อประกอบกิจธุระตามหน่วยงาน ห้างร้านต่างๆ", duration: "10 วันต่อปี ไม่สามารถสะสมจากปีก่อนได้", condition: "ลาล่วงหน้าอย่างน้อย 1 วันทำการ", benefit: "ไม่ได้รับค่าจ้าง / ไม่ได้รับเบี้ยขยัน", evidence: "ไม่ใช้หลักฐานประกอบการลา" },
+        leave4: { title: "4. ลาป่วย", desc: "ใช้สำหรับลาในกรณีเจ็บป่วยได้เท่าที่ป่วยจริง", duration: "30 วันต่อปี ไม่สามารถสะสมจากปีก่อนได้", condition: "ลาล่วงหน้าหรือลาฉุกเฉินได้", benefit: "ได้รับค่าจ้าง / ไม่ได้รับเบี้ยขยัน", evidence: "หากมีสามารถแนบเพื่อขออนุมัติได้" },
+        leave5: { title: "5. ลาคลอดบุตร", desc: "ใช้สำหรับกรณีคลอดบุตรของลูกจ้างหญิง ลาเพื่อช่วยเหลือสำหรับลูกจ้างชาย", duration: "ลูกจ้างหญิง สูงสุด 120 วัน / ชาย 15 วันต่อปี", condition: "ลาล่วงหน้าหรือลาฉุกเฉินได้", benefit: "หญิงรับค่าจ้างสูงสุด 60 วัน ชายได้รับค่าจ้าง 15 วัน / ไม่ได้รับเบี้ยขยัน", evidence: "ใช้หลักฐานประกอบการลา" },
+        leave6: { title: "6. ลาอุปสมบท", desc: "กรณีอุปสมบทตามประเพณี", duration: "15 วันต่อปี", condition: "ลาล่วงหน้า", benefit: "ได้รับค่าจ้าง / ไม่ได้รับเบี้ยขยัน", evidence: "ใช้หลักฐานประกอบการลา" },
+        leave7: { title: "7. ลาร่วมงานพิธีศพ", desc: "การลาเพื่อร่วมงานศพหรือการฌาปนกิจศพบิดา มารดา คู่สมรส พี่น้องร่วมบิดามารดา และบุตรโดยชอบด้วยกฎหมาย", duration: "2 วันต่อปี", condition: "ลาล่วงหน้าหรือลาฉุกเฉินได้", benefit: "ได้รับค่าจ้าง / ได้รับเบี้ยขยัน", evidence: "ใช้หลักฐานประกอบการลา" },
+        leave8: { title: "8. ลาพิธีมงคลสมรส", desc: "เป็นการลาเพื่อแต่งงาน", duration: "3 วันต่อปี", condition: "ทำงานครบ 1 ปีนับตั้งแต่วันเริ่มทำงาน ลาล่วงหน้า 15 วัน", benefit: "ได้รับค่าจ้าง / ได้รับเบี้ยขยัน", evidence: "ใช้หลักฐานประกอบการลา" },
+        leave9: { title: "9. การลาเพื่อไปรับราชการทหาร", desc: "สำหรับการเรียกทหารกองเกิน", duration: "60 วันต่อปี", condition: "สามารถลาได้ตลอดและนำหลักฐานมายื่น", benefit: "ได้รับค่าจ้าง / ไม่ได้รับเบี้ยขยัน", evidence: "ใช้หลักฐานประกอบการลา" },
+        leave10: { title: "10. ลาเพื่อทำหมัน", desc: "พนักงานชายและหญิงมีสิทธิ์ลาเพื่อทำหมันและเนื่องจากการทำหมัน", duration: "ตามแพทย์ระบุ", condition: "ลาล่วงหน้าหรือลาฉุกเฉินได้", benefit: "ได้รับค่าจ้าง / ไม่ได้รับเบี้ยขยัน", evidence: "ใช้หลักฐานประกอบการลา" },
+        leave11: { title: "11. ลาพักร้อนพิเศษ", desc: "เป็นวันลาที่จะได้เมื่อมีอายุงานครบ 5 ปี และ 10 ปี", duration: "3 วันต่อปีที่ครบเงื่อนไข", condition: "ลาล่วงหน้าอย่างน้อย 1 วันทำการ", benefit: "ได้รับค่าจ้าง / ได้รับเบี้ยขยัน", evidence: "ไม่ใช้หลักฐานประกอบการลา" }
+      },
+      en: {
+        leave1: { title: "1. Annual Leave", desc: "Annual vacation or emergency leave.", duration: "6 days/year, max carry over 12 days.", condition: "At least 1 working day in advance.", benefit: "Paid / With bonus eligibility.", evidence: "No evidence required." },
+        leave2: { title: "2. Personal Leave", desc: "Personal business leave.", duration: "5 days/year, no carry over.", condition: "At least 1 working day in advance.", benefit: "Paid / No bonus eligibility.", evidence: "Evidence required." },
+        leave3: { title: "3. Unpaid Leave", desc: "Additional personal business leave.", duration: "10 days/year, no carry over.", condition: "At least 1 working day in advance.", benefit: "Unpaid / No bonus eligibility.", evidence: "No evidence required." },
+        leave4: { title: "4. Sick Leave", desc: "Leave for actual illness.", duration: "30 days/year, no carry over.", condition: "In advance or emergency.", benefit: "Paid / No bonus eligibility.", evidence: "Medical certificate if available." },
+        leave5: { title: "5. Maternity/Paternity Leave", desc: "For female childbirth or male assistance.", duration: "Female up to 120 days / Male 15 days.", condition: "In advance or emergency.", benefit: "Female paid up to 60 days, Male 15 days / No bonus.", evidence: "Evidence required." },
+        leave6: { title: "6. Ordination Leave", desc: "Traditional monk ordination.", duration: "15 days/year.", condition: "In advance.", benefit: "Paid / No bonus eligibility.", evidence: "Evidence required." },
+        leave7: { title: "7. Funeral Leave", desc: "Funeral of immediate family members.", duration: "2 days/year.", condition: "In advance or emergency.", benefit: "Paid / With bonus eligibility.", evidence: "Evidence required." },
+        leave8: { title: "8. Wedding Leave", desc: "Leave for marriage.", duration: "3 days/year.", condition: "Complete 1 year of service, 15 days in advance.", benefit: "Paid / With bonus eligibility.", evidence: "Evidence required." },
+        leave9: { title: "9. Military Service Leave", desc: "For military reserve call-up.", duration: "60 days/year.", condition: "Submit evidence upon notice.", benefit: "Paid / No bonus eligibility.", evidence: "Evidence required." },
+        leave10: { title: "10. Sterilization Leave", desc: "For male and female sterilization.", duration: "As prescribed by doctor.", condition: "In advance or emergency.", benefit: "Paid / No bonus eligibility.", evidence: "Evidence required." },
+        leave11: { title: "11. Special Leave (5/10 Yrs)", desc: "Granted at 5 and 10 years of service.", duration: "3 days/year.", condition: "At least 1 working day in advance.", benefit: "Paid / With bonus eligibility.", evidence: "No evidence required." }
+      },
+      ja: {
+        leave1: { title: "1. 年次有給休暇", desc: "年次休暇または緊急休暇。", duration: "年6日、繰越最大12日まで。", condition: "少なくとも1営業日前までに申請。", benefit: "有給 / 皆勤手当支給対象", evidence: "証明書不要" },
+        leave2: { title: "2. 私用休暇", desc: "個人的な用事のための休暇。", duration: "年5日、繰越不可。", condition: "少なくとも1営業日前までに申請。", benefit: "有給 / 皆勤手当非対象", evidence: "証明書必要" },
+        leave3: { title: "3. 無給私用休暇", desc: "追加の個人的な用事のための休暇。", duration: "年10日、繰越不可。", condition: "少なくとも1営業日前までに申請。", benefit: "無給 / 皆勤手当非対象", evidence: "証明書不要" },
+        leave4: { title: "4. 病気休暇", desc: "実際の病気のための休暇。", duration: "年30日、繰越不可。", condition: "事前または緊急時申請。", benefit: "有給 / 皆勤手当非対象", evidence: "診断書（あれば添付）" },
+        leave5: { title: "5. 産前産後・育児休暇", desc: "女性の出産または男性の育児補助。", duration: "女性最大120日 / 男性15日", condition: "事前または緊急時申請。", benefit: "女性最大60日有給、男性15日有給 / 皆勤手当非対象", evidence: "証明書必要" },
+        leave6: { title: "6. 出家休暇", desc: "伝統的な出家のための休暇。", duration: "年15日", condition: "事前申請。", benefit: "有給 / 皆勤手当非対象", evidence: "証明書必要" },
+        leave7: { title: "7. 忌引休暇", desc: "親族の葬儀のための休暇。", duration: "年2日", condition: "事前または緊急時申請。", benefit: "有給 / 皆勤手当支給対象", evidence: "証明書必要" },
+        leave8: { title: "8. 結婚休暇", desc: "結婚のための休暇。", duration: "年3日", condition: "勤続1年以上、15日前までに申請。", benefit: "有給 / 皆勤手当支給対象", evidence: "証明書必要" },
+        leave9: { title: "9. 兵役召集休暇", desc: "予備役召集のための休暇。", duration: "年60日", condition: "証明書を提出して申請。", benefit: "有給 / 皆勤手当非対象", evidence: "証明書必要" },
+        leave10: { title: "10. 避妊手術休暇", desc: "男女社員の避妊手術のため。", duration: "医師の診断による", condition: "事前または緊急時申請。", benefit: "有給 / 皆勤手当非対象", evidence: "証明書必要" },
+        leave11: { title: "11. 特別休暇 (勤続5・10年)", desc: "勤続5年および10年の特別休暇。", duration: "条件達成時 年3日", condition: "少なくとも1営業日前までに申請。", benefit: "有給 / 皆勤手当支給対象", evidence: "証明書不要" }
+      }
+    };
+
     const translations = {
       th: {
         pageTitle: "แบบฟอร์มยื่นการลา - Alpha D.I.",
@@ -598,7 +748,10 @@
         t5: "ลาคลอดบุตร", d5: "สำหรับลูกจ้างหญิงและชาย",
         t6: "ลาอุปสมบท", d6: "กรณีอุปสมบทตามประเพณี",
         t7: "ลาร่วมงานพิธีศพ", d7: "งานศพญาติสายตรงตามกฎหมาย",
-        t8: "ลาพักร้อนพิเศษ", d8: "เมื่ออายุงานครบ 5 และ 10 ปี",
+        t8: "ลาพิธีมงคลสมรส", d8: "เป็นการลาเพื่อแต่งงาน",
+        t9: "ลาเพื่อรับราชการทหาร", d9: "สำหรับการเรียกทหารกองเกิน",
+        t10: "ลาเพื่อทำหมัน", d10: "พนักงานชายและหญิง",
+        t11: "ลาพักร้อนพิเศษ", d11: "อายุงานครบ 5 และ 10 ปี",
         dateRangeLabel: "กำหนดช่วงวันลา",
         btnAddSlot: "+ เพิ่มช่วงวันลาอีก",
         totalDaysLabel: "รวมจำนวนวันลาทั้งหมด:",
@@ -614,12 +767,18 @@
         sumReason: "เหตุผลการลา:",
         btnEdit: "กลับไปแก้ไข",
         btnConfirm: "ยืนยันส่งใบลา",
+        btnClose: "ปิดหน้าต่าง",
         fullDay: "เต็มวัน (1 วัน)",
         halfMorning: "ครึ่งวันเช้า (0.5 วัน)",
         halfAfternoon: "ครึ่งวันบ่าย (0.5 วัน)",
         dayUnit: "วัน",
         removeSlotText: "ลบช่วงนี้",
-        slotPrefix: "ช่วงที่"
+        slotPrefix: "ช่วงที่",
+        ruleDesc: "รายละเอียด",
+        ruleDuration: "ระยะเวลา",
+        ruleCondition: "เงื่อนไข",
+        ruleBenefit: "สิทธิประโยชน์",
+        ruleEvidence: "หลักฐาน"
       },
       en: {
         pageTitle: "Leave Request Form - Alpha D.I.",
@@ -633,7 +792,10 @@
         t5: "Maternity/Paternity", d5: "For male & female employees",
         t6: "Ordination Leave", d6: "Traditional monk ordination",
         t7: "Funeral Leave", d7: "Immediate family member funeral",
-        t8: "Special Leave", d8: "For 5 & 10 years of service",
+        t8: "Wedding Leave", d8: "Leave for marriage",
+        t9: "Military Service", d9: "For military reserve call-up",
+        t10: "Sterilization", d10: "For male & female employees",
+        t11: "Special Leave (5/10 Yrs)", d11: "Service milestone 5 & 10 years",
         dateRangeLabel: "Leave Date Ranges",
         btnAddSlot: "+ Add Another Date Range",
         totalDaysLabel: "Total Leave Days:",
@@ -649,12 +811,18 @@
         sumReason: "Reason:",
         btnEdit: "Edit",
         btnConfirm: "Confirm & Submit",
+        btnClose: "Close",
         fullDay: "Full Day (1 Day)",
         halfMorning: "Half Day - Morning (0.5 Day)",
         halfAfternoon: "Half Day - Afternoon (0.5 Day)",
         dayUnit: "Days",
         removeSlotText: "Remove",
-        slotPrefix: "Period"
+        slotPrefix: "Period",
+        ruleDesc: "Description",
+        ruleDuration: "Duration",
+        ruleCondition: "Condition",
+        ruleBenefit: "Benefits",
+        ruleEvidence: "Evidence"
       },
       ja: {
         pageTitle: "休暇申請フォーム - Alpha D.I.",
@@ -666,9 +834,12 @@
         t3: "無給休暇", d3: "追加の私用",
         t4: "病気休暇", d4: "療養のため",
         t5: "産前産後・育児休暇", d5: "男女社員対象",
-        t6: "得度・出家休暇", d6: "伝統的な出家のため",
+        t6: "出家休暇", d6: "伝統的な出家のため",
         t7: "忌引休暇", d7: "親族の葬儀のため",
-        t8: "特別休暇", d8: "勤続5年・10年",
+        t8: "結婚休暇", d8: "結婚のための休暇",
+        t9: "兵役召集休暇", d9: "予備役召集のため",
+        t10: "避妊手術休暇", d10: "男女社員対象",
+        t11: "特別休暇 (勤続5・10年)", d11: "勤続5年および10年",
         dateRangeLabel: "休暇の日程",
         btnAddSlot: "+ 日程を追加",
         totalDaysLabel: "合計日数:",
@@ -684,12 +855,18 @@
         sumReason: "理由:",
         btnEdit: "修正する",
         btnConfirm: "確認して送信",
+        btnClose: "閉じる",
         fullDay: "終日 (1日)",
         halfMorning: "半日 - 午前 (0.5日)",
         halfAfternoon: "半日 - 午後 (0.5日)",
         dayUnit: "日",
         removeSlotText: "削除",
-        slotPrefix: "期間"
+        slotPrefix: "期間",
+        ruleDesc: "説明",
+        ruleDuration: "期間",
+        ruleCondition: "条件",
+        ruleBenefit: "待遇・手当",
+        ruleEvidence: "証明書"
       }
     };
 
@@ -716,15 +893,11 @@
         .catch(err => console.error(err));
     }
 
-    // ฟังก์ชันเปลี่ยนภาษา
     function setLanguage(lang) {
       currentLang = lang;
-      
-      // อัปเดตปุ่มธงชาติ Active State
       document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById(`btn${lang.charAt(0).toUpperCase() + lang.slice(1)}`).classList.add('active');
 
-      // แปลข้อความที่มี attribute data-i18n
       const elements = document.querySelectorAll('[data-i18n]');
       elements.forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -733,7 +906,6 @@
         }
       });
 
-      // แปล Placeholder
       const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
       placeholders.forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
@@ -742,7 +914,6 @@
         }
       });
 
-      // อัปเดต Dropdown ในช่องเลือกช่วงเวลาที่มีอยู่แล้ว
       updateSlotDropdownsText();
       calculateGrandTotal();
     }
@@ -751,6 +922,44 @@
       document.querySelectorAll('.leave-option').forEach(opt => opt.classList.remove('selected'));
       element.classList.add('selected');
       document.getElementById('selectedLeaveType').value = typeName;
+    }
+
+    function openRuleModal(event, ruleKey) {
+      event.stopPropagation();
+      const rule = leaveRulesData[currentLang][ruleKey];
+      const t = translations[currentLang];
+
+      document.getElementById('ruleModalTitle').innerText = rule.title;
+      
+      const bodyHtml = `
+        <div class="rule-row">
+          <div class="rule-label">${t.ruleDesc}</div>
+          <div>${rule.desc}</div>
+        </div>
+        <div class="rule-row">
+          <div class="rule-label">${t.ruleDuration}</div>
+          <div>${rule.duration}</div>
+        </div>
+        <div class="rule-row">
+          <div class="rule-label">${t.ruleCondition}</div>
+          <div>${rule.condition}</div>
+        </div>
+        <div class="rule-row">
+          <div class="rule-label">${t.ruleBenefit}</div>
+          <div>${rule.benefit}</div>
+        </div>
+        <div class="rule-row">
+          <div class="rule-label">${t.ruleEvidence}</div>
+          <div>${rule.evidence}</div>
+        </div>
+      `;
+
+      document.getElementById('ruleModalBody').innerHTML = bodyHtml;
+      document.getElementById('ruleModal').classList.add('active');
+    }
+
+    function closeRuleModal() {
+      document.getElementById('ruleModal').classList.remove('active');
     }
 
     function addDateSlot() {
