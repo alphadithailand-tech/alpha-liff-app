@@ -688,11 +688,14 @@
 
   <script>
     const MY_LIFF_ID = '2012053598-ClINT0ab';
+    
+    // ใส่ URL Web App ของ Google Apps Script ที่ได้จากการ Deploy ตรงนี้
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/ใส่_WEB_APP_ID_ของคุณ/exec';
+
     let lineUserId = '';
     let slotCount = 0;
     let currentLang = 'th';
 
-    // ข้อมูลรายละเอียดเงื่อนไขการลา 11 ประเภท (3 ภาษา)
     const leaveRulesData = {
       th: {
         leave1: { title: "1. ลาพักร้อน", desc: "เป็นการลาเพื่อพักผ่อนประจำปี หรือลากรณีฉุกเฉินต่างๆ", duration: "6 วันต่อปี สะสมจากปีก่อนได้ไม่เกิน 12 วัน", condition: "ลาล่วงหน้าอย่างน้อย 1 วันทำการ", benefit: "ได้รับค่าจ้าง / ได้รับเบี้ยขยัน", evidence: "ไม่ใช้หลักฐานประกอบการลา" },
@@ -701,7 +704,7 @@
         leave4: { title: "4. ลาป่วย", desc: "ใช้สำหรับลาในกรณีเจ็บป่วยได้เท่าที่ป่วยจริง", duration: "30 วันต่อปี ไม่สามารถสะสมจากปีก่อนได้", condition: "ลาล่วงหน้าหรือลาฉุกเฉินได้", benefit: "ได้รับค่าจ้าง / ไม่ได้รับเบี้ยขยัน", evidence: "หากมีสามารถแนบเพื่อขออนุมัติได้" },
         leave5: { title: "5. ลาคลอดบุตร", desc: "ใช้สำหรับกรณีคลอดบุตรของลูกจ้างหญิง ลาเพื่อช่วยเหลือสำหรับลูกจ้างชาย", duration: "ลูกจ้างหญิง สูงสุด 120 วัน / ชาย 15 วันต่อปี", condition: "ลาล่วงหน้าหรือลาฉุกเฉินได้", benefit: "หญิงรับค่าจ้างสูงสุด 60 วัน ชายได้รับค่าจ้าง 15 วัน / ไม่ได้รับเบี้ยขยัน", evidence: "ใช้หลักฐานประกอบการลา" },
         leave6: { title: "6. ลาอุปสมบท", desc: "กรณีอุปสมบทตามประเพณี", duration: "15 วันต่อปี", condition: "ลาล่วงหน้า", benefit: "ได้รับค่าจ้าง / ไม่ได้รับเบี้ยขยัน", evidence: "ใช้หลักฐานประกอบการลา" },
-        leave7: { title: "7. ลาร่วมงานพิธีศพ", desc: "การลาเพื่อร่วมงานศพหรือการฌาปนกิจศพบิดา มารดา คู่สมรส พี่น้องร่วมบิดามารดา และบุตรโดยชอบด้วยกฎหมาย", duration: "2 วันต่อปี", condition: "ลาล่วงหน้าหรือลาฉุกเฉินได้", benefit: "ได้รับค่าจ้าง / ได้รับเบี้ยขยัน", evidence: "ใช้หลักฐานประกอบการลา" },
+        leave7: { title: "7. ลาร่วมงานพิธีศพ", desc: "การลาเพื่อร่วมงานพิธีศพหรือการฌาปนกิจศพบิดา มารดา คู่สมรส พี่น้องร่วมบิดามารดา และบุตรโดยชอบด้วยกฎหมาย", duration: "2 วันต่อปี", condition: "ลาล่วงหน้าหรือลาฉุกเฉินได้", benefit: "ได้รับค่าจ้าง / ได้รับเบี้ยขยัน", evidence: "ใช้หลักฐานประกอบการลา" },
         leave8: { title: "8. ลาพิธีมงคลสมรส", desc: "เป็นการลาเพื่อแต่งงาน", duration: "3 วันต่อปี", condition: "ทำงานครบ 1 ปีนับตั้งแต่วันเริ่มทำงาน ลาล่วงหน้า 15 วัน", benefit: "ได้รับค่าจ้าง / ได้รับเบี้ยขยัน", evidence: "ใช้หลักฐานประกอบการลา" },
         leave9: { title: "9. การลาเพื่อไปรับราชการทหาร", desc: "สำหรับการเรียกทหารกองเกิน", duration: "60 วันต่อปี", condition: "สามารถลาได้ตลอดและนำหลักฐานมายื่น", benefit: "ได้รับค่าจ้าง / ไม่ได้รับเบี้ยขยัน", evidence: "ใช้หลักฐานประกอบการลา" },
         leave10: { title: "10. ลาเพื่อทำหมัน", desc: "พนักงานชายและหญิงมีสิทธิ์ลาเพื่อทำหมันและเนื่องจากการทำหมัน", duration: "ตามแพทย์ระบุ", condition: "ลาล่วงหน้าหรือลาฉุกเฉินได้", benefit: "ได้รับค่าจ้าง / ไม่ได้รับเบี้ยขยัน", evidence: "ใช้หลักฐานประกอบการลา" },
@@ -1113,12 +1116,28 @@
         reason: document.getElementById('reason').value
       };
 
-      console.log('Sending Leave Request Payload:', payload);
-
-      setTimeout(() => {
-        alert(currentLang === 'th' ? 'ยื่นคำขออนุมัติลาเรียบร้อยแล้ว!' : (currentLang === 'en' ? 'Leave request submitted successfully!' : '休暇申請が正常に送信されました！'));
-        liff.closeWindow();
-      }, 1000);
+      // ส่งข้อมูลไปยัง Google Apps Script Web App
+      fetch(GAS_WEB_APP_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res.status === 'success') {
+          alert(currentLang === 'th' ? 'ยื่นคำขออนุมัติลาเรียบร้อยแล้ว!' : (currentLang === 'en' ? 'Leave request submitted successfully!' : '休暇申請が正常に送信されました！'));
+          liff.closeWindow();
+        } else {
+          alert('เกิดข้อผิดพลาด: ' + res.message);
+          btn.disabled = false;
+          btn.innerText = currentLang === 'th' ? 'ยืนยันส่งใบลา' : 'Confirm & Submit';
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อระบบ');
+        btn.disabled = false;
+        btn.innerText = currentLang === 'th' ? 'ยืนยันส่งใบลา' : 'Confirm & Submit';
+      });
     }
   </script>
 </body>
