@@ -22,10 +22,9 @@
         
         <!-- Header -->
         <div class="p-6 text-center pb-2">
-            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm border border-blue-100">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
+            <!-- ไอคอนส่วนหัวที่เปลี่ยนเป็นรูปภาพจาก Google Drive -->
+            <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm border border-blue-100 overflow-hidden p-2">
+                <img src="https://lh3.googleusercontent.com/d/1eFDDgxw2mcPwQNnxg88EwHm1PgV6SJkP" alt="ข้อกำหนดและเงื่อนไขการลา" class="w-full h-full object-contain">
             </div>
             <h1 class="text-xl font-bold text-slate-800">ข้อกำหนดและเงื่อนไขการลา</h1>
             <p class="text-sm text-slate-500 mt-1">กรุณาอ่านรายละเอียดก่อนยื่นใบลา</p>
@@ -234,13 +233,11 @@
 
         // เมื่อกดปุ่มปฏิเสธ
         function onReject() {
-            // ใส่ลิงก์พาผู้ใช้กลับหน้าหลัก เช่น index.html
             window.location.href = 'index.html';
         }
 
         // เมื่อกดปุ่มยอมรับ
         function onAccept() {
-            // ใส่ลิงก์พาผู้ใช้ไปหน้าฟอร์มยื่นใบลา เช่น leave-form.html
             window.location.href = 'leave-form.html';
         }
     </script>
