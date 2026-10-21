@@ -22,8 +22,8 @@
         
         <!-- Header -->
         <div class="p-6 text-center pb-2">
-            <!-- ไอคอนส่วนหัวที่เปลี่ยนเป็นรูปภาพจาก Google Drive -->
-            <div class="w-24 h-24 bg-white rounded-3xl flex items-center justify-center mx-auto mb-3 shadow-sm border border-blue-100 overflow-hidden p-2">
+            <!-- รูปภาพ Header ขนาดใหญ่แบบไม่มีขอบและเงา -->
+            <div class="w-24 h-24 bg-white flex items-center justify-center mx-auto mb-2 overflow-hidden p-1">
                 <img src="https://lh3.googleusercontent.com/d/1eFDDgxw2mcPwQNnxg88EwHm1PgV6SJkP" alt="ข้อกำหนดและเงื่อนไขการลา" class="w-full h-full object-contain">
             </div>
             <h1 class="text-xl font-bold text-slate-800">ข้อกำหนดและเงื่อนไขการลา</h1>
@@ -45,8 +45,8 @@
         <!-- Tab Contents Area -->
         <div class="p-6 flex-1 flex flex-col justify-between">
             
-            <!-- TAB 1: เงื่อนไขการลา -->
-            <div id="tab-1-content" class="space-y-4">
+            <!-- TAB 1: เงื่อนไขการลา (มี Checkbox + ปุ่มปฏิเสธ/ยอมรับ อยู่ด้านในเฉพาะ Tab นี้) -->
+            <div id="tab-1-content" class="flex flex-col h-full justify-between space-y-4">
                 <div class="bg-blue-50/40 p-4 rounded-2xl border border-blue-50">
                     <h2 class="font-bold text-slate-800 mb-3 text-base flex items-center">
                         เงื่อนไขการลา (โดยสรุป)
@@ -82,9 +82,22 @@
                         ฉันได้อ่านและเข้าใจข้อกำหนดและเงื่อนไขการลาแล้ว
                     </label>
                 </div>
+
+                <!-- Action Buttons (แสดงเฉพาะหน้าเงื่อนไขการลา) -->
+                <div class="pt-2 grid grid-cols-2 gap-3 mt-auto">
+                    <!-- ปุ่มปฏิเสธ (กดย้อนกลับไปหน้าหลัก) -->
+                    <button onclick="onReject()" class="py-3 px-4 bg-blue-50/80 hover:bg-blue-100 text-blue-600 font-semibold rounded-2xl transition text-sm">
+                        ปฏิเสธ
+                    </button>
+                    
+                    <!-- ปุ่มยอมรับ (ไปหน้าถัดไปเมื่อยอมรับ) -->
+                    <button id="accept-btn" disabled onclick="onAccept()" class="py-3 px-4 bg-blue-600 text-white font-semibold rounded-2xl transition text-sm opacity-50 cursor-not-allowed shadow-md shadow-blue-200">
+                        ยอมรับ
+                    </button>
+                </div>
             </div>
 
-            <!-- TAB 2: ประเภทการลา -->
+            <!-- TAB 2: ประเภทการลา (ไม่มี Checkbox และปุ่มล่างสุด) -->
             <div id="tab-2-content" class="hidden space-y-2.5">
                 <!-- ลาพักร้อน -->
                 <div class="flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-100 hover:border-blue-200 hover:shadow-sm transition cursor-pointer">
@@ -169,19 +182,6 @@
                     </div>
                     <span class="text-slate-300">&rsaquo;</span>
                 </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="pt-4 grid grid-cols-2 gap-3 mt-auto">
-                <!-- ปุ่มปฏิเสธ (กดย้อนกลับไปหน้าหลัก) -->
-                <button onclick="onReject()" class="py-3 px-4 bg-blue-50/80 hover:bg-blue-100 text-blue-600 font-semibold rounded-2xl transition text-sm">
-                    ปฏิเสธ
-                </button>
-                
-                <!-- ปุ่มยอมรับ (ไปหน้าถัดไปเมื่อยอมรับ) -->
-                <button id="accept-btn" disabled onclick="onAccept()" class="py-3 px-4 bg-blue-600 text-white font-semibold rounded-2xl transition text-sm opacity-50 cursor-not-allowed shadow-md shadow-blue-200">
-                    ยอมรับ
-                </button>
             </div>
 
         </div>
