@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>แบบฟอร์มยื่นการลา - Alpha D.I.</title>
+  <title id="pageTitle">แบบฟอร์มยื่นการลา - Alpha D.I.</title>
   <!-- โหลด LIFF SDK -->
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
@@ -32,17 +32,50 @@
       position: relative;
     }
 
-    /* Top Navigation / Header */
+    /* Top Navigation / Header & Language Selector */
     .header-banner {
       width: 100%;
       background-color: #ffffff;
       border-bottom: 1px solid #edf2f7;
+      position: relative;
     }
 
     .header-banner img {
       width: 100%;
       height: auto;
       display: block;
+    }
+
+    /* ปุ่มเปลี่ยนภาษาธงชาติ มุมขวาบนของแบนเนอร์ */
+    .lang-bar {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 4px 8px;
+      border-radius: 20px;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+
+    .lang-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 2px;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      opacity: 0.6;
+    }
+
+    .lang-btn.active {
+      opacity: 1;
+      transform: scale(1.15);
+      filter: drop-shadow(0 0 2px rgba(0,0,0,0.2));
     }
 
     .user-card {
@@ -127,7 +160,7 @@
       box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
     }
 
-    /* Leave Type Cards (Pastel Tone) */
+    /* Leave Type Cards */
     .leave-type-select {
       display: flex;
       flex-direction: column;
@@ -205,7 +238,7 @@
       border-radius: 50%;
     }
 
-    /* Dynamic Date Slots Card (ขยายขนาดให้ใหญ่ขึ้น กดง่าย) */
+    /* Dynamic Date Slots Card */
     .date-slot-card {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -245,7 +278,6 @@
       gap: 10px;
     }
 
-    /* ขยายขนาดช่องวันที่และประเภทช่วงเวลาให้ใหญ่สะใจ */
     .slot-date, .slot-type {
       padding: 14px 12px;
       font-size: 15px;
@@ -287,7 +319,6 @@
       color: #166534;
     }
 
-    /* Submit Button (Pastel Green Tone) */
     .btn-submit {
       width: 100%;
       padding: 15px;
@@ -410,9 +441,15 @@
 <body>
 
   <div class="container">
-    <!-- รูปส่วนหัว -->
+    <!-- รูปส่วนหัว + ปุ่มธงชาติเปลี่ยนภาษา -->
     <div class="header-banner">
       <img src="https://lh3.googleusercontent.com/d/1KoanDHszHb1jpiFcCNB_UtvldAzeivN7" alt="เงื่อนไขการลา">
+      
+      <div class="lang-bar">
+        <button class="lang-btn active" id="btnTh" onclick="setLanguage('th')" title="ภาษาไทย">🇹🇭</button>
+        <button class="lang-btn" id="btnEn" onclick="setLanguage('en')" title="English">🇬🇧</button>
+        <button class="lang-btn" id="btnJa" onclick="setLanguage('ja')" title="日本語">🇯🇵</button>
+      </div>
     </div>
 
     <!-- โปรไฟล์ LINE -->
@@ -420,123 +457,123 @@
       <img src="https://via.placeholder.com/44" alt="Profile" class="profile-img" id="pictureUrl">
       <div class="user-info">
         <div class="user-name" id="displayName">กำลังโหลดชื่อ...</div>
-        <div class="user-subtext">ผู้ขออนุมัติลา</div>
+        <div class="user-subtext" data-i18n="approverSub">ผู้ขออนุมัติลา</div>
       </div>
     </div>
 
     <!-- ฟอร์มการลา -->
     <form class="form-container" id="leaveForm" onsubmit="openConfirmationModal(event)">
-      <div class="form-title">แบบฟอร์มยื่นขอลาหยุด</div>
+      <div class="form-title" data-i18n="formTitle">แบบฟอร์มยื่นขอลาหยุด</div>
 
       <!-- ประเภทการลา -->
       <div class="form-group">
-        <label class="form-label">ประเภทการลา <span class="required">*</span></label>
+        <label class="form-label"><span data-i18n="leaveTypeLabel">ประเภทการลา</span> <span class="required">*</span></label>
         <input type="hidden" id="selectedLeaveType" name="leaveType" required>
         
         <div class="leave-type-select">
-          <div class="leave-option" onclick="selectType(this, 'ลาพักร้อน')">
+          <div class="leave-option" onclick="selectType(this, 'Annual Leave')">
             <div class="leave-icon">🌴</div>
-            <div class="leave-details"><div class="leave-name">ลาพักร้อน</div><div class="leave-desc">พักผ่อนประจำปี / ฉุกเฉิน</div></div>
+            <div class="leave-details"><div class="leave-name" data-i18n="t1">ลาพักร้อน</div><div class="leave-desc" data-i18n="d1">พักผ่อนประจำปี / ฉุกเฉิน</div></div>
             <div class="radio-check"></div>
           </div>
-          <div class="leave-option" onclick="selectType(this, 'ลากิจ')">
+          <div class="leave-option" onclick="selectType(this, 'Personal Leave')">
             <div class="leave-icon">🏠</div>
-            <div class="leave-details"><div class="leave-name">ลากิจ</div><div class="leave-desc">ประกอบกิจธุระส่วนตัว</div></div>
+            <div class="leave-details"><div class="leave-name" data-i18n="t2">ลากิจ</div><div class="leave-desc" data-i18n="d2">ประกอบกิจธุระส่วนตัว</div></div>
             <div class="radio-check"></div>
           </div>
-          <div class="leave-option" onclick="selectType(this, 'ลากิจ ไม่รับค่าจ้าง')">
+          <div class="leave-option" onclick="selectType(this, 'Unpaid Leave')">
             <div class="leave-icon">📁</div>
-            <div class="leave-details"><div class="leave-name">ลากิจ ไม่รับค่าจ้าง</div><div class="leave-desc">กิจธุระส่วนตัวเพิ่มเติม</div></div>
+            <div class="leave-details"><div class="leave-name" data-i18n="t3">ลากิจ ไม่รับค่าจ้าง</div><div class="leave-desc" data-i18n="d3">กิจธุระส่วนตัวเพิ่มเติม</div></div>
             <div class="radio-check"></div>
           </div>
-          <div class="leave-option" onclick="selectType(this, 'ลาป่วย')">
+          <div class="leave-option" onclick="selectType(this, 'Sick Leave')">
             <div class="leave-icon">🏥</div>
-            <div class="leave-details"><div class="leave-name">ลาป่วย</div><div class="leave-desc">กรณีเจ็บป่วยจริง</div></div>
+            <div class="leave-details"><div class="leave-name" data-i18n="t4">ลาป่วย</div><div class="leave-desc" data-i18n="d4">กรณีเจ็บป่วยจริง</div></div>
             <div class="radio-check"></div>
           </div>
-          <div class="leave-option" onclick="selectType(this, 'ลาคลอดบุตร')">
+          <div class="leave-option" onclick="selectType(this, 'Maternity/Paternity Leave')">
             <div class="leave-icon">👶</div>
-            <div class="leave-details"><div class="leave-name">ลาคลอดบุตร</div><div class="leave-desc">สำหรับลูกจ้างหญิงและชาย</div></div>
+            <div class="leave-details"><div class="leave-name" data-i18n="t5">ลาคลอดบุตร</div><div class="leave-desc" data-i18n="d5">สำหรับลูกจ้างหญิงและชาย</div></div>
             <div class="radio-check"></div>
           </div>
-          <div class="leave-option" onclick="selectType(this, 'ลาอุปสมบท')">
+          <div class="leave-option" onclick="selectType(this, 'Ordination Leave')">
             <div class="leave-icon">🪷</div>
-            <div class="leave-details"><div class="leave-name">ลาอุปสมบท</div><div class="leave-desc">กรณีอุปสมบทตามประเพณี</div></div>
+            <div class="leave-details"><div class="leave-name" data-i18n="t6">ลาอุปสมบท</div><div class="leave-desc" data-i18n="d6">กรณีอุปสมบทตามประเพณี</div></div>
             <div class="radio-check"></div>
           </div>
-          <div class="leave-option" onclick="selectType(this, 'ลาร่วมงานพิธีศพ')">
+          <div class="leave-option" onclick="selectType(this, 'Funeral Leave')">
             <div class="leave-icon">🕊️</div>
-            <div class="leave-details"><div class="leave-name">ลาร่วมงานพิธีศพ</div><div class="leave-desc">งานศพญาติสายตรงตามกฎหมาย</div></div>
+            <div class="leave-details"><div class="leave-name" data-i18n="t7">ลาร่วมงานพิธีศพ</div><div class="leave-desc" data-i18n="d7">งานศพญาติสายตรงตามกฎหมาย</div></div>
             <div class="radio-check"></div>
           </div>
-          <div class="leave-option" onclick="selectType(this, 'ลาพักร้อนพิเศษ')">
+          <div class="leave-option" onclick="selectType(this, 'Special Leave (5/10 Years)')">
             <div class="leave-icon">⭐</div>
-            <div class="leave-details"><div class="leave-name">ลาพักร้อนพิเศษ</div><div class="leave-desc">เมื่ออายุงานครบ 5 และ 10 ปี</div></div>
+            <div class="leave-details"><div class="leave-name" data-i18n="t8">ลาพักร้อนพิเศษ</div><div class="leave-desc" data-i18n="d8">เมื่ออายุงานครบ 5 และ 10 ปี</div></div>
             <div class="radio-check"></div>
           </div>
         </div>
       </div>
 
-      <!-- ส่วนจัดการช่วงวันลาหลายรายการ -->
+      <!-- ส่วนจัดการช่วงวันลา -->
       <div class="form-group">
-        <label class="form-label">กำหนดช่วงวันลา <span class="required">*</span></label>
+        <label class="form-label"><span data-i18n="dateRangeLabel">กำหนดช่วงวันลา</span> <span class="required">*</span></label>
         <div id="slotsContainer"></div>
         
-        <button type="button" class="btn-add-slot" onclick="addDateSlot()">+ เพิ่มช่วงวันลาอีก</button>
+        <button type="button" class="btn-add-slot" onclick="addDateSlot()" data-i18n="btnAddSlot">+ เพิ่มช่วงวันลาอีก</button>
       </div>
 
       <!-- สรุปรวมวันลา -->
       <div class="total-summary-box">
-        <span>รวมจำนวนวันลาทั้งหมด:</span>
+        <span data-i18n="totalDaysLabel">รวมจำนวนวันลาทั้งหมด:</span>
         <span id="grandTotalDaysDisplay">0 วัน</span>
       </div>
 
       <!-- เหตุผลการลา -->
       <div class="form-group">
-        <label class="form-label">เหตุผลการลา <span class="required">*</span></label>
-        <textarea class="form-control" id="reason" name="reason" rows="3" placeholder="ระบุเหตุผลการลา..." required></textarea>
+        <label class="form-label"><span data-i18n="reasonLabel">เหตุผลการลา</span> <span class="required">*</span></label>
+        <textarea class="form-control" id="reason" name="reason" rows="3" placeholder="ระบุเหตุผลการลา..." data-i18n-placeholder="reasonPlaceholder" required></textarea>
       </div>
 
       <!-- แนบไฟล์ -->
       <div class="form-group">
-        <label class="form-label">แนบเอกสาร / ใบรับรองแพทย์ (ถ้ามี)</label>
+        <label class="form-label" data-i18n="attachLabel">แนบเอกสาร / ใบรับรองแพทย์ (ถ้ามี)</label>
         <input type="file" class="form-control" id="attachment" accept="image/*,.pdf">
       </div>
 
-      <button type="submit" class="btn-submit">ส่งใบขออนุมัติลา</button>
+      <button type="submit" class="btn-submit" data-i18n="btnSubmit">ส่งใบขออนุมัติลา</button>
     </form>
   </div>
 
   <!-- Pop-up ตรวจสอบข้อมูลก่อนส่ง -->
   <div class="modal-overlay" id="confirmModal">
     <div class="modal-content">
-      <div class="modal-title">📋 สรุปรายการขอลาหยุด</div>
+      <div class="modal-title" data-i18n="modalTitle">📋 สรุปรายการขอลาหยุด</div>
       <div class="summary-list">
         <div class="summary-item">
-          <span class="summary-item-title">ผู้ขออนุมัติ:</span>
+          <span class="summary-item-title" data-i18n="sumRequester">ผู้ขออนุมัติ:</span>
           <span id="summaryName">-</span>
         </div>
         <div class="summary-item">
-          <span class="summary-item-title">ประเภทการลา:</span>
+          <span class="summary-item-title" data-i18n="sumLeaveType">ประเภทการลา:</span>
           <span id="summaryLeaveType" style="color: #0ea5e9; font-weight: bold;">-</span>
         </div>
         <div>
-          <span class="summary-item-title">ช่วงวันลาที่ระบุ:</span>
+          <span class="summary-item-title" data-i18n="sumSlots">ช่วงวันลาที่ระบุ:</span>
           <div class="summary-slot-list" id="summarySlotsList"></div>
         </div>
         <div class="summary-item" style="margin-top: 6px;">
-          <span class="summary-item-title">รวมจำนวนวันลา:</span>
+          <span class="summary-item-title" data-i18n="sumTotal">รวมจำนวนวันลา:</span>
           <span id="summaryTotalDays" style="font-weight: bold; color: #10b981;">-</span>
         </div>
         <div class="summary-item">
-          <span class="summary-item-title">เหตุผลการลา:</span>
+          <span class="summary-item-title" data-i18n="sumReason">เหตุผลการลา:</span>
           <span id="summaryReason">-</span>
         </div>
       </div>
 
       <div class="modal-actions">
-        <button type="button" class="btn-edit" onclick="closeModal()">กลับไปแก้ไข</button>
-        <button type="button" class="btn-confirm" id="btnFinalSubmit" onclick="confirmAndSend()">ยืนยันส่งใบลา</button>
+        <button type="button" class="btn-edit" onclick="closeModal()" data-i18n="btnEdit">กลับไปแก้ไข</button>
+        <button type="button" class="btn-confirm" id="btnFinalSubmit" onclick="confirmAndSend()" data-i18n="btnConfirm">ยืนยันส่งใบลา</button>
       </div>
     </div>
   </div>
@@ -545,6 +582,116 @@
     const MY_LIFF_ID = '2012053598-ClINT0ab';
     let lineUserId = '';
     let slotCount = 0;
+    let currentLang = 'th';
+
+    // Dictionary 3 ภาษา (ไทย, อังกฤษ, ญี่ปุ่น)
+    const translations = {
+      th: {
+        pageTitle: "แบบฟอร์มยื่นการลา - Alpha D.I.",
+        approverSub: "ผู้ขออนุมัติลา",
+        formTitle: "แบบฟอร์มยื่นขอลาหยุด",
+        leaveTypeLabel: "ประเภทการลา",
+        t1: "ลาพักร้อน", d1: "พักผ่อนประจำปี / ฉุกเฉิน",
+        t2: "ลากิจ", d2: "ประกอบกิจธุระส่วนตัว",
+        t3: "ลากิจ ไม่รับค่าจ้าง", d3: "กิจธุระส่วนตัวเพิ่มเติม",
+        t4: "ลาป่วย", d4: "กรณีเจ็บป่วยจริง",
+        t5: "ลาคลอดบุตร", d5: "สำหรับลูกจ้างหญิงและชาย",
+        t6: "ลาอุปสมบท", d6: "กรณีอุปสมบทตามประเพณี",
+        t7: "ลาร่วมงานพิธีศพ", d7: "งานศพญาติสายตรงตามกฎหมาย",
+        t8: "ลาพักร้อนพิเศษ", d8: "เมื่ออายุงานครบ 5 และ 10 ปี",
+        dateRangeLabel: "กำหนดช่วงวันลา",
+        btnAddSlot: "+ เพิ่มช่วงวันลาอีก",
+        totalDaysLabel: "รวมจำนวนวันลาทั้งหมด:",
+        reasonLabel: "เหตุผลการลา",
+        reasonPlaceholder: "ระบุเหตุผลการลา...",
+        attachLabel: "แนบเอกสาร / ใบรับรองแพทย์ (ถ้ามี)",
+        btnSubmit: "ส่งใบขออนุมัติลา",
+        modalTitle: "📋 สรุปรายการขอลาหยุด",
+        sumRequester: "ผู้ขออนุมัติ:",
+        sumLeaveType: "ประเภทการลา:",
+        sumSlots: "ช่วงวันลาที่ระบุ:",
+        sumTotal: "รวมจำนวนวันลา:",
+        sumReason: "เหตุผลการลา:",
+        btnEdit: "กลับไปแก้ไข",
+        btnConfirm: "ยืนยันส่งใบลา",
+        fullDay: "เต็มวัน (1 วัน)",
+        halfMorning: "ครึ่งวันเช้า (0.5 วัน)",
+        halfAfternoon: "ครึ่งวันบ่าย (0.5 วัน)",
+        dayUnit: "วัน",
+        removeSlotText: "ลบช่วงนี้",
+        slotPrefix: "ช่วงที่"
+      },
+      en: {
+        pageTitle: "Leave Request Form - Alpha D.I.",
+        approverSub: "Requester",
+        formTitle: "Leave Request Form",
+        leaveTypeLabel: "Leave Type",
+        t1: "Annual Leave", d1: "Annual vacation / Emergency",
+        t2: "Personal Leave", d2: "Personal business",
+        t3: "Unpaid Leave", d3: "Additional personal business",
+        t4: "Sick Leave", d4: "Medical leave",
+        t5: "Maternity/Paternity", d5: "For male & female employees",
+        t6: "Ordination Leave", d6: "Traditional monk ordination",
+        t7: "Funeral Leave", d7: "Immediate family member funeral",
+        t8: "Special Leave", d8: "For 5 & 10 years of service",
+        dateRangeLabel: "Leave Date Ranges",
+        btnAddSlot: "+ Add Another Date Range",
+        totalDaysLabel: "Total Leave Days:",
+        reasonLabel: "Reason",
+        reasonPlaceholder: "Specify reason...",
+        attachLabel: "Attach Document / Medical Certificate",
+        btnSubmit: "Submit Leave Request",
+        modalTitle: "📋 Leave Request Summary",
+        sumRequester: "Requester:",
+        sumLeaveType: "Leave Type:",
+        sumSlots: "Selected Dates:",
+        sumTotal: "Total Days:",
+        sumReason: "Reason:",
+        btnEdit: "Edit",
+        btnConfirm: "Confirm & Submit",
+        fullDay: "Full Day (1 Day)",
+        halfMorning: "Half Day - Morning (0.5 Day)",
+        halfAfternoon: "Half Day - Afternoon (0.5 Day)",
+        dayUnit: "Days",
+        removeSlotText: "Remove",
+        slotPrefix: "Period"
+      },
+      ja: {
+        pageTitle: "休暇申請フォーム - Alpha D.I.",
+        approverSub: "申請者",
+        formTitle: "休暇申請書",
+        leaveTypeLabel: "休暇の種類",
+        t1: "年次有給休暇", d1: "年次休暇 / 緊急",
+        t2: "私用休暇", d2: "私用のため",
+        t3: "無給休暇", d3: "追加の私用",
+        t4: "病気休暇", d4: "療養のため",
+        t5: "産前産後・育児休暇", d5: "男女社員対象",
+        t6: "得度・出家休暇", d6: "伝統的な出家のため",
+        t7: "忌引休暇", d7: "親族の葬儀のため",
+        t8: "特別休暇", d8: "勤続5年・10年",
+        dateRangeLabel: "休暇の日程",
+        btnAddSlot: "+ 日程を追加",
+        totalDaysLabel: "合計日数:",
+        reasonLabel: "理由",
+        reasonPlaceholder: "理由を入力してください...",
+        attachLabel: "書類・診断書の添付 (任意)",
+        btnSubmit: "休暇申請を送信",
+        modalTitle: "📋 休暇申請の確認",
+        sumRequester: "申請者:",
+        sumLeaveType: "休暇の種類:",
+        sumSlots: "選択された日程:",
+        sumTotal: "合計日数:",
+        sumReason: "理由:",
+        btnEdit: "修正する",
+        btnConfirm: "確認して送信",
+        fullDay: "終日 (1日)",
+        halfMorning: "半日 - 午前 (0.5日)",
+        halfAfternoon: "半日 - 午後 (0.5日)",
+        dayUnit: "日",
+        removeSlotText: "削除",
+        slotPrefix: "期間"
+      }
+    };
 
     document.addEventListener("DOMContentLoaded", function() {
       initializeLiff(MY_LIFF_ID);
@@ -569,6 +716,37 @@
         .catch(err => console.error(err));
     }
 
+    // ฟังก์ชันเปลี่ยนภาษา
+    function setLanguage(lang) {
+      currentLang = lang;
+      
+      // อัปเดตปุ่มธงชาติ Active State
+      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`btn${lang.charAt(0).toUpperCase() + lang.slice(1)}`).classList.add('active');
+
+      // แปลข้อความที่มี attribute data-i18n
+      const elements = document.querySelectorAll('[data-i18n]');
+      elements.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          el.innerText = translations[lang][key];
+        }
+      });
+
+      // แปล Placeholder
+      const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
+      placeholders.forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (translations[lang][key]) {
+          el.placeholder = translations[lang][key];
+        }
+      });
+
+      // อัปเดต Dropdown ในช่องเลือกช่วงเวลาที่มีอยู่แล้ว
+      updateSlotDropdownsText();
+      calculateGrandTotal();
+    }
+
     function selectType(element, typeName) {
       document.querySelectorAll('.leave-option').forEach(opt => opt.classList.remove('selected'));
       element.classList.add('selected');
@@ -580,18 +758,19 @@
       const container = document.getElementById('slotsContainer');
       const slotId = `slot_${slotCount}`;
       
+      const t = translations[currentLang];
       const slotHtml = `
         <div class="date-slot-card" id="${slotId}">
           <div class="slot-header">
-            <span class="slot-title">ช่วงที่ ${container.children.length + 1}</span>
-            ${container.children.length > 0 ? `<button type="button" class="btn-remove-slot" onclick="removeDateSlot('${slotId}')">ลบช่วงนี้</button>` : ''}
+            <span class="slot-title">${t.slotPrefix} 1</span>
+            ${container.children.length > 0 ? `<button type="button" class="btn-remove-slot" onclick="removeDateSlot('${slotId}')">${t.removeSlotText}</button>` : ''}
           </div>
           <div class="slot-row">
             <input type="date" class="slot-date" required onchange="calculateGrandTotal()">
             <select class="slot-type" onchange="calculateGrandTotal()">
-              <option value="1">เต็มวัน (1 วัน)</option>
-              <option value="0.5_morning">ครึ่งวันเช้า (0.5 วัน)</option>
-              <option value="0.5_afternoon">ครึ่งวันบ่าย (0.5 วัน)</option>
+              <option value="1">${t.fullDay}</option>
+              <option value="0.5_morning">${t.halfMorning}</option>
+              <option value="0.5_afternoon">${t.halfAfternoon}</option>
             </select>
           </div>
         </div>
@@ -612,10 +791,29 @@
     }
 
     function updateSlotTitles() {
+      const t = translations[currentLang];
       const slots = document.querySelectorAll('.date-slot-card');
       slots.forEach((slot, index) => {
         const titleEl = slot.querySelector('.slot-title');
-        if (titleEl) titleEl.innerText = `ช่วงที่ ${index + 1}`;
+        if (titleEl) titleEl.innerText = `${t.slotPrefix} ${index + 1}`;
+        
+        const removeBtn = slot.querySelector('.btn-remove-slot');
+        if (removeBtn) removeBtn.innerText = t.removeSlotText;
+      });
+    }
+
+    function updateSlotDropdownsText() {
+      const t = translations[currentLang];
+      const slots = document.querySelectorAll('.date-slot-card');
+      slots.forEach(slot => {
+        const select = slot.querySelector('.slot-type');
+        const currentVal = select.value;
+        
+        select.options[0].text = t.fullDay;
+        select.options[1].text = t.halfMorning;
+        select.options[2].text = t.halfAfternoon;
+        
+        select.value = currentVal;
       });
     }
 
@@ -633,7 +831,8 @@
         }
       });
 
-      document.getElementById('grandTotalDaysDisplay').innerText = `${grandTotal} วัน`;
+      const t = translations[currentLang];
+      document.getElementById('grandTotalDaysDisplay').innerText = `${grandTotal} ${t.dayUnit}`;
       return grandTotal;
     }
 
@@ -642,19 +841,20 @@
 
       const leaveType = document.getElementById('selectedLeaveType').value;
       if (!leaveType) {
-        alert('กรุณาเลือกประเภทการลา');
+        alert(currentLang === 'th' ? 'กรุณาเลือกประเภทการลา' : (currentLang === 'en' ? 'Please select leave type.' : '休暇の種類を選択してください。'));
         return;
       }
 
       const totalDays = calculateGrandTotal();
       if (totalDays === 0) {
-        alert('กรุณาระบุวันที่ต้องการลาอย่างน้อย 1 ช่วง');
+        alert(currentLang === 'th' ? 'กรุณาระบุวันที่ต้องการลาอย่างน้อย 1 ช่วง' : (currentLang === 'en' ? 'Please select at least one leave date range.' : '少なくとも1つの休暇日程を選択してください。'));
         return;
       }
 
+      const t = translations[currentLang];
       document.getElementById('summaryName').innerText = document.getElementById('displayName').innerText;
       document.getElementById('summaryLeaveType').innerText = leaveType;
-      document.getElementById('summaryTotalDays').innerText = `${totalDays} วัน`;
+      document.getElementById('summaryTotalDays').innerText = `${totalDays} ${t.dayUnit}`;
       document.getElementById('summaryReason').innerText = document.getElementById('reason').value;
 
       const slotsContainer = document.getElementById('summarySlotsList');
@@ -669,7 +869,7 @@
         if (dateVal) {
           const item = document.createElement('div');
           item.style.padding = '3px 0';
-          item.innerText = `• ช่วงที่ ${index + 1}: ${dateVal} (${typeText})`;
+          item.innerText = `• ${t.slotPrefix} ${index + 1}: ${dateVal} (${typeText})`;
           slotsContainer.appendChild(item);
         }
       });
@@ -684,7 +884,7 @@
     function confirmAndSend() {
       const btn = document.getElementById('btnFinalSubmit');
       btn.disabled = true;
-      btn.innerText = 'กำลังส่งข้อมูล...';
+      btn.innerText = currentLang === 'th' ? 'กำลังส่งข้อมูล...' : (currentLang === 'en' ? 'Submitting...' : '送信中...');
 
       const slotData = [];
       const slots = document.querySelectorAll('.date-slot-card');
@@ -707,7 +907,7 @@
       console.log('Sending Leave Request Payload:', payload);
 
       setTimeout(() => {
-        alert('ยื่นคำขออนุมัติลาเรียบร้อยแล้ว!');
+        alert(currentLang === 'th' ? 'ยื่นคำขออนุมัติลาเรียบร้อยแล้ว!' : (currentLang === 'en' ? 'Leave request submitted successfully!' : '休暇申請が正常に送信されました！'));
         liff.closeWindow();
       }, 1000);
     }
