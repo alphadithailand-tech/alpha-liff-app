@@ -15,7 +15,7 @@
     }
 
     body {
-      background-color: #f4f6f9;
+      background-color: #f7f9fc;
       display: flex;
       justify-content: center;
       padding-bottom: 30px;
@@ -28,7 +28,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      box-shadow: 0 0 15px rgba(0,0,0,0.04);
       position: relative;
     }
 
@@ -36,7 +36,7 @@
     .header-banner {
       width: 100%;
       background-color: #ffffff;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid #edf2f7;
     }
 
     .header-banner img {
@@ -48,18 +48,18 @@
     .user-card {
       display: flex;
       align-items: center;
-      padding: 12px 16px;
-      background: #f8f9fa;
-      border-bottom: 1px solid #eee;
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);
+      border-bottom: 1px solid #e2e8f0;
       gap: 12px;
     }
 
     .profile-img {
-      width: 44px;
-      height: 44px;
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid #00c853;
+      border: 2px solid #38bdf8;
     }
 
     .user-info {
@@ -70,12 +70,12 @@
     .user-name {
       font-size: 15px;
       font-weight: bold;
-      color: #333;
+      color: #1e293b;
     }
 
     .user-subtext {
       font-size: 12px;
-      color: #666;
+      color: #64748b;
     }
 
     /* Form Content */
@@ -83,51 +83,51 @@
       padding: 20px 16px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 20px;
     }
 
     .form-title {
       font-size: 18px;
       font-weight: bold;
-      color: #1a2530;
-      margin-bottom: 4px;
+      color: #1e293b;
       text-align: center;
+      margin-bottom: -4px;
     }
 
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
     .form-label {
       font-size: 14px;
       font-weight: 600;
-      color: #444;
+      color: #334155;
     }
 
     .form-label span.required {
-      color: #e53935;
+      color: #f43f5e;
     }
 
     .form-control, .form-select {
       width: 100%;
-      padding: 11px 12px;
-      font-size: 14px;
-      border: 1px solid #dcdfe6;
-      border-radius: 10px;
+      padding: 13px 14px;
+      font-size: 15px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
       background-color: #fff;
-      color: #333;
+      color: #1e293b;
       outline: none;
       transition: all 0.2s ease;
     }
 
     .form-control:focus, .form-select:focus {
-      border-color: #00c853;
-      box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.1);
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
     }
 
-    /* Leave Type Cards */
+    /* Leave Type Cards (Pastel Tone) */
     .leave-type-select {
       display: flex;
       flex-direction: column;
@@ -145,22 +145,26 @@
       transition: all 0.2s ease;
     }
 
+    .leave-option:hover {
+      background-color: #f8fafc;
+    }
+
     .leave-option.selected {
-      border-color: #00c853;
-      background-color: #f0fdf4;
-      box-shadow: 0 2px 6px rgba(0, 200, 83, 0.15);
+      border-color: #38bdf8;
+      background-color: #f0f9ff;
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.15);
     }
 
     .leave-icon {
       font-size: 24px;
       margin-right: 12px;
-      width: 38px;
-      height: 38px;
+      width: 42px;
+      height: 42px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #f1f5f9;
-      border-radius: 10px;
+      border-radius: 12px;
     }
 
     .leave-details {
@@ -170,12 +174,12 @@
     .leave-name {
       font-size: 14px;
       font-weight: bold;
-      color: #2d3748;
+      color: #1e293b;
     }
 
     .leave-desc {
       font-size: 12px;
-      color: #718096;
+      color: #64748b;
     }
 
     .radio-check {
@@ -189,8 +193,8 @@
     }
 
     .leave-option.selected .radio-check {
-      border-color: #00c853;
-      background-color: #00c853;
+      border-color: #0ea5e9;
+      background-color: #0ea5e9;
     }
 
     .leave-option.selected .radio-check::after {
@@ -201,13 +205,13 @@
       border-radius: 50%;
     }
 
-    /* Dynamic Date Slots Card */
+    /* Dynamic Date Slots Card (ขยายขนาดให้ใหญ่ขึ้น กดง่าย) */
     .date-slot-card {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 10px;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
       position: relative;
     }
 
@@ -215,7 +219,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .slot-title {
@@ -225,10 +229,10 @@
     }
 
     .btn-remove-slot {
-      background: #fee2e2;
-      color: #ef4444;
+      background: #ffe4e6;
+      color: #f43f5e;
       border: none;
-      padding: 4px 8px;
+      padding: 4px 10px;
       border-radius: 6px;
       font-size: 12px;
       cursor: pointer;
@@ -238,15 +242,26 @@
     .slot-row {
       display: grid;
       grid-template-columns: 1.2fr 1fr;
-      gap: 8px;
+      gap: 10px;
+    }
+
+    /* ขยายขนาดช่องวันที่และประเภทช่วงเวลาให้ใหญ่สะใจ */
+    .slot-date, .slot-type {
+      padding: 14px 12px;
+      font-size: 15px;
+      border-radius: 12px;
+      background-color: #ffffff;
+      border: 1px solid #cbd5e1;
+      font-weight: 500;
+      color: #0f172a;
     }
 
     .btn-add-slot {
       background: #e0f2fe;
       color: #0284c7;
-      border: 1px dashed #0284c7;
-      padding: 10px;
-      border-radius: 10px;
+      border: 1px dashed #38bdf8;
+      padding: 12px;
+      border-radius: 12px;
       font-size: 14px;
       font-weight: bold;
       cursor: pointer;
@@ -260,31 +275,36 @@
     }
 
     .total-summary-box {
-      background-color: #f0fdf4;
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
       border: 1px solid #bbf7d0;
-      padding: 10px 14px;
-      border-radius: 10px;
+      padding: 14px 16px;
+      border-radius: 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: bold;
       color: #166534;
     }
 
-    /* Submit Button */
+    /* Submit Button (Pastel Green Tone) */
     .btn-submit {
       width: 100%;
-      padding: 14px;
+      padding: 15px;
       font-size: 16px;
       font-weight: bold;
       color: #ffffff;
-      background-color: #00c853;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       border: none;
       border-radius: 14px;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
-      margin-top: 10px;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+      margin-top: 6px;
+      transition: opacity 0.2s;
+    }
+
+    .btn-submit:active {
+      opacity: 0.9;
     }
 
     /* Popup Modal Styles */
@@ -294,12 +314,13 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(15, 23, 42, 0.5);
       display: none;
       justify-content: center;
       align-items: center;
       z-index: 1000;
       padding: 16px;
+      backdrop-filter: blur(4px);
     }
 
     .modal-overlay.active {
@@ -308,11 +329,11 @@
 
     .modal-content {
       background: #ffffff;
-      border-radius: 16px;
+      border-radius: 20px;
       width: 100%;
       max-width: 420px;
-      padding: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      padding: 24px 20px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
       max-height: 90vh;
       overflow-y: auto;
     }
@@ -321,26 +342,26 @@
       font-size: 18px;
       font-weight: bold;
       color: #1e293b;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       text-align: center;
       border-bottom: 2px solid #f1f5f9;
-      padding-bottom: 8px;
+      padding-bottom: 10px;
     }
 
     .summary-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       font-size: 14px;
       color: #334155;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .summary-item {
       display: flex;
       justify-content: space-between;
       border-bottom: 1px dashed #e2e8f0;
-      padding-bottom: 6px;
+      padding-bottom: 8px;
     }
 
     .summary-item-title {
@@ -350,36 +371,36 @@
 
     .summary-slot-list {
       background: #f8fafc;
-      padding: 8px 12px;
-      border-radius: 8px;
-      margin-top: 4px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-top: 6px;
       font-size: 13px;
+      border: 1px solid #e2e8f0;
     }
 
     .modal-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-top: 16px;
     }
 
     .btn-edit {
       background: #f1f5f9;
       color: #475569;
-      border: 1px solid #cbd5e0;
-      padding: 12px;
-      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      padding: 13px;
+      border-radius: 12px;
       font-size: 14px;
       font-weight: bold;
       cursor: pointer;
     }
 
     .btn-confirm {
-      background: #00c853;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       color: #ffffff;
       border: none;
-      padding: 12px;
-      border-radius: 10px;
+      padding: 13px;
+      border-radius: 12px;
       font-size: 14px;
       font-weight: bold;
       cursor: pointer;
@@ -497,7 +518,7 @@
         </div>
         <div class="summary-item">
           <span class="summary-item-title">ประเภทการลา:</span>
-          <span id="summaryLeaveType" style="color: #00c853; font-weight: bold;">-</span>
+          <span id="summaryLeaveType" style="color: #0ea5e9; font-weight: bold;">-</span>
         </div>
         <div>
           <span class="summary-item-title">ช่วงวันลาที่ระบุ:</span>
@@ -505,7 +526,7 @@
         </div>
         <div class="summary-item" style="margin-top: 6px;">
           <span class="summary-item-title">รวมจำนวนวันลา:</span>
-          <span id="summaryTotalDays" style="font-weight: bold; color: #ef4444;">-</span>
+          <span id="summaryTotalDays" style="font-weight: bold; color: #10b981;">-</span>
         </div>
         <div class="summary-item">
           <span class="summary-item-title">เหตุผลการลา:</span>
@@ -527,7 +548,7 @@
 
     document.addEventListener("DOMContentLoaded", function() {
       initializeLiff(MY_LIFF_ID);
-      addDateSlot(); // เพิ่มช่วงแรกให้อัตโนมัติ 1 สล็อต
+      addDateSlot();
     });
 
     function initializeLiff(liffId) {
@@ -554,7 +575,6 @@
       document.getElementById('selectedLeaveType').value = typeName;
     }
 
-    // ฟังก์ชันเพิ่มสล็อตเลือกวันลา
     function addDateSlot() {
       slotCount++;
       const container = document.getElementById('slotsContainer');
@@ -567,8 +587,8 @@
             ${container.children.length > 0 ? `<button type="button" class="btn-remove-slot" onclick="removeDateSlot('${slotId}')">ลบช่วงนี้</button>` : ''}
           </div>
           <div class="slot-row">
-            <input type="date" class="form-control slot-date" required onchange="calculateGrandTotal()">
-            <select class="form-select slot-type" onchange="calculateGrandTotal()">
+            <input type="date" class="slot-date" required onchange="calculateGrandTotal()">
+            <select class="slot-type" onchange="calculateGrandTotal()">
               <option value="1">เต็มวัน (1 วัน)</option>
               <option value="0.5_morning">ครึ่งวันเช้า (0.5 วัน)</option>
               <option value="0.5_afternoon">ครึ่งวันบ่าย (0.5 วัน)</option>
@@ -582,7 +602,6 @@
       calculateGrandTotal();
     }
 
-    // ฟังก์ชันลบสล็อต
     function removeDateSlot(slotId) {
       const slotElement = document.getElementById(slotId);
       if (slotElement) {
@@ -600,7 +619,6 @@
       });
     }
 
-    // คำนวณวันลารวมทั้งหมด
     function calculateGrandTotal() {
       let grandTotal = 0;
       const slots = document.querySelectorAll('.date-slot-card');
@@ -619,7 +637,6 @@
       return grandTotal;
     }
 
-    // เปิด Pop-up สรุปข้อมูล
     function openConfirmationModal(event) {
       event.preventDefault();
 
@@ -635,13 +652,11 @@
         return;
       }
 
-      // นำข้อมูลไปแสดงใน Modal
       document.getElementById('summaryName').innerText = document.getElementById('displayName').innerText;
       document.getElementById('summaryLeaveType').innerText = leaveType;
       document.getElementById('summaryTotalDays').innerText = `${totalDays} วัน`;
       document.getElementById('summaryReason').innerText = document.getElementById('reason').value;
 
-      // สร้างรายการช่วงวันลาเพื่อโชว์ใน Modal
       const slotsContainer = document.getElementById('summarySlotsList');
       slotsContainer.innerHTML = '';
       
@@ -653,13 +668,12 @@
 
         if (dateVal) {
           const item = document.createElement('div');
-          item.style.padding = '2px 0';
+          item.style.padding = '3px 0';
           item.innerText = `• ช่วงที่ ${index + 1}: ${dateVal} (${typeText})`;
           slotsContainer.appendChild(item);
         }
       });
 
-      // แสดง Pop-up
       document.getElementById('confirmModal').classList.add('active');
     }
 
@@ -667,13 +681,11 @@
       document.getElementById('confirmModal').classList.remove('active');
     }
 
-    // กด ยืนยันส่งใบลา จริงๆ
     function confirmAndSend() {
       const btn = document.getElementById('btnFinalSubmit');
       btn.disabled = true;
       btn.innerText = 'กำลังส่งข้อมูล...';
 
-      // รวบรวมข้อมูลช่วงวันลาทั้งหมดส่งออก
       const slotData = [];
       const slots = document.querySelectorAll('.date-slot-card');
       slots.forEach(slot => {
