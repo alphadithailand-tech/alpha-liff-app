@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แบบฟอร์มยื่นยื่นการลา - Alpha D.I.</title>
+  <!-- โหลด LIFF SDK -->
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tahoma', 'Segoe UI', Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      padding-bottom: 30px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background-color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    /* Top Navigation / Header */
+    .header-banner {
+      width: 100%;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .user-card {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #eee;
+      gap: 12px;
+    }
+
+    .profile-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #00c853;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-size: 15px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .user-subtext {
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* Form Content */
+    .form-container {
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .form-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #1a2530;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    .form-label span.required {
+      color: #e53935;
+    }
+
+    .form-control, .form-select {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 14px;
+      border: 1px solid #dcdfe6;
+      border-radius: 12px;
+      background-color: #fff;
+      color: #333;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: #00c853;
+      box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.1);
+    }
+
+    /* Custom Leave Type Cards Container */
+    .leave-type-select {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .leave-option {
+      display: flex;
+      align-items: center;
+      padding: 12px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      background-color: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .leave-option:hover {
+      border-color: #b0bec5;
+    }
+
+    .leave-option.selected {
+      border-color: #00c853;
+      background-color: #f0fdf4;
+      box-shadow: 0 2px 6px rgba(0, 200, 83, 0.15);
+    }
+
+    .leave-icon {
+      font-size: 26px;
+      margin-right: 12px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+
+    .leave-details {
+      flex: 1;
+    }
+
+    .leave-name {
+      font-size: 15px;
+      font-weight: bold;
+      color: #2d3748;
+    }
+
+    .leave-desc {
+      font-size: 12px;
+      color: #718096;
+      margin-top: 2px;
+    }
+
+    .radio-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #cbd5e0;
+      margin-left: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .leave-option.selected .radio-check {
+      border-color: #00c853;
+      background-color: #00c853;
+    }
+
+    .leave-option.selected .radio-check::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background-color: #fff;
+      border-radius: 50%;
+    }
+
+    /* Date Row */
+    .date-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* Submit Button */
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffffff;
+      background-color: #00c853;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
+      transition: background-color 0.2s;
+      margin-top: 10px;
+    }
+
+    .btn-submit:active {
+      background-color: #00a844;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- รูปส่วนหัวหน้าเงื่อนไข/การลา (ใส่ File ID ของคุณ) -->
+    <div class="header-banner">
+      <img src="https://lh3.googleusercontent.com/d/1KoanDHszHb1jpiFcCNB_UtvldAzeivN7" alt="เงื่อนไขการลา">
+    </div>
+
+    <!-- ส่วนแสดงโปรไฟล์ผู้ยื่นลา -->
+    <div class="user-card">
+      <img src="https://via.placeholder.com/44" alt="Profile" class="profile-img" id="pictureUrl">
+      <div class="user-info">
+        <div class="user-name" id="displayName">กำลังโหลดชื่อ...</div>
+        <div class="user-subtext">ผู้ขออนุมัติลา</div>
+      </div>
+    </div>
+
+    <!-- แบบฟอร์มยื่นคำร้อง -->
+    <form class="form-container" id="leaveForm" onsubmit="submitForm(event)">
+      <div class="form-title">แบบฟอร์มยื่นขอลาหยุด</div>
+
+      <!-- เลือกประเภทการลา -->
+      <div class="form-group">
+        <label class="form-label">ประเภทการลา <span class="required">*</span></label>
+        <input type="hidden" id="selectedLeaveType" name="leaveType" required>
+        
+        <div class="leave-type-select">
+          
+          <!-- 1. ลาพักร้อน -->
+          <div class="leave-option" onclick="selectType(this, 'ลาพักร้อน')">
+            <div class="leave-icon">🌴</div>
+            <div class="leave-details">
+              <div class="leave-name">ลาพักร้อน</div>
+              <div class="leave-desc">พักผ่อนประจำปี / ฉุกเฉิน</div>
+            </div>
+            <div class="radio-check"></div>
+          </div>
+
+          <!-- 2. ลากิจ -->
+          <div class="leave-option" onclick="selectType(this, 'ลากิจ')">
+            <div class="leave-icon">🏠</div>
+            <div class="leave-details">
+              <div class="leave-name">ลากิจ</div>
+              <div class="leave-desc">ประกอบกิจธุระส่วนตัว</div>
+            </div>
+            <div class="radio-check"></div>
+          </div>
+
+          <!-- 3. ลากิจ ไม่รับค่าจ้าง -->
+          <div class="leave-option" onclick="selectType(this, 'ลากิจ ไม่รับค่าจ้าง')">
+            <div class="leave-icon">📁</div>
+            <div class="leave-details">
+              <div class="leave-name">ลากิจ ไม่รับค่าจ้าง</div>
+              <div class="leave-desc">กิจธุระส่วนตัวเพิ่มเติม</div>
+            </div>
+            <div class="radio-check"></div>
+          </div>
+
+          <!-- 4. ลาป่วย -->
+          <div class="leave-option" onclick="selectType(this, 'ลาป่วย')">
+            <div class="leave-icon">🏥</div>
+            <div class="leave-details">
+              <div class="leave-name">ลาป่วย</div>
+              <div class="leave-desc">กรณีเจ็บป่วยจริง</div>
+            </div>
+            <div class="radio-check"></div>
+          </div>
+
+          <!-- 5. ลาคลอดบุตร -->
+          <div class="leave-option" onclick="selectType(this, 'ลาคลอดบุตร')">
+            <div class="leave-icon">👶</div>
+            <div class="leave-details">
+              <div class="leave-name">ลาคลอดบุตร</div>
+              <div class="leave-desc">สำหรับลูกจ้างหญิงและชาย</div>
+            </div>
+            <div class="radio-check"></div>
+          </div>
+
+          <!-- 6. ลาอุปสมบท -->
+          <div class="leave-option" onclick="selectType(this, 'ลาอุปสมบท')">
+            <div class="leave-icon">🪷</div>
+            <div class="leave-details">
+              <div class="leave-name">ลาอุปสมบท</div>
+              <div class="leave-desc">กรณีอุปสมบทตามประเพณี</div>
+            </div>
+            <div class="radio-check"></div>
+          </div>
+
+          <!-- 7. ลาร่วมงานพิธีศพ -->
+          <div class="leave-option" onclick="selectType(this, 'ลาร่วมงานพิธีศพ')">
+            <div class="leave-icon">🕊️</div>
+            <div class="leave-details">
+              <div class="leave-name">ลาร่วมงานพิธีศพ</div>
+              <div class="leave-desc">งานศพญาติสายตรงตามกฎหมาย</div>
+            </div>
+            <div class="radio-check"></div>
+          </div>
+
+          <!-- 8. ลาพักร้อนพิเศษ -->
+          <div class="leave-option" onclick="selectType(this, 'ลาพักร้อนพิเศษ')">
+            <div class="leave-icon">⭐</div>
+            <div class="leave-details">
+              <div class="leave-name">ลาพักร้อนพิเศษ</div>
+              <div class="leave-desc">เมื่ออายุงานครบ 5 และ 10 ปี</div>
+            </div>
+            <div class="radio-check"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ช่วงวันที่ลา -->
+      <div class="date-row">
+        <div class="form-group">
+          <label class="form-label">ตั้งแต่วันที่ <span class="required">*</span></label>
+          <input type="date" class="form-control" id="startDate" name="startDate" required onchange="calculateDays()">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ถึงวันที่ <span class="required">*</span></label>
+          <input type="date" class="form-control" id="endDate" name="endDate" required onchange="calculateDays()">
+        </div>
+      </div>
+
+      <!-- จำนวนวันลา -->
+      <div class="form-group">
+        <label class="form-label">จำนวนวันลา (วัน)</label>
+        <input type="number" step="0.5" class="form-control" id="totalDays" name="totalDays" placeholder="เช่น 1 หรือ 0.5" required>
+      </div>
+
+      <!-- เหตุผลการลา -->
+      <div class="form-group">
+        <label class="form-label">เหตุผลการลา <span class="required">*</span></label>
+        <textarea class="form-control" id="reason" name="reason" rows="3" placeholder="ระบุเหตุผลการลา..." required></textarea>
+      </div>
+
+      <!-- แนบเอกสาร/ใบรับรองแพทย์ (ถ้ามี) -->
+      <div class="form-group">
+        <label class="form-label">แนบเอกสาร / ใบรับรองแพทย์ (ถ้ามี)</label>
+        <input type="file" class="form-control" id="attachment" accept="image/*,.pdf">
+      </div>
+
+      <!-- ปุ่มส่งข้อมูล -->
+      <button type="submit" class="btn-submit" id="btnSubmit">ส่งใบขออนุมัติลา</button>
+    </form>
+  </div>
+
+  <script>
+    const MY_LIFF_ID = '2012053598-ClINT0ab';
+    let lineUserId = '';
+
+    document.addEventListener("DOMContentLoaded", function() {
+      initializeLiff(MY_LIFF_ID);
+    });
+
+    function initializeLiff(liffId) {
+      liff.init({ liffId: liffId })
+        .then(() => {
+          if (!liff.isLoggedIn()) {
+            liff.login();
+          } else {
+            liff.getProfile().then(profile => {
+              lineUserId = profile.userId;
+              document.getElementById('displayName').innerText = profile.displayName;
+              if (profile.pictureUrl) {
+                document.getElementById('pictureUrl').src = profile.pictureUrl;
+              }
+            });
+          }
+        })
+        .catch(err => console.error(err));
+    }
+
+    // ฟังก์ชันเลือกประเภทการลา
+    function selectType(element, typeName) {
+      document.querySelectorAll('.leave-option').forEach(opt => opt.classList.remove('selected'));
+      element.classList.add('selected');
+      document.getElementById('selectedLeaveType').value = typeName;
+    }
+
+    // คำนวณจำนวนวันให้อัตโนมัติเบื้องต้น
+    function calculateDays() {
+      const start = new Date(document.getElementById('startDate').value);
+      const end = new Date(document.getElementById('endDate').value);
+
+      if (start && end && end >= start) {
+        const diffTime = Math.abs(end - start);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        document.getElementById('totalDays').value = diffDays;
+      }
+    }
+
+    // ส่งฟอร์ม
+    function submitForm(event) {
+      event.preventDefault();
+      
+      const leaveType = document.getElementById('selectedLeaveType').value;
+      if (!leaveType) {
+        alert('กรุณาเลือกประเภทการลา');
+        return;
+      }
+
+      const formData = {
+        userId: lineUserId,
+        name: document.getElementById('displayName').innerText,
+        leaveType: leaveType,
+        startDate: document.getElementById('startDate').value,
+        endDate: document.getElementById('endDate').value,
+        totalDays: document.getElementById('totalDays').value,
+        reason: document.getElementById('reason').value
+      };
+
+      document.getElementById('btnSubmit').disabled = true;
+      document.getElementById('btnSubmit').innerText = 'กำลังส่งข้อมูล...';
+
+      // จำลองการบันทึก (หรือส่งไปยัง Google Apps Script Web App)
+      console.log('Form Data:', formData);
+      alert('ยื่นคำขอลาเรียบร้อยแล้ว');
+      liff.closeWindow();
+    }
+  </script>
+</body>
+</html>
