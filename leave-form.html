@@ -21,7 +21,7 @@
     <div class="w-full max-w-lg bg-white rounded-3xl shadow-lg border border-blue-100 overflow-hidden flex flex-col p-6 my-6">
         
         <h1 class="text-xl font-bold text-slate-800 mb-1 text-center">แบบฟอร์มยื่นใบลา</h1>
-        <p class="text-xs text-slate-500 mb-6 text-center">กรุณากรอกข้อมูลและเลือกช่วงเวลาการลาของคุณ</p>
+        <p class="text-xs text-slate-500 mb-6 text-center">กรุณากรอกข้อมูล เลือกช่วงเวลา และแนบหลักฐาน (ถ้ามี)</p>
 
         <!-- Form -->
         <form id="leaveForm" onsubmit="openSummaryModal(event)" class="space-y-4">
@@ -76,6 +76,13 @@
                 <textarea id="leaveReason" rows="3" required placeholder="ระบุเหตุผลความจำเป็น..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:border-blue-500"></textarea>
             </div>
 
+            <!-- แนบหลักฐานประกอบการลา -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">แนบหลักฐานประกอบการลา (ถ้ามี)</label>
+                <input type="file" id="leaveFile" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 cursor-pointer bg-slate-50 border border-slate-200 rounded-xl">
+                <p class="text-[10px] text-slate-400 mt-1">รองรับไฟล์รูปภาพ (JPG, PNG) หรือ PDF</p>
+            </div>
+
             <!-- ปุ่มกดส่งคำขอ -->
             <div class="pt-2">
                 <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-2xl transition text-sm shadow-md shadow-blue-200">
@@ -85,9 +92,9 @@
         </form>
     </div>
 
-    <!-- POP-UP มอลัดสรุปข้อมูลการลา -->
+    <!-- POP-UP สรุปข้อมูลการลา -->
     <div id="summaryModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl border border-slate-100 space-y-4 animate-fadeIn">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl border border-slate-100 space-y-4">
             <h3 class="text-lg font-bold text-slate-800 text-center">📄 สรุปข้อมูลการขอลา</h3>
             <p class="text-xs text-slate-500 text-center -mt-2">กรุณาตรวจสอบความถูกต้องก่อนกดยืนยัน</p>
 
@@ -97,6 +104,7 @@
                     <ul id="sumPeriods" class="list-disc list-inside mt-1 font-semibold text-slate-700 space-y-1"></ul>
                 </div>
                 <div><span class="text-slate-400">เหตุผลการลา:</span> <span id="sumReason" class="font-semibold text-slate-700"></span></div>
+                <div><span class="text-slate-400">หลักฐานที่แนบ:</span> <span id="sumFile" class="font-semibold text-slate-700"></span></div>
             </div>
 
             <div class="grid grid-cols-2 gap-3 pt-2">
@@ -146,9 +154,12 @@
             // ดึงค่าประเภทการลาและเหตุผล
             const type = document.getElementById('leaveType').value;
             const reason = document.getElementById('leaveReason').value;
+            const fileInput = document.getElementById('leaveFile');
+            const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : 'ไม่มีไฟล์แนบ';
 
             document.getElementById('sumType').innerText = type;
             document.getElementById('sumReason').innerText = reason;
+            document.getElementById('sumFile').innerText = fileName;
 
             // รวบรวมช่วงเวลาทั้งหมด
             const dates = document.querySelectorAll('.leave-date');
@@ -178,7 +189,6 @@
         // ยืนยันส่งข้อมูลจริง
         function confirmSubmit() {
             alert('ส่งใบขออนุมัติลาเรียบร้อยแล้ว!');
-            // สามารถเปลี่ยนเส้นทางกลับหน้าหลัก หรือหน้าประวัติการลาได้ที่นี่
             window.location.href = 'index.html';
         }
     </script>
