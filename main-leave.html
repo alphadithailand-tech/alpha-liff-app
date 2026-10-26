@@ -236,8 +236,8 @@
     <!-- Interactive JavaScript -->
     <script>
         const LIFF_ID = "2012053598-ClINT0ab";
-        // URL Web App จาก Google Apps Script
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz......(ใส่ Web App URL ของคุณที่นี่)....../exec"; 
+        // ใสลิงก์ Web App เรียบร้อยแล้ว
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwo4qrNh69G-Pz1fvTcpBIkQesKSXyEqDiGwVYpVubWYTNEvgWrECBTE1qy5LerjgzvEg/exec"; 
 
         window.onload = function() {
             initLiff();
@@ -254,7 +254,6 @@
                 })
                 .catch(err => {
                     console.error("LIFF Init Error:", err);
-                    // กรณีเปิดทดสอบบนเบราว์เซอร์ภายนอก
                     fetchUserData();
                 });
         }
@@ -269,7 +268,6 @@
                     userId = profile.userId;
                     pictureUrl = profile.pictureUrl;
                 } else {
-                    // LINE ID สำหรับทดสอบ (กรณีเทสบน Local/PC)
                     userId = "U0123456789abcdef..."; 
                 }
 
@@ -277,7 +275,6 @@
                     document.getElementById('user-avatar').src = pictureUrl;
                 }
 
-                // เรียกข้อมูลจาก Google Apps Script
                 const response = await fetch(`${WEB_APP_URL}?action=getUserProfile&userId=${userId}`);
                 const res = await response.json();
 
@@ -288,12 +285,10 @@
                     document.getElementById('emp-position').innerText = data.position || '-';
                     document.getElementById('emp-department').innerText = data.department || '-';
 
-                    // สิทธิ์วันลา (เรียง: AL -> PL -> SL)
                     document.getElementById('quota-al').innerText = data.quotaAL !== undefined ? data.quotaAL : '-';
                     document.getElementById('quota-pl').innerText = data.quotaPL !== undefined ? data.quotaPL : '-';
                     document.getElementById('quota-sl').innerText = data.quotaSL !== undefined ? data.quotaSL : '-';
 
-                    // เปลี่ยนสีจุดสถานะเป็นสีเขียวถ้า Active
                     if ((data.status || '').toLowerCase() === 'active') {
                         document.getElementById('user-status-dot').className = "absolute bottom-0 right-0 w-4 h-4 bg-line border-2 border-slate-900 rounded-full";
                     }
@@ -338,6 +333,7 @@
                 toastIcon.innerHTML = `<i class="fa-solid fa-check"></i>`;
             }
 
+            modal.classList.add('hidden'); // Fix toggle logic
             modal.classList.remove('hidden');
         }
 
