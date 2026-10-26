@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="pageTitle">แบบฟอร์มยื่นการลา - ALPHA D.I. TH</title>
+  <!-- โหลด LIFF SDK -->
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
     * {
@@ -12,12 +13,14 @@
       padding: 0;
       font-family: 'Tahoma', 'Segoe UI', Geneva, Verdana, sans-serif;
     }
+
     body {
       background-color: #f7f9fc;
       display: flex;
       justify-content: center;
       padding-bottom: 30px;
     }
+
     .container {
       width: 100%;
       max-width: 480px;
@@ -28,17 +31,21 @@
       box-shadow: 0 0 15px rgba(0,0,0,0.04);
       position: relative;
     }
+
+    /* Top Navigation / Header & Language Selector */
     .header-banner {
       width: 100%;
       background-color: #ffffff;
       border-bottom: 1px solid #edf2f7;
       position: relative;
     }
+
     .header-banner img {
       width: 100%;
       height: auto;
       display: block;
     }
+
     .lang-bar {
       position: absolute;
       top: 10px;
@@ -52,6 +59,7 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       z-index: 10;
     }
+
     .lang-btn {
       background: none;
       border: none;
@@ -62,11 +70,13 @@
       transition: transform 0.2s;
       opacity: 0.6;
     }
+
     .lang-btn.active {
       opacity: 1;
       transform: scale(1.15);
       filter: drop-shadow(0 0 2px rgba(0,0,0,0.2));
     }
+
     .user-card {
       display: flex;
       align-items: center;
@@ -75,6 +85,7 @@
       border-bottom: 1px solid #e2e8f0;
       gap: 12px;
     }
+
     .profile-img {
       width: 46px;
       height: 46px;
@@ -82,25 +93,31 @@
       object-fit: cover;
       border: 2px solid #38bdf8;
     }
+
     .user-info {
       display: flex;
       flex-direction: column;
     }
+
     .user-name {
       font-size: 15px;
       font-weight: bold;
       color: #1e293b;
     }
+
     .user-subtext {
       font-size: 12px;
       color: #64748b;
     }
+
+    /* Form Content */
     .form-container {
       padding: 20px 16px;
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
+
     .form-title {
       font-size: 18px;
       font-weight: bold;
@@ -108,11 +125,13 @@
       text-align: center;
       margin-bottom: -4px;
     }
+
     .form-group {
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
+
     .form-label {
       font-size: 14px;
       font-weight: 600;
@@ -121,9 +140,11 @@
       justify-content: space-between;
       align-items: center;
     }
+
     .form-label span.required {
       color: #f43f5e;
     }
+
     .quota-badge {
       font-size: 12px;
       font-weight: normal;
@@ -132,6 +153,7 @@
       padding: 2px 8px;
       border-radius: 6px;
     }
+
     .form-control, .form-select {
       width: 100%;
       padding: 13px 14px;
@@ -143,15 +165,19 @@
       outline: none;
       transition: all 0.2s ease;
     }
+
     .form-control:focus, .form-select:focus {
       border-color: #38bdf8;
       box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
     }
+
+    /* Leave Type Cards */
     .leave-type-select {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
+
     .leave-option {
       display: flex;
       align-items: center;
@@ -163,14 +189,17 @@
       transition: all 0.2s ease;
       position: relative;
     }
+
     .leave-option:hover {
       background-color: #f8fafc;
     }
+
     .leave-option.selected {
       border-color: #38bdf8;
       background-color: #f0f9ff;
       box-shadow: 0 2px 8px rgba(56, 189, 248, 0.15);
     }
+
     .leave-icon {
       font-size: 24px;
       margin-right: 12px;
@@ -183,19 +212,23 @@
       border-radius: 12px;
       flex-shrink: 0;
     }
+
     .leave-details {
       flex: 1;
     }
+
     .leave-name {
       font-size: 14px;
       font-weight: bold;
       color: #1e293b;
     }
+
     .leave-desc {
       font-size: 12px;
       color: #64748b;
       margin-top: 2px;
     }
+
     .btn-info-detail {
       background: none;
       border: none;
@@ -209,9 +242,11 @@
       justify-content: center;
       transition: background 0.2s;
     }
+
     .btn-info-detail:hover {
       background: #e0f2fe;
     }
+
     .radio-check {
       width: 18px;
       height: 18px;
@@ -223,10 +258,12 @@
       margin-left: 8px;
       flex-shrink: 0;
     }
+
     .leave-option.selected .radio-check {
       border-color: #0ea5e9;
       background-color: #0ea5e9;
     }
+
     .leave-option.selected .radio-check::after {
       content: '';
       width: 6px;
@@ -234,6 +271,8 @@
       background-color: #fff;
       border-radius: 50%;
     }
+
+    /* Dynamic Date Slots Card */
     .date-slot-card {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -242,17 +281,20 @@
       margin-bottom: 12px;
       position: relative;
     }
+
     .slot-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
     }
+
     .slot-title {
       font-size: 13px;
       font-weight: bold;
       color: #475569;
     }
+
     .btn-remove-slot {
       background: #ffe4e6;
       color: #f43f5e;
@@ -263,11 +305,13 @@
       cursor: pointer;
       font-weight: bold;
     }
+
     .slot-row {
       display: grid;
       grid-template-columns: 1.2fr 1fr;
       gap: 10px;
     }
+
     .slot-date, .slot-type {
       padding: 14px 12px;
       font-size: 15px;
@@ -277,6 +321,7 @@
       font-weight: 500;
       color: #0f172a;
     }
+
     .btn-add-slot {
       background: #e0f2fe;
       color: #0284c7;
@@ -290,9 +335,11 @@
       text-align: center;
       transition: background 0.2s;
     }
+
     .btn-add-slot:hover {
       background: #bae6fd;
     }
+
     .total-summary-box {
       background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
       border: 1px solid #bbf7d0;
@@ -305,6 +352,7 @@
       font-weight: bold;
       color: #166534;
     }
+
     .btn-submit {
       width: 100%;
       padding: 15px;
@@ -319,9 +367,12 @@
       margin-top: 6px;
       transition: opacity 0.2s;
     }
+
     .btn-submit:active {
       opacity: 0.9;
     }
+
+    /* Modal Styles */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -336,9 +387,11 @@
       padding: 16px;
       backdrop-filter: blur(4px);
     }
+
     .modal-overlay.active {
       display: flex;
     }
+
     .modal-content {
       background: #ffffff;
       border-radius: 20px;
@@ -349,6 +402,7 @@
       max-height: 90vh;
       overflow-y: auto;
     }
+
     .modal-title {
       font-size: 18px;
       font-weight: bold;
@@ -358,6 +412,7 @@
       border-bottom: 2px solid #f1f5f9;
       padding-bottom: 10px;
     }
+
     .summary-list {
       display: flex;
       flex-direction: column;
@@ -366,16 +421,19 @@
       color: #334155;
       margin-bottom: 20px;
     }
+
     .summary-item {
       display: flex;
       justify-content: space-between;
       border-bottom: 1px dashed #e2e8f0;
       padding-bottom: 8px;
     }
+
     .summary-item-title {
       font-weight: bold;
       color: #64748b;
     }
+
     .summary-slot-list {
       background: #f8fafc;
       padding: 10px 12px;
@@ -384,6 +442,7 @@
       font-size: 13px;
       border: 1px solid #e2e8f0;
     }
+
     .rule-box {
       display: flex;
       flex-direction: column;
@@ -392,26 +451,31 @@
       color: #334155;
       margin-bottom: 20px;
     }
+
     .rule-row {
       background: #f8fafc;
       padding: 10px 12px;
       border-radius: 10px;
       border: 1px solid #e2e8f0;
     }
+
     .rule-label {
       font-weight: bold;
       color: #0ea5e9;
       font-size: 12px;
       margin-bottom: 2px;
     }
+
     .modal-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
+
     .modal-actions.single {
       grid-template-columns: 1fr;
     }
+
     .btn-edit, .btn-confirm, .btn-close-modal {
       padding: 13px;
       border-radius: 12px;
@@ -420,11 +484,13 @@
       cursor: pointer;
       text-align: center;
     }
+
     .btn-edit {
       background: #f1f5f9;
       color: #475569;
       border: 1px solid #cbd5e1;
     }
+
     .btn-confirm, .btn-close-modal {
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       color: #ffffff;
@@ -435,8 +501,10 @@
 <body>
 
   <div class="container">
+    <!-- รูปส่วนหัว + ปุ่มธงชาติเปลี่ยนภาษา -->
     <div class="header-banner">
       <img src="https://lh3.googleusercontent.com/d/1KoanDHszHb1jpiFcCNB_UtvldAzeivN7" alt="เงื่อนไขการลา">
+      
       <div class="lang-bar">
         <button class="lang-btn active" id="btnTh" onclick="setLanguage('th')" title="ภาษาไทย">🇹🇭</button>
         <button class="lang-btn" id="btnEn" onclick="setLanguage('en')" title="English">🇬🇧</button>
@@ -444,6 +512,7 @@
       </div>
     </div>
 
+    <!-- โปรไฟล์ LINE -->
     <div class="user-card">
       <img src="https://via.placeholder.com/44" alt="Profile" class="profile-img" id="pictureUrl">
       <div class="user-info">
@@ -452,9 +521,11 @@
       </div>
     </div>
 
+    <!-- ฟอร์มการลา -->
     <form class="form-container" id="leaveForm" onsubmit="openConfirmationModal(event)">
       <div class="form-title" data-i18n="formTitle">แบบฟอร์มยื่นขอลาหยุด</div>
 
+      <!-- ประเภทการลา (11 ประเภท) -->
       <div class="form-group">
         <label class="form-label">
           <span data-i18n="leaveTypeLabel">ประเภทการลา</span> 
@@ -464,91 +535,119 @@
         <input type="hidden" id="selectedLeaveType" name="leaveType" required>
         
         <div class="leave-type-select">
+          
+          <!-- 1. ลาพักร้อน -->
           <div class="leave-option" onclick="selectType(this, 'Annual Leave')">
             <div class="leave-icon">🌴</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t1">ลาพักร้อน</div><div class="leave-desc" data-i18n="d1">พักผ่อนประจำปี / ฉุกเฉิน</div></div>
             <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave1')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 2. ลากิจ -->
           <div class="leave-option" onclick="selectType(this, 'Personal Leave')">
             <div class="leave-icon">🏠</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t2">ลากิจ</div><div class="leave-desc" data-i18n="d2">ประกอบกิจธุระส่วนตัว</div></div>
             <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave2')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 3. ลากิจ ไม่รับค่าจ้าง -->
           <div class="leave-option" onclick="selectType(this, 'Unpaid Leave')">
             <div class="leave-icon">📁</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t3">ลากิจ ไม่รับค่าจ้าง</div><div class="leave-desc" data-i18n="d3">กิจธุระส่วนตัวเพิ่มเติม</div></div>
             <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave3')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 4. ลาป่วย -->
           <div class="leave-option" onclick="selectType(this, 'Sick Leave')">
             <div class="leave-icon">🏥</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t4">ลาป่วย</div><div class="leave-desc" data-i18n="d4">กรณีเจ็บป่วยจริง</div></div>
             <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave4')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 5. ลาคลอดบุตร -->
           <div class="leave-option" onclick="selectType(this, 'Maternity/Paternity Leave')">
             <div class="leave-icon">👶</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t5">ลาคลอดบุตร</div><div class="leave-desc" data-i18n="d5">สำหรับลูกจ้างหญิงและชาย</div></div>
             <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave5')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 6. ลาอุปสมบท -->
           <div class="leave-option" onclick="selectType(this, 'Ordination Leave')">
             <div class="leave-icon">🪷</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t6">ลาอุปสมบท</div><div class="leave-desc" data-i18n="d6">กรณีอุปสมบทตามประเพณี</div></div>
             <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave6')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 7. ลาร่วมงานพิธีศพ -->
           <div class="leave-option" onclick="selectType(this, 'Funeral Leave')">
             <div class="leave-icon">🕊️</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t7">ลาร่วมงานพิธีศพ</div><div class="leave-desc" data-i18n="d7">งานศพญาติสายตรงตามกฎหมาย</div></div>
             <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave7')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 8. ลาพิธีมงคลสมรส -->
           <div class="leave-option" onclick="selectType(this, 'Wedding Leave')">
             <div class="leave-icon">💍</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t8">ลาพิธีมงคลสมรส</div><div class="leave-desc" data-i18n="d8">เป็นการลาเพื่อแต่งงาน</div></div>
             <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave8')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 9. การลาเพื่อไปรับราชการทหาร -->
           <div class="leave-option" onclick="selectType(this, 'Military Service Leave')">
             <div class="leave-icon">🪖</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t9">ลาเพื่อรับราชการทหาร</div><div class="leave-desc" data-i18n="d9">สำหรับการเรียกทหารกองเกิน</div></div>
             <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave9')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 10. ลาเพื่อทำหมัน -->
           <div class="leave-option" onclick="selectType(this, 'Sterilization Leave')">
             <div class="leave-icon">⚕️</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t10">ลาเพื่อทำหมัน</div><div class="leave-desc" data-i18n="d10">พนักงานชายและหญิง</div></div>
             <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave10')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
+          <!-- 11. ลาพักร้อนพิเศษ -->
           <div class="leave-option" onclick="selectType(this, 'Special Leave (5/10 Years)')">
             <div class="leave-icon">⭐</div>
             <div class="leave-details"><div class="leave-name" data-i18n="t11">ลาพักร้อนพิเศษ</div><div class="leave-desc" data-i18n="d11">อายุงานครบ 5 และ 10 ปี</div></div>
             <button type="button" class="btn-info-detail" onclick="openRuleModal(event, 'leave11')" title="ดูรายละเอียด">ℹ️</button>
             <div class="radio-check"></div>
           </div>
+
         </div>
       </div>
 
+      <!-- ส่วนจัดการช่วงวันลา -->
       <div class="form-group">
         <label class="form-label"><span data-i18n="dateRangeLabel">กำหนดช่วงวันลา</span> <span class="required">*</span></label>
         <div id="slotsContainer"></div>
+        
         <button type="button" class="btn-add-slot" onclick="addDateSlot()" data-i18n="btnAddSlot">+ เพิ่มช่วงวันลาอีก</button>
       </div>
 
+      <!-- สรุปรวมวันลา -->
       <div class="total-summary-box">
         <span data-i18n="totalDaysLabel">รวมจำนวนวันลาทั้งหมด:</span>
         <span id="grandTotalDaysDisplay">0 วัน</span>
       </div>
 
+      <!-- เหตุผลการลา -->
       <div class="form-group">
         <label class="form-label"><span data-i18n="reasonLabel">เหตุผลการลา</span> <span class="required">*</span></label>
         <textarea class="form-control" id="reason" name="reason" rows="3" placeholder="ระบุเหตุผลการลา..." data-i18n-placeholder="reasonPlaceholder" required></textarea>
       </div>
 
+      <!-- แนบไฟล์ -->
       <div class="form-group">
         <label class="form-label" data-i18n="attachLabel">แนบเอกสาร / ใบรับรองแพทย์ (ถ้ามี)</label>
         <input type="file" class="form-control" id="attachment" accept="image/*,.pdf">
@@ -558,6 +657,7 @@
     </form>
   </div>
 
+  <!-- Pop-up แสดงรายละเอียดเงื่อนไขการลา -->
   <div class="modal-overlay" id="ruleModal">
     <div class="modal-content">
       <div class="modal-title" id="ruleModalTitle">ℹ️ รายละเอียดการลา</div>
@@ -568,6 +668,7 @@
     </div>
   </div>
 
+  <!-- Pop-up ตรวจสอบข้อมูลก่อนส่ง -->
   <div class="modal-overlay" id="confirmModal">
     <div class="modal-content">
       <div class="modal-title" data-i18n="modalTitle">📋 สรุปรายการขอลาหยุด</div>
