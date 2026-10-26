@@ -47,11 +47,6 @@
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
-        .profile-bg {
-            background-image: linear-gradient(135deg, rgba(0, 61, 165, 0.88) 0%, rgba(0, 86, 210, 0.85) 50%, rgba(30, 110, 235, 0.82) 160%), url('https://lh3.googleusercontent.com/d/1tz1pXJinc7G0pVo3GHDnq6ZKKtrw7tq5');
-            background-size: cover;
-            background-position: center;
-        }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
@@ -75,50 +70,59 @@
         
         <!-- MAIN VIEW: MENU HUB -->
         <div id="view-main-menu" class="flex-1 overflow-y-auto pb-6 animate-fade-in">
-            <!-- Header Profile Section (ปรับใช้ภาพพื้นหลังโปร่งแสง) -->
-            <div class="profile-bg text-white px-5 pt-6 pb-8 rounded-b-3xl shadow-lg relative overflow-hidden">
-                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-                <div class="absolute -left-10 -top-10 w-32 h-32 bg-blue-400/20 rounded-full blur-xl pointer-events-none"></div>
+            
+            <!-- Header Profile Section (วิธีที่ 2: ใช้แท็กภาพซ้อนทับพร้อมเลเยอร์โปร่งแสง) -->
+            <div class="text-white px-5 pt-6 pb-8 rounded-b-3xl shadow-lg relative overflow-hidden bg-slate-900">
+                <!-- ภาพพื้นหลัง Google Drive -->
+                <img src="https://lh3.googleusercontent.com/d/1tz1pXJinc7G0pVo3GHDnq6ZKKtrw7tq5" 
+                     class="absolute inset-0 w-full h-full object-cover opacity-40 pointer-events-none" 
+                     alt="Profile Background">
+                     
+                <!-- เลเยอร์สีน้ำเงินทับเพื่อให้ข้อความอ่านง่าย -->
+                <div class="absolute inset-0 bg-gradient-to-br from-[#003DA5]/90 via-[#0056D2]/80 to-[#1E6EEB]/70 pointer-events-none"></div>
 
-                <!-- Company Branding Banner -->
-                <div class="flex items-center justify-between mb-4">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white/15 text-white border border-white/20">
-                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mr-1.5 animate-pulse"></span>
-                        Alpha D.I. Thailand
-                    </span>
-                    <span class="text-xs text-blue-100">รหัสพนักงาน: <strong id="emp-id" class="text-white">กำลังโหลด...</strong></span>
-                </div>
+                <!-- เนื้อหาข้างใน Header Profile -->
+                <div class="relative z-10">
+                    <!-- Company Branding Banner -->
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white/15 text-white border border-white/20">
+                            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mr-1.5 animate-pulse"></span>
+                            Alpha D.I. Thailand
+                        </span>
+                        <span class="text-xs text-blue-100">รหัสพนักงาน: <strong id="emp-id" class="text-white">กำลังโหลด...</strong></span>
+                    </div>
 
-                <!-- Profile Info Card -->
-                <div class="flex items-center space-x-4">
-                    <div class="relative">
-                        <img id="user-avatar" src="https://via.placeholder.com/150" 
-                             alt="User Avatar" 
-                             class="w-16 h-16 rounded-full object-cover border-2 border-white/80 shadow-md">
-                        <span id="user-status-dot" class="absolute bottom-0 right-0 w-4 h-4 bg-slate-400 border-2 border-slate-900 rounded-full" title="Status"></span>
+                    <!-- Profile Info Card -->
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <img id="user-avatar" src="https://via.placeholder.com/150" 
+                                 alt="User Avatar" 
+                                 class="w-16 h-16 rounded-full object-cover border-2 border-white/80 shadow-md">
+                            <span id="user-status-dot" class="absolute bottom-0 right-0 w-4 h-4 bg-slate-400 border-2 border-slate-900 rounded-full" title="Status"></span>
+                        </div>
+                        <div class="flex-1">
+                            <h2 id="emp-name" class="text-lg font-bold text-white tracking-tight flex items-center gap-1.5">
+                                กำลังโหลดชื่อ...
+                            </h2>
+                            <p class="text-xs text-blue-100">ตำแหน่ง: <span id="emp-position">กำลังโหลด...</span></p>
+                            <p class="text-xs text-blue-200">แผนก: <span id="emp-department">กำลังโหลด...</span></p>
+                        </div>
                     </div>
-                    <div class="flex-1">
-                        <h2 id="emp-name" class="text-lg font-bold text-white tracking-tight flex items-center gap-1.5">
-                            กำลังโหลดชื่อ...
-                        </h2>
-                        <p class="text-xs text-blue-100">ตำแหน่ง: <span id="emp-position">กำลังโหลด...</span></p>
-                        <p class="text-xs text-blue-200">แผนก: <span id="emp-department">กำลังโหลด...</span></p>
-                    </div>
-                </div>
 
-                <!-- Quick Balance Summary Bar (สลับลำดับ: พักร้อน -> กิจ -> ป่วย) -->
-                <div class="mt-5 grid grid-cols-3 gap-2 pt-4 border-t border-white/20 text-center">
-                    <div class="bg-black/20 rounded-xl p-2 border border-white/10">
-                        <p class="text-[10px] text-blue-200">สิทธิพักร้อน</p>
-                        <p class="text-sm font-bold text-cyan-300"><span id="quota-al">-</span> <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
-                    </div>
-                    <div class="bg-black/20 rounded-xl p-2 border border-white/10">
-                        <p class="text-[10px] text-blue-200">สิทธิลากิจ</p>
-                        <p class="text-sm font-bold text-amber-300"><span id="quota-pl">-</span> <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
-                    </div>
-                    <div class="bg-black/20 rounded-xl p-2 border border-white/10">
-                        <p class="text-[10px] text-blue-200">สิทธิลาป่วย</p>
-                        <p class="text-sm font-bold text-emerald-300"><span id="quota-sl">-</span> <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
+                    <!-- Quick Balance Summary Bar (พักร้อน -> กิจ -> ป่วย) -->
+                    <div class="mt-5 grid grid-cols-3 gap-2 pt-4 border-t border-white/20 text-center">
+                        <div class="bg-black/30 backdrop-blur-sm rounded-xl p-2 border border-white/10">
+                            <p class="text-[10px] text-blue-200">สิทธิพักร้อน</p>
+                            <p class="text-sm font-bold text-cyan-300"><span id="quota-al">-</span> <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
+                        </div>
+                        <div class="bg-black/30 backdrop-blur-sm rounded-xl p-2 border border-white/10">
+                            <p class="text-[10px] text-blue-200">สิทธิลากิจ</p>
+                            <p class="text-sm font-bold text-amber-300"><span id="quota-pl">-</span> <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
+                        </div>
+                        <div class="bg-black/30 backdrop-blur-sm rounded-xl p-2 border border-white/10">
+                            <p class="text-[10px] text-blue-200">สิทธิลาป่วย</p>
+                            <p class="text-sm font-bold text-emerald-300"><span id="quota-sl">-</span> <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
+                        </div>
                     </div>
                 </div>
             </div>
