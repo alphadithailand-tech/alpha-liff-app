@@ -21,20 +21,12 @@
     <div class="w-full max-w-md bg-white rounded-3xl shadow-lg border border-blue-100 overflow-hidden flex flex-col min-h-[600px]">
         
         <!-- Header -->
-        <div class="p-6 text-center pb-4">
+        <div class="p-6 text-center pb-2">
             <div class="w-24 h-24 bg-white flex items-center justify-center mx-auto mb-2 overflow-hidden p-1">
                 <img src="https://lh3.googleusercontent.com/d/1eFDDgxw2mcPwQNnxg88EwHm1PgV6SJkP" alt="ข้อกำหนดและเงื่อนไขการลา" class="w-full h-full object-contain">
             </div>
             <h1 class="text-xl font-bold text-slate-800">ข้อกำหนดและเงื่อนไขการลา</h1>
-            <p class="text-sm text-slate-500 mt-1 mb-3">กรุณาอ่านรายละเอียดก่อนยื่นใบลา</p>
-            
-            <!-- ปุ่มตรวจสอบสิทธิวันลาคงเหลือ -->
-            <button onclick="checkLeaveBalance()" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xl font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-full hover:bg-blue-100 hover:border-blue-300 transition duration-150 shadow-sm active:scale-95">
-                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
-                </svg>
-                ตรวจสอบสิทธิวันลาคงเหลือ
-            </button>
+            <p class="text-sm text-slate-500 mt-1">กรุณาอ่านรายละเอียดก่อนยื่นใบลา</p>
         </div>
 
         <!-- Tabs Switcher -->
@@ -465,12 +457,6 @@
 
         function onAccept() {
             window.location.href = 'leave-form.html';
-        }
-
-        // ฟังก์ชันเมื่อกดปุ่ม "ตรวจสอบสิทธิวันลาคงเหลือ"
-        function checkLeaveBalance() {
-            // สามารถเปลี่ยน URL ไปยังหน้าเช็คสิทธิ หรือเปิด LIFF URL / Modal ตามต้องการได้ที่นี่
-            window.location.href = 'check-leave-balance.html';
         }
     </script>
 </body>
