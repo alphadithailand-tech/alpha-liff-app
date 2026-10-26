@@ -47,8 +47,10 @@
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
-        .glass-header {
-            background: linear-gradient(135deg, #003DA5 0%, #0056D2 50%, #1E6EEB 160%);
+        .profile-bg {
+            background-image: linear-gradient(135deg, rgba(0, 61, 165, 0.88) 0%, rgba(0, 86, 210, 0.85) 50%, rgba(30, 110, 235, 0.82) 160%), url('https://lh3.googleusercontent.com/d/1tz1pXJinc7G0pVo3GHDnq6ZKKtrw7tq5');
+            background-size: cover;
+            background-position: center;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
@@ -73,8 +75,8 @@
         
         <!-- MAIN VIEW: MENU HUB -->
         <div id="view-main-menu" class="flex-1 overflow-y-auto pb-6 animate-fade-in">
-            <!-- Header Profile Section -->
-            <div class="glass-header text-white px-5 pt-6 pb-8 rounded-b-3xl shadow-lg relative overflow-hidden">
+            <!-- Header Profile Section (ปรับใช้ภาพพื้นหลังโปร่งแสง) -->
+            <div class="profile-bg text-white px-5 pt-6 pb-8 rounded-b-3xl shadow-lg relative overflow-hidden">
                 <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
                 <div class="absolute -left-10 -top-10 w-32 h-32 bg-blue-400/20 rounded-full blur-xl pointer-events-none"></div>
 
@@ -236,7 +238,6 @@
     <!-- Interactive JavaScript -->
     <script>
         const LIFF_ID = "2012053598-ClINT0ab";
-        // ใสลิงก์ Web App เรียบร้อยแล้ว
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwo4qrNh69G-Pz1fvTcpBIkQesKSXyEqDiGwVYpVubWYTNEvgWrECBTE1qy5LerjgzvEg/exec"; 
 
         window.onload = function() {
@@ -333,7 +334,7 @@
                 toastIcon.innerHTML = `<i class="fa-solid fa-check"></i>`;
             }
 
-            modal.classList.add('hidden'); // Fix toggle logic
+            modal.classList.add('hidden');
             modal.classList.remove('hidden');
         }
 
