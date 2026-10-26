@@ -48,7 +48,7 @@
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
-        /* ใช้ภาพจาก Google Drive แสดงผลตรงๆ แบบไม่ใส่ฟิลเตอร์หรือสีทับใดๆ ทั้งสิ้น */
+        /* ใช้ภาพจาก Google Drive แสดงผลต้นฉบับ 100% แบบไม่ใส่ฟิลเตอร์ทับ */
         .glass-header {
             background: url('https://lh3.googleusercontent.com/d/1tz1pXJinc7G0pVo3GHDnq6ZKKtrw7tq5') center/cover no-repeat;
         }
@@ -187,7 +187,7 @@
                         </div>
                     </button>
 
-                    <!-- BUTTON 4: กลับสู่เมนูหลัก -->
+                    <!-- BUTTON 4: กลับสู่เมนูหลัก (เชื่อมโยงไป index.html) -->
                     <button onclick="goToMainHub()" 
                             class="group bg-slate-900 text-white rounded-2xl p-4 shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98] text-left border border-slate-800">
                         <div class="flex items-center space-x-4">
@@ -310,11 +310,8 @@
         }
 
         function goToMainHub() {
-            if (liff.isInClient()) {
-                liff.closeWindow();
-            } else {
-                window.location.href = 'https://alphadithailand-tech.github.io/alpha-liff-app/index.html';
-            }
+            // พาผู้ใช้งานกลับไปที่หน้า index.html โดยอัตโนมัติ
+            window.location.href = 'index.html';
         }
 
         function showToast(title, message, type = 'info') {
