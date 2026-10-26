@@ -136,10 +136,22 @@
       font-size: 14px;
       font-weight: 600;
       color: #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .form-label span.required {
       color: #f43f5e;
+    }
+
+    .quota-badge {
+      font-size: 12px;
+      font-weight: normal;
+      color: #0284c7;
+      background: #e0f2fe;
+      padding: 2px 8px;
+      border-radius: 6px;
     }
 
     .form-control, .form-select {
@@ -515,7 +527,11 @@
 
       <!-- ประเภทการลา (11 ประเภท) -->
       <div class="form-group">
-        <label class="form-label"><span data-i18n="leaveTypeLabel">ประเภทการลา</span> <span class="required">*</span></label>
+        <label class="form-label">
+          <span data-i18n="leaveTypeLabel">ประเภทการลา</span> 
+          <span id="quotaDisplayLabel" class="quota-badge">โควตาคงเหลือ: - วัน</span>
+          <span class="required">*</span>
+        </label>
         <input type="hidden" id="selectedLeaveType" name="leaveType" required>
         
         <div class="leave-type-select">
@@ -688,13 +704,18 @@
 
   <script>
     const MY_LIFF_ID = '2012053598-ClINT0ab';
-    
-    // ใส่ URL Web App ของ Google Apps Script เรียบร้อยแล้ว
     const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwo4qrNh69G-Pz1fvTcpBIkQesKSXyEqDiGwVYpVubWYTNEvgWrECBTE1qy5LerjgzvEg/exec';
 
     let lineUserId = '';
     let slotCount = 0;
     let currentLang = 'th';
+    
+    // เก็บข้อมูลโควตาคงเหลือที่ดึงมาจาก Google Sheets
+    let userQuotas = {
+      AL: 0, // พักร้อน
+      PL: 0, // ลากิจ
+      SL: 0  // ลาป่วย
+    };
 
     const leaveRulesData = {
       th: {
@@ -816,15 +837,15 @@
         btnConfirm: "Confirm & Submit",
         btnClose: "Close",
         fullDay: "Full Day (1 Day)",
-        halfMorning: "Half Day - Morning (0.5 Day)",
-        halfAfternoon: "Half Day - Afternoon (0.5 Day)",
+        halfMorning: "Morning Half (0.5 Day)",
+        halfAfternoon: "Afternoon Half (0.5 Day)",
         dayUnit: "Days",
         removeSlotText: "Remove",
-        slotPrefix: "Period",
+        slotPrefix: "Slot ",
         ruleDesc: "Description",
         ruleDuration: "Duration",
         ruleCondition: "Condition",
-        ruleBenefit: "Benefits",
+        ruleBenefit: "Benefit",
         ruleEvidence: "Evidence"
       },
       ja: {
@@ -832,25 +853,25 @@
         approverSub: "申請者",
         formTitle: "休暇申請書",
         leaveTypeLabel: "休暇の種類",
-        t1: "年次有給休暇", d1: "年次休暇 / 緊急",
-        t2: "私用休暇", d2: "私用のため",
-        t3: "無給休暇", d3: "追加の私用",
-        t4: "病気休暇", d4: "療養のため",
-        t5: "産前産後・育児休暇", d5: "男女社員対象",
-        t6: "出家休暇", d6: "伝統的な出家のため",
-        t7: "忌引休暇", d7: "親族の葬儀のため",
-        t8: "結婚休暇", d8: "結婚のための休暇",
-        t9: "兵役召集休暇", d9: "予備役召集のため",
-        t10: "避妊手術休暇", d10: "男女社員対象",
-        t11: "特別休暇 (勤続5・10年)", d11: "勤続5年および10年",
-        dateRangeLabel: "休暇の日程",
-        btnAddSlot: "+ 日程を追加",
+        t1: "年次有給休暇", d1: "年次休暇または緊急休暇",
+        t2: "私用休暇", d2: "個人的な用事",
+        t3: "無給私用休暇", d3: "追加の私用休暇",
+        t4: "病気休暇", d4: "病気療養",
+        t5: "産前産後・育児休暇", d5: "男女社員向け",
+        t6: "出家休暇", d6: "伝統的出家",
+        t7: "忌引休暇", d7: "親族の葬儀",
+        t8: "結婚休暇", d8: "結婚式",
+        t9: "兵役召集休暇", d9: "予備役召集",
+        t10: "避妊手術休暇", d10: "男女社員向け",
+        t11: "特別休暇 (勤続5・10年)", d11: "勤続5・10年",
+        dateRangeLabel: "休暇日程",
+        btnAddSlot: "+ 日程を追加する",
         totalDaysLabel: "合計日数:",
-        reasonLabel: "理由",
+        reasonLabel: "申請理由",
         reasonPlaceholder: "理由を入力してください...",
-        attachLabel: "書類・診断書の添付 (任意)",
+        attachLabel: "書類 / 診断書添付 (任意)",
         btnSubmit: "休暇申請を送信",
-        modalTitle: "📋 休暇申請の確認",
+        modalTitle: "📋 休暇申請概要",
         sumRequester: "申請者:",
         sumLeaveType: "休暇の種類:",
         sumSlots: "選択された日程:",
@@ -860,26 +881,26 @@
         btnConfirm: "確認して送信",
         btnClose: "閉じる",
         fullDay: "終日 (1日)",
-        halfMorning: "半日 - 午前 (0.5日)",
-        halfAfternoon: "半日 - 午後 (0.5日)",
+        halfMorning: "午前半休 (0.5日)",
+        halfAfternoon: "午後半休 (0.5日)",
         dayUnit: "日",
         removeSlotText: "削除",
-        slotPrefix: "期間",
-        ruleDesc: "説明",
+        slotPrefix: "日程 ",
+        ruleDesc: "詳細",
         ruleDuration: "期間",
         ruleCondition: "条件",
-        ruleBenefit: "待遇・手当",
+        ruleBenefit: "手当",
         ruleEvidence: "証明書"
       }
     };
 
-    document.addEventListener("DOMContentLoaded", function() {
-      initializeLiff(MY_LIFF_ID);
-      addDateSlot();
-    });
+    window.onload = function() {
+      initLiff();
+      addDateSlot(); // เริ่มต้นสร้างช่องเลือกวันที่ 1 ช่อง
+    };
 
-    function initializeLiff(liffId) {
-      liff.init({ liffId: liffId })
+    function initLiff() {
+      liff.init({ liffId: MY_LIFF_ID })
         .then(() => {
           if (!liff.isLoggedIn()) {
             liff.login();
@@ -890,201 +911,194 @@
               if (profile.pictureUrl) {
                 document.getElementById('pictureUrl').src = profile.pictureUrl;
               }
-            });
+              // ดึงข้อมูลโควตาคงเหลือจาก Backend (Google Apps Script)
+              fetchUserQuota(profile.userId);
+            }).catch(err => console.error('getProfile err:', err));
           }
         })
-        .catch(err => console.error(err));
+        .catch(err => {
+          console.error('LIFF init error:', err);
+          // กรณีรันเทสบนเบราว์เซอร์ปกติ
+          fetchUserQuota('U0074f2f97ba5a81892b2fe4993b42636');
+        });
+    }
+
+    // ฟังก์ชันดึงโควตาจาก Google Sheets ผ่าน GAS
+    async function fetchUserQuota(userId) {
+      try {
+        const response = await fetch(`${GAS_WEB_APP_URL}?action=getUserProfile&userId=${userId}`);
+        const result = await response.json();
+        if (result.status === 'success') {
+          userQuotas.AL = parseFloat(result.data.quotaAL || 0);
+          userQuotas.PL = parseFloat(result.data.quotaPL || 0);
+          userQuotas.SL = parseFloat(result.data.quotaSL || 0);
+          updateQuotaDisplay();
+        }
+      } catch (e) {
+        console.error('Fetch quota error:', e);
+      }
     }
 
     function setLanguage(lang) {
       currentLang = lang;
       document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-      document.getElementById(`btn${lang.charAt(0).toUpperCase() + lang.slice(1)}`).classList.add('active');
+      document.getElementById('btn' + lang.charAt(0).toUpperCase() + lang.slice(1)).classList.add('active');
 
-      const elements = document.querySelectorAll('[data-i18n]');
-      elements.forEach(el => {
+      // อัปเดตข้อความแปลทั้งหน้า
+      document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (translations[lang][key]) {
           el.innerText = translations[lang][key];
         }
       });
 
-      const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
-      placeholders.forEach(el => {
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
         if (translations[lang][key]) {
           el.placeholder = translations[lang][key];
         }
       });
 
-      updateSlotDropdownsText();
-      calculateGrandTotal();
+      document.title = translations[lang].pageTitle;
+      updateDateSlotsLanguage();
+      updateGrandTotal();
     }
 
     function selectType(element, typeName) {
       document.querySelectorAll('.leave-option').forEach(opt => opt.classList.remove('selected'));
       element.classList.add('selected');
       document.getElementById('selectedLeaveType').value = typeName;
+      updateQuotaDisplay();
     }
 
-    function openRuleModal(event, ruleKey) {
-      event.stopPropagation();
-      const rule = leaveRulesData[currentLang][ruleKey];
-      const t = translations[currentLang];
-
-      document.getElementById('ruleModalTitle').innerText = rule.title;
+    // แสดงโควตาคงเหลือตามประเภทการลาที่เลือก
+    function updateQuotaDisplay() {
+      const selectedType = document.getElementById('selectedLeaveType').value;
+      const label = document.getElementById('quotaDisplayLabel');
       
-      const bodyHtml = `
-        <div class="rule-row">
-          <div class="rule-label">${t.ruleDesc}</div>
-          <div>${rule.desc}</div>
-        </div>
-        <div class="rule-row">
-          <div class="rule-label">${t.ruleDuration}</div>
-          <div>${rule.duration}</div>
-        </div>
-        <div class="rule-row">
-          <div class="rule-label">${t.ruleCondition}</div>
-          <div>${rule.condition}</div>
-        </div>
-        <div class="rule-row">
-          <div class="rule-label">${t.ruleBenefit}</div>
-          <div>${rule.benefit}</div>
-        </div>
-        <div class="rule-row">
-          <div class="rule-label">${t.ruleEvidence}</div>
-          <div>${rule.evidence}</div>
-        </div>
-      `;
+      let quotaVal = '-';
+      if (selectedType === 'Annual Leave') quotaVal = userQuotas.AL + ' ' + translations[currentLang].dayUnit;
+      else if (selectedType === 'Personal Leave') quotaVal = userQuotas.PL + ' ' + translations[currentLang].dayUnit;
+      else if (selectedType === 'Sick Leave') quotaVal = userQuotas.SL + ' ' + translations[currentLang].dayUnit;
 
-      document.getElementById('ruleModalBody').innerHTML = bodyHtml;
-      document.getElementById('ruleModal').classList.add('active');
-    }
-
-    function closeRuleModal() {
-      document.getElementById('ruleModal').classList.remove('active');
+      label.innerText = (currentLang === 'th' ? 'โควตาคงเหลือ: ' : 'Remaining: ') + quotaVal;
     }
 
     function addDateSlot() {
       slotCount++;
       const container = document.getElementById('slotsContainer');
-      const slotId = `slot_${slotCount}`;
-      
       const t = translations[currentLang];
-      const slotHtml = `
-        <div class="date-slot-card" id="${slotId}">
-          <div class="slot-header">
-            <span class="slot-title">${t.slotPrefix} 1</span>
-            ${container.children.length > 0 ? `<button type="button" class="btn-remove-slot" onclick="removeDateSlot('${slotId}')">${t.removeSlotText}</button>` : ''}
-          </div>
-          <div class="slot-row">
-            <input type="date" class="slot-date" required onchange="calculateGrandTotal()">
-            <select class="slot-type" onchange="calculateGrandTotal()">
-              <option value="1">${t.fullDay}</option>
-              <option value="0.5_morning">${t.halfMorning}</option>
-              <option value="0.5_afternoon">${t.halfAfternoon}</option>
-            </select>
-          </div>
+
+      const div = document.createElement('div');
+      div.className = 'date-slot-card';
+      div.id = `slot-${slotCount}`;
+      div.innerHTML = `
+        <div class="slot-header">
+          <span class="slot-title">${t.slotPrefix} ${slotCount}</span>
+          ${slotCount > 1 ? `<button type="button" class="btn-remove-slot" onclick="removeSlot(${slotCount})">${t.removeSlotText}</button>` : ''}
+        </div>
+        <div class="slot-row">
+          <input type="date" class="slot-date" required onchange="updateGrandTotal()">
+          <select class="slot-type" onchange="updateGrandTotal()">
+            <option value="1">${t.fullDay}</option>
+            <option value="0.5_morning">${t.halfMorning}</option>
+            <option value="0.5_afternoon">${t.halfAfternoon}</option>
+          </select>
         </div>
       `;
-      
-      container.insertAdjacentHTML('beforeend', slotHtml);
-      updateSlotTitles();
-      calculateGrandTotal();
+      container.appendChild(div);
+      updateGrandTotal();
     }
 
-    function removeDateSlot(slotId) {
-      const slotElement = document.getElementById(slotId);
-      if (slotElement) {
-        slotElement.remove();
-        updateSlotTitles();
-        calculateGrandTotal();
-      }
+    function removeSlot(id) {
+      const el = document.getElementById(`slot-${id}`);
+      if (el) el.remove();
+      updateGrandTotal();
     }
 
-    function updateSlotTitles() {
+    function updateDateSlotsLanguage() {
       const t = translations[currentLang];
-      const slots = document.querySelectorAll('.date-slot-card');
-      slots.forEach((slot, index) => {
-        const titleEl = slot.querySelector('.slot-title');
-        if (titleEl) titleEl.innerText = `${t.slotPrefix} ${index + 1}`;
-        
-        const removeBtn = slot.querySelector('.btn-remove-slot');
+      document.querySelectorAll('.date-slot-card').forEach((card, index) => {
+        card.querySelector('.slot-title').innerText = `${t.slotPrefix} ${index + 1}`;
+        const removeBtn = card.querySelector('.btn-remove-slot');
         if (removeBtn) removeBtn.innerText = t.removeSlotText;
-      });
-    }
 
-    function updateSlotDropdownsText() {
-      const t = translations[currentLang];
-      const slots = document.querySelectorAll('.date-slot-card');
-      slots.forEach(slot => {
-        const select = slot.querySelector('.slot-type');
+        const select = card.querySelector('.slot-type');
         const currentVal = select.value;
-        
-        select.options[0].text = t.fullDay;
-        select.options[1].text = t.halfMorning;
-        select.options[2].text = t.halfAfternoon;
-        
+        select.innerHTML = `
+          <option value="1">${t.fullDay}</option>
+          <option value="0.5_morning">${t.halfMorning}</option>
+          <option value="0.5_afternoon">${t.halfAfternoon}</option>
+        `;
         select.value = currentVal;
       });
     }
 
-    function calculateGrandTotal() {
-      let grandTotal = 0;
-      const slots = document.querySelectorAll('.date-slot-card');
-      
-      slots.forEach(slot => {
-        const dateVal = slot.querySelector('.slot-date').value;
-        const typeVal = slot.querySelector('.slot-type').value;
-
-        if (dateVal) {
-          if (typeVal === '1') grandTotal += 1;
-          else if (typeVal.startsWith('0.5')) grandTotal += 0.5;
-        }
+    function calculateTotalDays() {
+      let total = 0;
+      document.querySelectorAll('.date-slot-card').forEach(card => {
+        const type = card.querySelector('.slot-type').value;
+        if (type === '1') total += 1;
+        else total += 0.5;
       });
-
-      const t = translations[currentLang];
-      document.getElementById('grandTotalDaysDisplay').innerText = `${grandTotal} ${t.dayUnit}`;
-      return grandTotal;
+      return total;
     }
 
+    function updateGrandTotal() {
+      const total = calculateTotalDays();
+      const t = translations[currentLang];
+      document.getElementById('grandTotalDaysDisplay').innerText = `${total} ${t.dayUnit}`;
+    }
+
+    // 📌 ฟังก์ชันตรวจสอบโควตาก่อนเปิด Modal ยืนยัน
     function openConfirmationModal(event) {
       event.preventDefault();
-
+      
       const leaveType = document.getElementById('selectedLeaveType').value;
       if (!leaveType) {
-        alert(currentLang === 'th' ? 'กรุณาเลือกประเภทการลา' : (currentLang === 'en' ? 'Please select leave type.' : '休暇の種類を選択してください。'));
+        alert(currentLang === 'th' ? 'กรุณาเลือกประเภทการลา' : 'Please select leave type.');
         return;
       }
 
-      const totalDays = calculateGrandTotal();
-      if (totalDays === 0) {
-        alert(currentLang === 'th' ? 'กรุณาระบุวันที่ต้องการลาอย่างน้อย 1 ช่วง' : (currentLang === 'en' ? 'Please select at least one leave date range.' : '少なくとも1つの休暇日程を選択してください。'));
-        return;
+      const totalDays = calculateTotalDays();
+      let maxQuota = 9999;
+      let quotaName = '';
+
+      // เช็กเงื่อนไขโควตาเฉพาะประเภทที่มีการจำกัด (พักร้อน, ลากิจ, ลาป่วย)
+      if (leaveType === 'Annual Leave') {
+        maxQuota = userQuotas.AL;
+        quotaName = currentLang === 'th' ? 'ลาพักร้อน' : 'Annual Leave';
+      } else if (leaveType === 'Personal Leave') {
+        maxQuota = userQuotas.PL;
+        quotaName = currentLang === 'th' ? 'ลากิจ' : 'Personal Leave';
+      } else if (leaveType === 'Sick Leave') {
+        maxQuota = userQuotas.SL;
+        quotaName = currentLang === 'th' ? 'ลาป่วย' : 'Sick Leave';
       }
 
-      const t = translations[currentLang];
+      // 🚨 ตรวจสอบว่าเกินโควตาหรือไม่
+      if (totalDays > maxQuota) {
+        const msg = currentLang === 'th' 
+          ? `❌ ไม่สามารถยื่นใบลาได้!\nวันลาที่คุณขอ (${totalDays} วัน) เกินสิทธิโควตาคงเหลือของ "${quotaName}" (${maxQuota} วัน)`
+          : `❌ Leave request denied!\nRequested days (${totalDays}) exceed your remaining quota for "${quotaName}" (${maxQuota} days).`;
+        alert(msg);
+        return; // หยุดการทำงาน ไม่ให้เปิด Modal ส่งใบลา
+      }
+
+      // ถ้ายอดไม่เกิน ให้แสดง Modal สรุปข้อมูลปกติ
       document.getElementById('summaryName').innerText = document.getElementById('displayName').innerText;
-      document.getElementById('summaryLeaveType').innerText = leaveType;
-      document.getElementById('summaryTotalDays').innerText = `${totalDays} ${t.dayUnit}`;
-      document.getElementById('summaryReason').innerText = document.getElementById('reason').value;
-
-      const slotsContainer = document.getElementById('summarySlotsList');
-      slotsContainer.innerHTML = '';
+      document.getElementById('summaryLeaveType').innerText = document.querySelector('.leave-option.selected .leave-name').innerText;
       
-      const slots = document.querySelectorAll('.date-slot-card');
-      slots.forEach((slot, index) => {
-        const dateVal = slot.querySelector('.slot-date').value;
-        const typeSelect = slot.querySelector('.slot-type');
-        const typeText = typeSelect.options[typeSelect.selectedIndex].text;
-
-        if (dateVal) {
-          const item = document.createElement('div');
-          item.style.padding = '3px 0';
-          item.innerText = `• ${t.slotPrefix} ${index + 1}: ${dateVal} (${typeText})`;
-          slotsContainer.appendChild(item);
-        }
+      let slotsHtml = '';
+      document.querySelectorAll('.date-slot-card').forEach((card, idx) => {
+        const date = card.querySelector('.slot-date').value;
+        const select = card.querySelector('.slot-type');
+        const text = select.options[select.selectedIndex].text;
+        slotsHtml += `<div>• ${date} (${text})</div>`;
       });
+      document.getElementById('summarySlotsList').innerHTML = slotsHtml;
+      document.getElementById('summaryTotalDays').innerText = document.getElementById('grandTotalDaysDisplay').innerText;
+      document.getElementById('summaryReason').innerText = document.getElementById('reason').value;
 
       document.getElementById('confirmModal').classList.add('active');
     }
@@ -1093,51 +1107,76 @@
       document.getElementById('confirmModal').classList.remove('active');
     }
 
-    function confirmAndSend() {
+    function openRuleModal(event, ruleKey) {
+      event.stopPropagation();
+      const rule = leaveRulesData[currentLang][ruleKey];
+      const t = translations[currentLang];
+
+      document.getElementById('ruleModalTitle').innerText = 'ℹ️ ' + rule.title;
+      document.getElementById('ruleModalBody').innerHTML = `
+        <div class="rule-row"><div class="rule-label">${t.ruleDesc}</div><div>${rule.desc}</div></div>
+        <div class="rule-row"><div class="rule-label">${t.ruleDuration}</div><div>${rule.duration}</div></div>
+        <div class="rule-row"><div class="rule-label">${t.ruleCondition}</div><div>${rule.condition}</div></div>
+        <div class="rule-row"><div class="rule-label">${t.ruleBenefit}</div><div>${rule.benefit}</div></div>
+        <div class="rule-row"><div class="rule-label">${t.ruleEvidence}</div><div>${rule.evidence}</div></div>
+      `;
+      document.getElementById('ruleModalModal') // fix ID reference
+      document.getElementById('ruleModal').classList.add('active');
+    }
+
+    function closeRuleModal() {
+      document.getElementById('ruleModal').classList.remove('active');
+    }
+
+    // ส่งข้อมูลไปยัง Google Apps Script Backend
+    async function confirmAndSend() {
       const btn = document.getElementById('btnFinalSubmit');
       btn.disabled = true;
-      btn.innerText = currentLang === 'th' ? 'กำลังส่งข้อมูล...' : (currentLang === 'en' ? 'Submitting...' : '送信中...');
+      btn.innerText = currentLang === 'th' ? 'กำลังส่งข้อมูล...' : 'Submitting...';
 
-      const slotData = [];
-      const slots = document.querySelectorAll('.date-slot-card');
-      slots.forEach(slot => {
-        slotData.push({
-          date: slot.querySelector('.slot-date').value,
-          timeType: slot.querySelector('.slot-type').value
+      const leaveType = document.getElementById('selectedLeaveType').value;
+      const reason = document.getElementById('reason').value;
+      const totalDays = calculateTotalDays();
+
+      const slots = [];
+      document.querySelectorAll('.date-slot-card').forEach(card => {
+        slots.push({
+          date: card.querySelector('.slot-date').value,
+          timeType: card.querySelector('.slot-type').value
         });
       });
 
       const payload = {
         userId: lineUserId,
         name: document.getElementById('displayName').innerText,
-        leaveType: document.getElementById('selectedLeaveType').value,
-        slots: slotData,
-        totalDays: calculateGrandTotal(),
-        reason: document.getElementById('reason').value
+        leaveType: leaveType,
+        slots: slots,
+        totalDays: totalDays,
+        reason: reason,
+        attachment: '-'
       };
 
-      // ส่งข้อมูลไปยัง Google Apps Script Web App
-      fetch(GAS_WEB_APP_URL, {
-        method: 'POST',
-        body: JSON.stringify(payload)
-      })
-      .then(res => res.json())
-      .then(res => {
-        if (res.status === 'success') {
-          alert(currentLang === 'th' ? 'ยื่นคำขออนุมัติลาเรียบร้อยแล้ว!' : (currentLang === 'en' ? 'Leave request submitted successfully!' : '休暇申請が正常に送信されました！'));
+      try {
+        const response = await fetch(GAS_WEB_APP_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+
+        if (result.status === 'success') {
+          alert(currentLang === 'th' ? '✅ ยื่นใบลาสำเร็จ ระบบได้ส่งการแจ้งเตือนไปยังหัวหน้างานแล้ว' : '✅ Leave request submitted successfully!');
           liff.closeWindow();
         } else {
-          alert('เกิดข้อผิดพลาด: ' + res.message);
+          alert('Error: ' + result.message);
           btn.disabled = false;
-          btn.innerText = currentLang === 'th' ? 'ยืนยันส่งใบลา' : 'Confirm & Submit';
+          btn.innerText = translations[currentLang].btnConfirm;
         }
-      })
-      .catch(err => {
-        console.error(err);
+      } catch (err) {
+        console.error('Submit error:', err);
         alert('เกิดข้อผิดพลาดในการเชื่อมต่อระบบ');
         btn.disabled = false;
-        btn.innerText = currentLang === 'th' ? 'ยืนยันส่งใบลา' : 'Confirm & Submit';
-      });
+        btn.innerText = translations[currentLang].btnConfirm;
+      }
     }
   </script>
 </body>
