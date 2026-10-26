@@ -32,8 +32,7 @@
                             light: '#EBF3FE',
                             accent: '#1E6EEB',
                             hover: '#0047AD'
-                        },
-                        accentYellow: '#FDC12A'
+                        }
                     },
                     fontFamily: {
                         sans: ['Prompt', 'sans-serif'],
@@ -48,9 +47,8 @@
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
-        /* ใช้ภาพจาก Google Drive แสดงผลต้นฉบับ 100% แบบไม่ใส่ฟิลเตอร์ทับ */
         .glass-header {
-            background: url('https://lh3.googleusercontent.com/d/1tz1pXJinc7G0pVo3GHDnq6ZKKtrw7tq5') center/cover no-repeat;
+            background: linear-gradient(135deg, #003DA5 0%, #0056D2 50%, #1E6EEB 160%);
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
@@ -82,11 +80,11 @@
 
                 <!-- Company Branding Banner -->
                 <div class="flex items-center justify-between mb-4">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-black/40 backdrop-blur-md text-white border border-white/20">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white/15 text-white border border-white/20">
                         <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mr-1.5 animate-pulse"></span>
                         Alpha D.I. Thailand
                     </span>
-                    <span class="text-xs text-white drop-shadow-md">รหัสพนักงาน: <strong id="emp-id" class="text-white">กำลังโหลด...</strong></span>
+                    <span class="text-xs text-blue-100">รหัสพนักงาน: <strong id="emp-id" class="text-white">กำลังโหลด...</strong></span>
                 </div>
 
                 <!-- Profile Info Card -->
@@ -98,27 +96,27 @@
                         <span id="user-status-dot" class="absolute bottom-0 right-0 w-4 h-4 bg-slate-400 border-2 border-slate-900 rounded-full" title="Status"></span>
                     </div>
                     <div class="flex-1">
-                        <h2 id="emp-name" class="text-lg font-bold text-white tracking-tight flex items-center gap-1.5 drop-shadow-md">
+                        <h2 id="emp-name" class="text-lg font-bold text-white tracking-tight flex items-center gap-1.5">
                             กำลังโหลดชื่อ...
                         </h2>
-                        <p class="text-xs text-white drop-shadow-md">ตำแหน่ง: <span id="emp-position">กำลังโหลด...</span></p>
-                        <p class="text-xs text-white drop-shadow-md">แผนก: <span id="emp-department">กำลังโหลด...</span></p>
+                        <p class="text-xs text-blue-100">ตำแหน่ง: <span id="emp-position">กำลังโหลด...</span></p>
+                        <p class="text-xs text-blue-200">แผนก: <span id="emp-department">กำลังโหลด...</span></p>
                     </div>
                 </div>
 
                 <!-- Quick Balance Summary Bar (สลับลำดับ: พักร้อน -> กิจ -> ป่วย) -->
                 <div class="mt-5 grid grid-cols-3 gap-2 pt-4 border-t border-white/20 text-center">
-                    <div class="bg-black/50 backdrop-blur-md rounded-xl p-2 border border-white/15">
-                        <p class="text-[10px] text-white">สิทธิพักร้อน</p>
-                        <p class="text-sm font-bold text-cyan-300"><span id="quota-al">-</span> <span class="text-[10px] font-normal text-white">วัน</span></p>
+                    <div class="bg-black/20 rounded-xl p-2 border border-white/10">
+                        <p class="text-[10px] text-blue-200">สิทธิพักร้อน</p>
+                        <p class="text-sm font-bold text-cyan-300"><span id="quota-al">-</span> <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
                     </div>
-                    <div class="bg-black/50 backdrop-blur-md rounded-xl p-2 border border-white/15">
-                        <p class="text-[10px] text-white">สิทธิลากิจ</p>
-                        <p class="text-sm font-bold text-amber-300"><span id="quota-pl">-</span> <span class="text-[10px] font-normal text-white">วัน</span></p>
+                    <div class="bg-black/20 rounded-xl p-2 border border-white/10">
+                        <p class="text-[10px] text-blue-200">สิทธิลากิจ</p>
+                        <p class="text-sm font-bold text-amber-300"><span id="quota-pl">-</span> <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
                     </div>
-                    <div class="bg-black/50 backdrop-blur-md rounded-xl p-2 border border-white/15">
-                        <p class="text-[10px] text-white">สิทธิลาป่วย</p>
-                        <p class="text-sm font-bold text-emerald-300"><span id="quota-sl">-</span> <span class="text-[10px] font-normal text-white">วัน</span></p>
+                    <div class="bg-black/20 rounded-xl p-2 border border-white/10">
+                        <p class="text-[10px] text-blue-200">สิทธิลาป่วย</p>
+                        <p class="text-sm font-bold text-emerald-300"><span id="quota-sl">-</span> <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
                     </div>
                 </div>
             </div>
@@ -132,13 +130,13 @@
 
                 <div class="grid grid-cols-1 gap-3">
                     
-                    <!-- BUTTON 1: ยื่นใบลา (ไอคอนโทนสีเหลืองเข้ม #FDC12A) -->
+                    <!-- BUTTON 1: ยื่นใบลา -->
                     <button onclick="goToLeaveTerms()" 
                             class="group relative overflow-hidden bg-gradient-to-r from-brand to-brand-accent text-white rounded-2xl p-4 shadow-md shadow-brand/25 hover:shadow-lg hover:shadow-brand/35 transition-all active:scale-[0.98] text-left border border-blue-400/40">
                         <div class="absolute right-0 top-0 bottom-0 w-24 bg-white/10 skew-x-12 translate-x-8 group-hover:translate-x-4 transition-transform"></div>
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center shrink-0 shadow-inner">
-                                <i class="fa-solid fa-file-circle-plus text-2xl text-[#FDC12A]"></i>
+                                <i class="fa-solid fa-file-circle-plus text-2xl text-white"></i>
                             </div>
                             <div class="flex-1">
                                 <div class="flex items-center gap-2">
@@ -153,41 +151,41 @@
                         </div>
                     </button>
 
-                    <!-- BUTTON 2: ตรวจสอบสิทธิการลาคงเหลือ (ไอคอนโทนสีเหลืองเข้ม #FDC12A) -->
+                    <!-- BUTTON 2: ตรวจสอบสิทธิการลาคงเหลือ -->
                     <button onclick="showUnderDevelopment()" 
-                            class="group bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 hover:border-[#FDC12A] hover:shadow-md transition-all active:scale-[0.98] text-left">
+                            class="group bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 hover:border-brand hover:shadow-md transition-all active:scale-[0.98] text-left">
                         <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 rounded-xl bg-amber-50 text-[#FDC12A] flex items-center justify-center shrink-0 group-hover:bg-[#FDC12A] group-hover:text-white transition-colors">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-brand flex items-center justify-center shrink-0 group-hover:bg-brand group-hover:text-white transition-colors">
                                 <i class="fa-solid fa-chart-pie text-xl"></i>
                             </div>
                             <div class="flex-1">
-                                <h4 class="font-bold text-slate-800 text-sm group-hover:text-[#FDC12A] transition-colors">2. ตรวจสอบสิทธิการลาคงเหลือ</h4>
+                                <h4 class="font-bold text-slate-800 text-sm group-hover:text-brand transition-colors">2. ตรวจสอบสิทธิการลาคงเหลือ</h4>
                                 <p class="text-xs text-slate-500 font-light mt-0.5">เช็กโควตาลาป่วย ลากิจ ลาพักร้อนคงเหลือ</p>
                             </div>
-                            <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center group-hover:text-[#FDC12A] group-hover:bg-amber-50 group-hover:translate-x-1 transition-all">
+                            <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center group-hover:text-brand group-hover:bg-brand/10 group-hover:translate-x-1 transition-all">
                                 <i class="fa-solid fa-chevron-right text-sm"></i>
                             </div>
                         </div>
                     </button>
 
-                    <!-- BUTTON 3: ตรวจสอบประวัติการลาย้อนหลัง (ไอคอนโทนสีเหลืองเข้ม #FDC12A) -->
+                    <!-- BUTTON 3: ตรวจสอบประวัติการลาย้อนหลัง -->
                     <button onclick="showUnderDevelopment()" 
-                            class="group bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 hover:border-[#FDC12A] hover:shadow-md transition-all active:scale-[0.98] text-left">
+                            class="group bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 hover:border-brand hover:shadow-md transition-all active:scale-[0.98] text-left">
                         <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 rounded-xl bg-amber-50 text-[#FDC12A] flex items-center justify-center shrink-0 group-hover:bg-[#FDC12A] group-hover:text-white transition-colors">
+                            <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0 group-hover:bg-brand group-hover:text-white transition-colors">
                                 <i class="fa-solid fa-clock-rotate-left text-xl"></i>
                             </div>
                             <div class="flex-1">
-                                <h4 class="font-bold text-slate-800 text-sm group-hover:text-[#FDC12A] transition-colors">3. ตรวจสอบประวัติการลาย้อนหลัง</h4>
+                                <h4 class="font-bold text-slate-800 text-sm group-hover:text-brand transition-colors">3. ตรวจสอบประวัติการลาย้อนหลัง</h4>
                                 <p class="text-xs text-slate-500 font-light mt-0.5">ดูสถานะอนุมัติและรายการลาย้อนหลัง</p>
                             </div>
-                            <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center group-hover:text-[#FDC12A] group-hover:bg-amber-50 group-hover:translate-x-1 transition-all">
+                            <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center group-hover:text-brand group-hover:bg-brand/10 group-hover:translate-x-1 transition-all">
                                 <i class="fa-solid fa-chevron-right text-sm"></i>
                             </div>
                         </div>
                     </button>
 
-                    <!-- BUTTON 4: กลับสู่เมนูหลัก (เชื่อมโยงไป index.html) -->
+                    <!-- BUTTON 4: กลับสู่เมนูหลัก -->
                     <button onclick="goToMainHub()" 
                             class="group bg-slate-900 text-white rounded-2xl p-4 shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98] text-left border border-slate-800">
                         <div class="flex items-center space-x-4">
@@ -196,7 +194,7 @@
                             </div>
                             <div class="flex-1">
                                 <h4 class="font-bold text-slate-100 text-sm">4. กลับสู่เมนูหลัก</h4>
-                                <p class="text-xs text-slate-400 font-light mt-0.5">ย้อนกลับไปเมนูหลักของระบบ</p>
+                                <p class="text-xs text-slate-400 font-light mt-0.5">ย้อนกลับไปเมนูหลักของระบบ LIFF</p>
                             </div>
                             <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center group-hover:text-white transition-colors">
                                 <i class="fa-solid fa-xmark text-sm"></i>
@@ -213,7 +211,7 @@
                     <i class="fa-solid fa-circle-info text-brand text-lg mt-0.5"></i>
                     <div class="text-xs text-blue-900 leading-relaxed">
                         <strong class="font-semibold block mb-0.5">คำแนะนำจากฝ่ายบุคคล (HR)</strong>
-                        การยื่นใบลาล่วงหน้าต้องดำเนินการอย่างน้อย 3 วันทำการ เพื่อให้หัวหน้าวางแผนงานล่วงหน้า
+                        การยื่นใบลาล่วงหน้าต้องดำเนินการอย่างน้อย 3 วันทำการ สำหรับการลาป่วยกะทันหัน สามารถยื่นเอกสารย้อนหลังได้ไม่เกิน 2 วัน
                     </div>
                 </div>
             </div>
@@ -238,6 +236,7 @@
     <!-- Interactive JavaScript -->
     <script>
         const LIFF_ID = "2012053598-ClINT0ab";
+        // ใสลิงก์ Web App เรียบร้อยแล้ว
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwo4qrNh69G-Pz1fvTcpBIkQesKSXyEqDiGwVYpVubWYTNEvgWrECBTE1qy5LerjgzvEg/exec"; 
 
         window.onload = function() {
@@ -310,8 +309,11 @@
         }
 
         function goToMainHub() {
-            // พาผู้ใช้งานกลับไปที่หน้า index.html โดยอัตโนมัติ
-            window.location.href = 'index.html';
+            if (liff.isInClient()) {
+                liff.closeWindow();
+            } else {
+                window.location.href = 'https://alphadithailand-tech.github.io/alpha-liff-app/';
+            }
         }
 
         function showToast(title, message, type = 'info') {
@@ -331,6 +333,7 @@
                 toastIcon.innerHTML = `<i class="fa-solid fa-check"></i>`;
             }
 
+            modal.classList.add('hidden'); // Fix toggle logic
             modal.classList.remove('hidden');
         }
 
