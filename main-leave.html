@@ -12,6 +12,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- LINE LIFF SDK -->
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     
     <script>
         tailwind.config = {
@@ -25,7 +27,7 @@
                             hover: '#05b34c'
                         },
                         brand: {
-                            DEFAULT: '#0056D2', // Company Royal Blue from Logo
+                            DEFAULT: '#0056D2',
                             dark: '#003DA5',
                             light: '#EBF3FE',
                             accent: '#1E6EEB',
@@ -45,16 +47,9 @@
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
-        /* Glassmorphism Effect */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
         .glass-header {
             background: linear-gradient(135deg, #003DA5 0%, #0056D2 50%, #1E6EEB 160%);
         }
-        /* Custom Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
@@ -62,7 +57,6 @@
         .animate-fade-in {
             animation: fadeIn 0.25s ease-out forwards;
         }
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 4px;
         }
@@ -81,7 +75,6 @@
         <div id="view-main-menu" class="flex-1 overflow-y-auto pb-6 animate-fade-in">
             <!-- Header Profile Section -->
             <div class="glass-header text-white px-5 pt-6 pb-8 rounded-b-3xl shadow-lg relative overflow-hidden">
-                <!-- Background decorative glow -->
                 <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
                 <div class="absolute -left-10 -top-10 w-32 h-32 bg-blue-400/20 rounded-full blur-xl pointer-events-none"></div>
 
@@ -91,40 +84,39 @@
                         <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mr-1.5 animate-pulse"></span>
                         Alpha D.I. Thailand
                     </span>
-                    <span class="text-xs text-blue-100">รหัสพนักงาน: <strong class="text-white">EMP-8842</strong></span>
+                    <span class="text-xs text-blue-100">รหัสพนักงาน: <strong id="emp-id" class="text-white">กำลังโหลด...</strong></span>
                 </div>
 
                 <!-- Profile Info Card -->
                 <div class="flex items-center space-x-4">
                     <div class="relative">
-                        <img id="user-avatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop" 
+                        <img id="user-avatar" src="https://via.placeholder.com/150" 
                              alt="User Avatar" 
                              class="w-16 h-16 rounded-full object-cover border-2 border-white/80 shadow-md">
-                        <span class="absolute bottom-0 right-0 w-4 h-4 bg-line border-2 border-slate-900 rounded-full" title="Active"></span>
+                        <span id="user-status-dot" class="absolute bottom-0 right-0 w-4 h-4 bg-slate-400 border-2 border-slate-900 rounded-full" title="Status"></span>
                     </div>
                     <div class="flex-1">
-                        <h2 class="text-lg font-bold text-white tracking-tight flex items-center gap-1.5">
-                            คุณปริชญา วงศ์สวัสดิ์
-                            <i class="fa-solid fa-circle-check text-cyan-400 text-xs"></i>
+                        <h2 id="emp-name" class="text-lg font-bold text-white tracking-tight flex items-center gap-1.5">
+                            กำลังโหลดชื่อ...
                         </h2>
-                        <p class="text-xs text-blue-100">ตำแหน่ง: Senior Software Engineer</p>
-                        <p class="text-xs text-blue-200">แผนก: Information Technology</p>
+                        <p class="text-xs text-blue-100">ตำแหน่ง: <span id="emp-position">กำลังโหลด...</span></p>
+                        <p class="text-xs text-blue-200">แผนก: <span id="emp-department">กำลังโหลด...</span></p>
                     </div>
                 </div>
 
-                <!-- Quick Balance Summary Bar -->
+                <!-- Quick Balance Summary Bar (สลับลำดับ: พักร้อน -> กิจ -> ป่วย) -->
                 <div class="mt-5 grid grid-cols-3 gap-2 pt-4 border-t border-white/20 text-center">
                     <div class="bg-black/20 rounded-xl p-2 border border-white/10">
-                        <p class="text-[10px] text-blue-200">สิทธิลาป่วย</p>
-                        <p class="text-sm font-bold text-emerald-300">24 <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
+                        <p class="text-[10px] text-blue-200">สิทธิพักร้อน</p>
+                        <p class="text-sm font-bold text-cyan-300"><span id="quota-al">-</span> <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
                     </div>
                     <div class="bg-black/20 rounded-xl p-2 border border-white/10">
                         <p class="text-[10px] text-blue-200">สิทธิลากิจ</p>
-                        <p class="text-sm font-bold text-amber-300">4.5 <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
+                        <p class="text-sm font-bold text-amber-300"><span id="quota-pl">-</span> <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
                     </div>
                     <div class="bg-black/20 rounded-xl p-2 border border-white/10">
-                        <p class="text-[10px] text-blue-200">สิทธิพักร้อน</p>
-                        <p class="text-sm font-bold text-cyan-300">8 <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
+                        <p class="text-[10px] text-blue-200">สิทธิลาป่วย</p>
+                        <p class="text-sm font-bold text-emerald-300"><span id="quota-sl">-</span> <span class="text-[10px] font-normal text-blue-100">วัน</span></p>
                     </div>
                 </div>
             </div>
@@ -138,8 +130,8 @@
 
                 <div class="grid grid-cols-1 gap-3">
                     
-                    <!-- BUTTON 1: ยื่นใบลา -> redirect to leave-terms.html -->
-                    <button onclick=window.location.href='leave-terms.html' 
+                    <!-- BUTTON 1: ยื่นใบลา -->
+                    <button onclick="goToLeaveTerms()" 
                             class="group relative overflow-hidden bg-gradient-to-r from-brand to-brand-accent text-white rounded-2xl p-4 shadow-md shadow-brand/25 hover:shadow-lg hover:shadow-brand/35 transition-all active:scale-[0.98] text-left border border-blue-400/40">
                         <div class="absolute right-0 top-0 bottom-0 w-24 bg-white/10 skew-x-12 translate-x-8 group-hover:translate-x-4 transition-transform"></div>
                         <div class="flex items-center space-x-4">
@@ -159,7 +151,7 @@
                         </div>
                     </button>
 
-                    <!-- BUTTON 2: ตรวจสอบสิทธิการลาคงเหลือ -> รอพัฒนาอีกหน้านึง -->
+                    <!-- BUTTON 2: ตรวจสอบสิทธิการลาคงเหลือ -->
                     <button onclick="showUnderDevelopment()" 
                             class="group bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 hover:border-brand hover:shadow-md transition-all active:scale-[0.98] text-left">
                         <div class="flex items-center space-x-4">
@@ -176,7 +168,7 @@
                         </div>
                     </button>
 
-                    <!-- BUTTON 3: ตรวจสอบประวัติการลาย้อนหลัง -> รอพัฒนาอีกหน้านึง -->
+                    <!-- BUTTON 3: ตรวจสอบประวัติการลาย้อนหลัง -->
                     <button onclick="showUnderDevelopment()" 
                             class="group bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 hover:border-brand hover:shadow-md transition-all active:scale-[0.98] text-left">
                         <div class="flex items-center space-x-4">
@@ -193,7 +185,7 @@
                         </div>
                     </button>
 
-                    <!-- BUTTON 4: กลับสู่เมนูหลัก -> Redirect back to Main LIFF Hub -->
+                    <!-- BUTTON 4: กลับสู่เมนูหลัก -->
                     <button onclick="goToMainHub()" 
                             class="group bg-slate-900 text-white rounded-2xl p-4 shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98] text-left border border-slate-800">
                         <div class="flex items-center space-x-4">
@@ -243,22 +235,92 @@
 
     <!-- Interactive JavaScript -->
     <script>
-        // Button 1 Action: Redirect to leave-terms.html
+        const LIFF_ID = "2012053598-ClINT0ab";
+        // URL Web App จาก Google Apps Script
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz......(ใส่ Web App URL ของคุณที่นี่)....../exec"; 
+
+        window.onload = function() {
+            initLiff();
+        };
+
+        function initLiff() {
+            liff.init({ liffId: LIFF_ID })
+                .then(() => {
+                    if (!liff.isLoggedIn()) {
+                        liff.login();
+                    } else {
+                        fetchUserData();
+                    }
+                })
+                .catch(err => {
+                    console.error("LIFF Init Error:", err);
+                    // กรณีเปิดทดสอบบนเบราว์เซอร์ภายนอก
+                    fetchUserData();
+                });
+        }
+
+        async function fetchUserData() {
+            try {
+                let userId = "";
+                let pictureUrl = "";
+
+                if (liff.isLoggedIn()) {
+                    const profile = await liff.getProfile();
+                    userId = profile.userId;
+                    pictureUrl = profile.pictureUrl;
+                } else {
+                    // LINE ID สำหรับทดสอบ (กรณีเทสบน Local/PC)
+                    userId = "U0123456789abcdef..."; 
+                }
+
+                if (pictureUrl) {
+                    document.getElementById('user-avatar').src = pictureUrl;
+                }
+
+                // เรียกข้อมูลจาก Google Apps Script
+                const response = await fetch(`${WEB_APP_URL}?action=getUserProfile&userId=${userId}`);
+                const res = await response.json();
+
+                if (res.status === 'success') {
+                    const data = res.data;
+                    document.getElementById('emp-id').innerText = data.empId || '-';
+                    document.getElementById('emp-name').innerHTML = `${data.name} <i class="fa-solid fa-circle-check text-cyan-400 text-xs"></i>`;
+                    document.getElementById('emp-position').innerText = data.position || '-';
+                    document.getElementById('emp-department').innerText = data.department || '-';
+
+                    // สิทธิ์วันลา (เรียง: AL -> PL -> SL)
+                    document.getElementById('quota-al').innerText = data.quotaAL !== undefined ? data.quotaAL : '-';
+                    document.getElementById('quota-pl').innerText = data.quotaPL !== undefined ? data.quotaPL : '-';
+                    document.getElementById('quota-sl').innerText = data.quotaSL !== undefined ? data.quotaSL : '-';
+
+                    // เปลี่ยนสีจุดสถานะเป็นสีเขียวถ้า Active
+                    if ((data.status || '').toLowerCase() === 'active') {
+                        document.getElementById('user-status-dot').className = "absolute bottom-0 right-0 w-4 h-4 bg-line border-2 border-slate-900 rounded-full";
+                    }
+                } else {
+                    alert(res.message || "ไม่พบข้อมูลพนักงานในระบบ");
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
         function goToLeaveTerms() {
             window.location.href = 'leave-terms.html';
         }
 
-        // Button 2 & 3 Action: Show Under Development Alert
         function showUnderDevelopment() {
             showToast('รอพัฒนาอีกหน้านึง', 'ฟังก์ชันส่วนนี้กำลังอยู่ในระหว่างการพัฒนา ขออภัยในความไม่สะดวกค่ะ', 'info');
         }
 
-        // Button 4 Action: Redirect to main LIFF HUB
         function goToMainHub() {
-            window.location.href = 'https://alphadithailand-tech.github.io/alpha-liff-app/';
+            if (liff.isInClient()) {
+                liff.closeWindow();
+            } else {
+                window.location.href = 'https://alphadithailand-tech.github.io/alpha-liff-app/';
+            }
         }
 
-        // Custom Modal Toast Trigger
         function showToast(title, message, type = 'info') {
             const modal = document.getElementById('toast-modal');
             const toastTitle = document.getElementById('toast-title');
