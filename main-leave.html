@@ -47,9 +47,9 @@
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
-        /* เปลี่ยนพื้นหลังเป็นรูปภาพจาก Google Drive และซ้อนทับด้วยเงาดำจางๆ เพื่อให้อ่านตัวหนังสือได้ชัดเจน */
+        /* ใช้ภาพจาก Google Drive แสดงผลตรงๆ แบบไม่ใส่ฟิลเตอร์หรือสีทับใดๆ ทั้งสิ้น */
         .glass-header {
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('https://lh3.googleusercontent.com/d/1tz1pXJinc7G0pVo3GHDnq6ZKKtrw7tq5') center/cover no-repeat;
+            background: url('https://lh3.googleusercontent.com/d/1tz1pXJinc7G0pVo3GHDnq6ZKKtrw7tq5') center/cover no-repeat;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
@@ -81,11 +81,11 @@
 
                 <!-- Company Branding Banner -->
                 <div class="flex items-center justify-between mb-4">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-black/30 backdrop-blur-md text-white border border-white/20">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-black/40 backdrop-blur-md text-white border border-white/20">
                         <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mr-1.5 animate-pulse"></span>
                         Alpha D.I. Thailand
                     </span>
-                    <span class="text-xs text-slate-200 drop-shadow">รหัสพนักงาน: <strong id="emp-id" class="text-white">กำลังโหลด...</strong></span>
+                    <span class="text-xs text-white drop-shadow-md">รหัสพนักงาน: <strong id="emp-id" class="text-white">กำลังโหลด...</strong></span>
                 </div>
 
                 <!-- Profile Info Card -->
@@ -97,27 +97,27 @@
                         <span id="user-status-dot" class="absolute bottom-0 right-0 w-4 h-4 bg-slate-400 border-2 border-slate-900 rounded-full" title="Status"></span>
                     </div>
                     <div class="flex-1">
-                        <h2 id="emp-name" class="text-lg font-bold text-white tracking-tight flex items-center gap-1.5 drop-shadow-sm">
+                        <h2 id="emp-name" class="text-lg font-bold text-white tracking-tight flex items-center gap-1.5 drop-shadow-md">
                             กำลังโหลดชื่อ...
                         </h2>
-                        <p class="text-xs text-slate-200 drop-shadow-sm">ตำแหน่ง: <span id="emp-position">กำลังโหลด...</span></p>
-                        <p class="text-xs text-slate-300 drop-shadow-sm">แผนก: <span id="emp-department">กำลังโหลด...</span></p>
+                        <p class="text-xs text-white drop-shadow-md">ตำแหน่ง: <span id="emp-position">กำลังโหลด...</span></p>
+                        <p class="text-xs text-white drop-shadow-md">แผนก: <span id="emp-department">กำลังโหลด...</span></p>
                     </div>
                 </div>
 
                 <!-- Quick Balance Summary Bar (สลับลำดับ: พักร้อน -> กิจ -> ป่วย) -->
                 <div class="mt-5 grid grid-cols-3 gap-2 pt-4 border-t border-white/20 text-center">
-                    <div class="bg-black/40 backdrop-blur-md rounded-xl p-2 border border-white/10">
-                        <p class="text-[10px] text-slate-300">สิทธิพักร้อน</p>
-                        <p class="text-sm font-bold text-cyan-300"><span id="quota-al">-</span> <span class="text-[10px] font-normal text-slate-200">วัน</span></p>
+                    <div class="bg-black/50 backdrop-blur-md rounded-xl p-2 border border-white/15">
+                        <p class="text-[10px] text-white">สิทธิพักร้อน</p>
+                        <p class="text-sm font-bold text-cyan-300"><span id="quota-al">-</span> <span class="text-[10px] font-normal text-white">วัน</span></p>
                     </div>
-                    <div class="bg-black/40 backdrop-blur-md rounded-xl p-2 border border-white/10">
-                        <p class="text-[10px] text-slate-300">สิทธิลากิจ</p>
-                        <p class="text-sm font-bold text-amber-300"><span id="quota-pl">-</span> <span class="text-[10px] font-normal text-slate-200">วัน</span></p>
+                    <div class="bg-black/50 backdrop-blur-md rounded-xl p-2 border border-white/15">
+                        <p class="text-[10px] text-white">สิทธิลากิจ</p>
+                        <p class="text-sm font-bold text-amber-300"><span id="quota-pl">-</span> <span class="text-[10px] font-normal text-white">วัน</span></p>
                     </div>
-                    <div class="bg-black/40 backdrop-blur-md rounded-xl p-2 border border-white/10">
-                        <p class="text-[10px] text-slate-300">สิทธิลาป่วย</p>
-                        <p class="text-sm font-bold text-emerald-300"><span id="quota-sl">-</span> <span class="text-[10px] font-normal text-slate-200">วัน</span></p>
+                    <div class="bg-black/50 backdrop-blur-md rounded-xl p-2 border border-white/15">
+                        <p class="text-[10px] text-white">สิทธิลาป่วย</p>
+                        <p class="text-sm font-bold text-emerald-300"><span id="quota-sl">-</span> <span class="text-[10px] font-normal text-white">วัน</span></p>
                     </div>
                 </div>
             </div>
@@ -195,7 +195,7 @@
                             </div>
                             <div class="flex-1">
                                 <h4 class="font-bold text-slate-100 text-sm">4. กลับสู่เมนูหลัก</h4>
-                                <p class="text-xs text-slate-400 font-light mt-0.5">ย้อนกลับไปเมนูหลักของระบบ LIFF</p>
+                                <p class="text-xs text-slate-400 font-light mt-0.5">ย้อนกลับไปเมนูหลักของระบบ AIO-HR</p>
                             </div>
                             <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center group-hover:text-white transition-colors">
                                 <i class="fa-solid fa-xmark text-sm"></i>
@@ -212,7 +212,7 @@
                     <i class="fa-solid fa-circle-info text-brand text-lg mt-0.5"></i>
                     <div class="text-xs text-blue-900 leading-relaxed">
                         <strong class="font-semibold block mb-0.5">คำแนะนำจากฝ่ายบุคคล (HR)</strong>
-                        การยื่นใบลาล่วงหน้าต้องดำเนินการอย่างน้อย 3 วันทำการ สำหรับการลาป่วยกะทันหัน สามารถยื่นเอกสารย้อนหลังได้ไม่เกิน 2 วัน
+                        การยื่นใบลาล่วงหน้าต้องดำเนินการอย่างน้อย 3 วันทำการจะดีที่สุด เพื่อให้หัวหน้าแผนกแพลนงานล่วงหน้า
                     </div>
                 </div>
             </div>
