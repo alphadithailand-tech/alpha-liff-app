@@ -75,7 +75,7 @@
       <!-- Input: Employee ID -->
       <div>
         <label class="block text-xs font-semibold text-gray-700 mb-1">
-          <i class="fa-solid fa-id-card text-blue-600 mr-1"></i> รหัสพนักงาน <span class="text-red-550">*</span>
+          <i class="fa-solid fa-id-card text-blue-600 mr-1"></i> รหัสพนักงาน <span class="text-red-500">*</span>
         </label>
         <input type="text" id="empId" placeholder="เช่น 57200" required
           class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
@@ -85,9 +85,9 @@
       <!-- Input: Full Name -->
       <div>
         <label class="block text-xs font-semibold text-gray-700 mb-1">
-          <i class="fa-solid fa-user text-blue-600 mr-1"></i> ชื่อ - นามสกุล (ภาษาอังกฤษ) <span class="text-red-500">*</span>
+          <i class="fa-solid fa-user text-blue-600 mr-1"></i> ชื่อ - สกุล(ภาษาอังกฤษพิมพ์ใหญ่) <span class="text-red-500">*</span>
         </label>
-        <input type="text" id="fullName" placeholder="นายสมชาย ใจดี" required
+        <input type="text" id="fullName" placeholder="SOMCHAI JAIDEE" required
           class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
         <p id="fullNameError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกชื่อ-นามสกุล</p>
       </div>
@@ -140,8 +140,12 @@
 
   <!-- JavaScript Script -->
   <script>
-    // Replace with your LIFF ID
+    // Replace with your actual LINE LIFF ID
     const MY_LIFF_ID = "2012053598-7keSq00Y"; 
+    
+    // Google Apps Script Web App URL
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwXG37igOgFUDQ7Sa5o6RKlax8iSsVdMy9eK_5eluQwJoDx04IJh7BzaxA2gMhRdlz0dw/exec";
+    
     let lineUserId = "";
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -170,8 +174,9 @@
       } catch (err) {
         console.warn("LIFF Initialization failed (Browser Test Mode):", err);
         // Fallback Simulation for Local Testing
+        lineUserId = "SIMULATION_USER_001";
         document.getElementById("userName").textContent = "สมชาย ใจดี (Simulation Test)";
-        document.getElementById("userId").textContent = "Uk79ej619wgcuwc";
+        document.getElementById("userId").textContent = lineUserId;
         document.getElementById("userAvatar").src = "https://ui-avatars.com/api/?name=Somchai+Jaidee&background=0D8ABC&color=fff";
         
         const badge = document.getElementById("connectionBadge");
@@ -244,8 +249,8 @@
       document.getElementById(errorId).classList.add("hidden");
     }
 
-    // 4. Form Submit & Close LIFF Window
-    function handleSubmit(event) {
+    // 3. Form Submit & Send to Google Sheets via Apps Script
+    async function handleSubmit(event) {
       event.preventDefault();
 
       if (!validateForm()) {
@@ -256,18 +261,47 @@
       btn.disabled = true;
       btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> กำลังบันทึกข้อมูล...`;
 
-      // จำลองการบันทึกสำเร็จ (รอเชื่อม Backend ในข้อ 3)
-      setTimeout(() => {
-        alert("ลงทะเบียนเรียบร้อยแล้ว!");
+      // รวบรวมข้อมูลจากฟอร์ม
+      const formData = {
+        userId: lineUserId,
+        empId: document.getElementById("empId").value.trim(),
+        fullName: document.getElementById("fullName").value.trim(),
+        department: document.getElementById("department").value,
+        phone: document.getElementById("phone").value.trim(),
+        email: document.getElementById("email").value.trim()
+      };
 
-        // ปิดหน้าต่าง LIFF
-        if (typeof liff !== "undefined" && liff.isInClient()) {
-          liff.closeWindow();
+      try {
+        const response = await fetch(GAS_WEB_APP_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8", // ป้องกัน CORS preflight error
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (result.result === "success") {
+          alert("ลงทะเบียนเรียบร้อยแล้ว!");
+          
+          // ปิดหน้าต่าง LIFF หากเปิดบนแอป LINE
+          if (typeof liff !== "undefined" && liff.isInClient()) {
+            liff.closeWindow();
+          } else {
+            btn.innerHTML = `<i class="fa-solid fa-circle-check text-xs"></i> บันทึกสำเร็จแล้ว`;
+            btn.classList.replace("bg-blue-700", "bg-emerald-600");
+          }
         } else {
-          btn.innerHTML = `<i class="fa-solid fa-circle-check text-xs"></i> บันทึกสำเร็จแล้ว`;
-          btn.classList.replace("bg-blue-700", "bg-emerald-600");
+          throw new Error(result.message || "เกิดข้อผิดพลาดในการบันทึก");
         }
-      }, 1000);
+
+      } catch (err) {
+        console.error("Error submitting form:", err);
+        alert("เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง");
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-paper-plane text-xs"></i> ยืนยันการลงทะเบียน`;
+      }
     }
   </script>
 </body>
