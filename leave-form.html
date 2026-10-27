@@ -709,7 +709,21 @@
     let lineUserId = '';
     let slotCount = 0;
     let currentLang = 'th';
-    let userQuotas = { AL: 0, PL: 0, SL: 0 };
+    
+    // ขยายตัวแปรเก็บโควตารองรับครบทั้ง 11 ประเภทตามชีต Leave_Quota
+    let userQuotas = {
+      AL: 0, // ลาพักร้อน
+      PL: 0, // ลากิจ
+      UP: 0, // ลาไม่รับค่าจ้าง
+      SL: 0, // ลาป่วย
+      MP: 0, // ลาคลอดบุตร
+      OL: 0, // ลาอุปสมบท
+      FL: 0, // ลาร่วมงานพิธีศพ
+      WL: 0, // ลาพิธีมงคลสมรส
+      MS: 0, // ลารับราชการทหาร
+      MF: 0, // ลาทำหมัน
+      SP: 0  // ลาพักร้อนพิเศษ
+    };
 
     const leaveRulesData = {
       th: {
@@ -919,10 +933,20 @@
       try {
         const response = await fetch(`${GAS_WEB_APP_URL}?action=getUserProfile&userId=${userId}`);
         const result = await response.json();
-        if (result.status === 'success') {
+        if (result.status === 'success' && result.data) {
+          // ดึงข้อมูลโควตาคงเหลือครบทั้ง 11 ประเภทจากฝั่ง Backend
           userQuotas.AL = parseFloat(result.data.quotaAL || 0);
           userQuotas.PL = parseFloat(result.data.quotaPL || 0);
+          userQuotas.UP = parseFloat(result.data.quotaUP || 0);
           userQuotas.SL = parseFloat(result.data.quotaSL || 0);
+          userQuotas.MP = parseFloat(result.data.quotaMP || 0);
+          userQuotas.OL = parseFloat(result.data.quotaOL || 0);
+          userQuotas.FL = parseFloat(result.data.quotaFL || 0);
+          userQuotas.WL = parseFloat(result.data.quotaWL || 0);
+          userQuotas.MS = parseFloat(result.data.quotaMS || 0);
+          userQuotas.MF = parseFloat(result.data.quotaMF || 0);
+          userQuotas.SP = parseFloat(result.data.quotaSP || 0);
+          
           updateQuotaDisplay();
         }
       } catch (e) {
@@ -965,7 +989,15 @@
       let quotaVal = '-';
       if (selectedType === 'Annual Leave') quotaVal = userQuotas.AL + ' ' + translations[currentLang].dayUnit;
       else if (selectedType === 'Personal Leave') quotaVal = userQuotas.PL + ' ' + translations[currentLang].dayUnit;
+      else if (selectedType === 'Unpaid Leave') quotaVal = userQuotas.UP + ' ' + translations[currentLang].dayUnit;
       else if (selectedType === 'Sick Leave') quotaVal = userQuotas.SL + ' ' + translations[currentLang].dayUnit;
+      else if (selectedType === 'Maternity/Paternity Leave') quotaVal = userQuotas.MP + ' ' + translations[currentLang].dayUnit;
+      else if (selectedType === 'Ordination Leave') quotaVal = userQuotas.OL + ' ' + translations[currentLang].dayUnit;
+      else if (selectedType === 'Funeral Leave') quotaVal = userQuotas.FL + ' ' + translations[currentLang].dayUnit;
+      else if (selectedType === 'Wedding Leave') quotaVal = userQuotas.WL + ' ' + translations[currentLang].dayUnit;
+      else if (selectedType === 'Military Service Leave') quotaVal = userQuotas.MS + ' ' + translations[currentLang].dayUnit;
+      else if (selectedType === 'Sterilization Leave') quotaVal = userQuotas.MF + ' ' + translations[currentLang].dayUnit;
+      else if (selectedType === 'Special Leave (5/10 Years)') quotaVal = userQuotas.SP + ' ' + translations[currentLang].dayUnit;
 
       label.innerText = (currentLang === 'th' ? 'โควตาคงเหลือ: ' : 'Remaining: ') + quotaVal;
     }
@@ -1049,15 +1081,24 @@
       let maxQuota = 9999;
       let quotaName = '';
 
-      if (leaveType === 'Annual Leave') {
-        maxQuota = userQuotas.AL;
-        quotaName = currentLang === 'th' ? 'ลาพักร้อน' : 'Annual Leave';
-      } else if (leaveType === 'Personal Leave') {
-        maxQuota = userQuotas.PL;
-        quotaName = currentLang === 'th' ? 'ลากิจ' : 'Personal Leave';
-      } else if (leaveType === 'Sick Leave') {
-        maxQuota = userQuotas.SL;
-        quotaName = currentLang === 'th' ? 'ลาป่วย' : 'Sick Leave';
+      // แมปโควตาตรวจสอบตามประเภทการลาทั้ง 11 แบบ
+      const quotaMapping = {
+        'Annual Leave': { val: userQuotas.AL, name: currentLang === 'th' ? 'ลาพักร้อน' : 'Annual Leave' },
+        'Personal Leave': { val: userQuotas.PL, name: currentLang === 'th' ? 'ลากิจ' : 'Personal Leave' },
+        'Unpaid Leave': { val: userQuotas.UP, name: currentLang === 'th' ? 'ลากิจ ไม่รับค่าจ้าง' : 'Unpaid Leave' },
+        'Sick Leave': { val: userQuotas.SL, name: currentLang === 'th' ? 'ลาป่วย' : 'Sick Leave' },
+        'Maternity/Paternity Leave': { val: userQuotas.MP, name: currentLang === 'th' ? 'ลาคลอดบุตร' : 'Maternity/Paternity Leave' },
+        'Ordination Leave': { val: userQuotas.OL, name: currentLang === 'th' ? 'ลาอุปสมบท' : 'Ordination Leave' },
+        'Funeral Leave': { val: userQuotas.FL, name: currentLang === 'th' ? 'ลาร่วมงานพิธีศพ' : 'Funeral Leave' },
+        'Wedding Leave': { val: userQuotas.WL, name: currentLang === 'th' ? 'ลาพิธีมงคลสมรส' : 'Wedding Leave' },
+        'Military Service Leave': { val: userQuotas.MS, name: currentLang === 'th' ? 'ลาเพื่อรับราชการทหาร' : 'Military Service Leave' },
+        'Sterilization Leave': { val: userQuotas.MF, name: currentLang === 'th' ? 'ลาเพื่อทำหมัน' : 'Sterilization Leave' },
+        'Special Leave (5/10 Years)': { val: userQuotas.SP, name: currentLang === 'th' ? 'ลาพักร้อนพิเศษ' : 'Special Leave' }
+      };
+
+      if (quotaMapping[leaveType]) {
+        maxQuota = quotaMapping[leaveType].val;
+        quotaName = quotaMapping[leaveType].name;
       }
 
       if (totalDays > maxQuota) {
