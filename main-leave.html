@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ระบบการลาของพนักงาน - LIFF App</title>
+    <title>ระบบการลาหยุดของพนักงาน</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -83,7 +83,7 @@
                 <div class="flex items-center justify-between mb-4">
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-black/40 text-white border border-white/20 backdrop-blur-sm">
                         <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mr-1.5 animate-pulse"></span>
-                        Alpha D.I. Thailand
+                        ALPHA D.I. THAILAND
                     </span>
                     <span class="text-xs text-white bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm">รหัสพนักงาน: <strong id="emp-id" class="text-white">กำลังโหลด...</strong></span>
                 </div>
@@ -108,19 +108,19 @@
                 <!-- Quick Balance Summary Bar (ปรับขนาดตัวเลขเพิ่มเป็น 2 เท่า) -->
                 <div class="mt-5 grid grid-cols-3 gap-2 pt-4 border-t border-white/20 text-center">
                     <div class="bg-black/30 backdrop-blur-sm rounded-xl p-2.5 border border-white/10">
-                        <p class="text-[10px] text-blue-200">สิทธิพักร้อน</p>
+                        <p class="text-[15px] text-blue-200">สิทธิพักร้อน</p>
                         <p class="text-3xl font-bold text-cyan-300 leading-tight mt-1"><span id="quota-al">-</span></p>
-                        <span class="text-[10px] font-normal text-blue-100">วัน</span>
+                        <span class="text-[15px] font-normal text-blue-100">วัน</span>
                     </div>
                     <div class="bg-black/30 backdrop-blur-sm rounded-xl p-2.5 border border-white/10">
-                        <p class="text-[10px] text-blue-200">สิทธิลากิจ</p>
+                        <p class="text-[15px] text-blue-200">สิทธิลากิจ</p>
                         <p class="text-3xl font-bold text-amber-300 leading-tight mt-1"><span id="quota-pl">-</span></p>
-                        <span class="text-[10px] font-normal text-blue-100">วัน</span>
+                        <span class="text-[15px] font-normal text-blue-100">วัน</span>
                     </div>
                     <div class="bg-black/30 backdrop-blur-sm rounded-xl p-2.5 border border-white/10">
-                        <p class="text-[10px] text-blue-200">สิทธิลาป่วย</p>
+                        <p class="text-[15px] text-blue-200">สิทธิลาป่วย</p>
                         <p class="text-3xl font-bold text-emerald-300 leading-tight mt-1"><span id="quota-sl">-</span></p>
-                        <span class="text-[10px] font-normal text-blue-100">วัน</span>
+                        <span class="text-[15px] font-normal text-blue-100">วัน</span>
                     </div>
                 </div>
             </div>
@@ -147,7 +147,7 @@
                                     <h4 class="font-bold text-base text-white">1. ยื่นใบลา</h4>
                                     <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-light">ทำรายการ</span>
                                 </div>
-                                <p class="text-xs text-blue-100 font-light mt-0.5">กรอกแบบฟอร์มขออนุมัติลาหยุดงาน</p>
+                                <p class="text-xs text-blue-100 font-light mt-0.5">กรอกแบบฟอร์มขออนุมัติลาหยุดงาน และเงื่อนไขต่างๆ</p>
                             </div>
                             <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:translate-x-1 transition-transform">
                                 <i class="fa-solid fa-chevron-right text-sm"></i>
@@ -164,7 +164,7 @@
                             </div>
                             <div class="flex-1">
                                 <h4 class="font-bold text-slate-800 text-sm group-hover:text-brand transition-colors">2. ตรวจสอบสิทธิการลาคงเหลือ</h4>
-                                <p class="text-xs text-slate-500 font-light mt-0.5">เช็กโควตาลาป่วย ลากิจ ลาพักร้อนคงเหลือ</p>
+                                <p class="text-xs text-slate-500 font-light mt-0.5">เช็กโควตาลาประเภทต่างๆที่คงเหลือ</p>
                             </div>
                             <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center group-hover:text-brand group-hover:bg-brand/10 group-hover:translate-x-1 transition-all">
                                 <i class="fa-solid fa-chevron-right text-sm"></i>
@@ -181,7 +181,7 @@
                             </div>
                             <div class="flex-1">
                                 <h4 class="font-bold text-slate-800 text-sm group-hover:text-brand transition-colors">3. ตรวจสอบประวัติการลาย้อนหลัง</h4>
-                                <p class="text-xs text-slate-500 font-light mt-0.5">ดูสถานะอนุมัติและรายการลาย้อนหลัง</p>
+                                <p class="text-xs text-slate-500 font-light mt-0.5">ดูสถานะอนุมัติ รายการลาย้อนหลัง การส่งหลักฐานย้อนหลัง</p>
                             </div>
                             <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center group-hover:text-brand group-hover:bg-brand/10 group-hover:translate-x-1 transition-all">
                                 <i class="fa-solid fa-chevron-right text-sm"></i>
@@ -198,7 +198,7 @@
                             </div>
                             <div class="flex-1">
                                 <h4 class="font-bold text-slate-100 text-sm">4. กลับสู่เมนูหลัก</h4>
-                                <p class="text-xs text-slate-400 font-light mt-0.5">ย้อนกลับไปเมนูหลักของระบบ LIFF</p>
+                                <p class="text-xs text-slate-400 font-light mt-0.5">ย้อนกลับไปเมนูหลักของระบบ AIO-HR</p>
                             </div>
                             <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center group-hover:text-white transition-colors">
                                 <i class="fa-solid fa-xmark text-sm"></i>
@@ -215,7 +215,7 @@
                     <i class="fa-solid fa-circle-info text-brand text-lg mt-0.5"></i>
                     <div class="text-xs text-blue-900 leading-relaxed">
                         <strong class="font-semibold block mb-0.5">คำแนะนำจากฝ่ายบุคคล (HR)</strong>
-                        การยื่นใบลาล่วงหน้าต้องดำเนินการอย่างน้อย 3 วันทำการ สำหรับการลาป่วยกะทันหัน สามารถยื่นเอกสารย้อนหลังได้ไม่เกิน 2 วัน
+                        การยื่นใบลาล่วงหน้าต้องดำเนินการอย่างน้อย 3 วันทำการ เพื่อให้ต้นสังกัดสามารถวางแผนงานได้อย่างถูกต้อง
                     </div>
                 </div>
             </div>
