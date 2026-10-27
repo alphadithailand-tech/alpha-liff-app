@@ -21,15 +21,8 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-2 sm:p-4">
 
-  <div class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 my-4 relative">
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 my-4">
     
-    <!-- ปุ่มเปลี่ยนภาษา 3 ภาษา (เพิ่มเข้ามาใหม่โดยไม่กระทบโครงสร้างเดิม) -->
-    <div class="absolute top-4 right-4 z-10 flex bg-white/20 backdrop-blur-md rounded-lg p-0.5 border border-white/30">
-      <button type="button" onclick="changeLanguage('th')" id="langThBtn" class="px-2 py-1 text-xs font-bold rounded-md bg-white text-blue-900 shadow-sm transition-all">TH</button>
-      <button type="button" onclick="changeLanguage('en')" id="langEnBtn" class="px-2 py-1 text-xs font-semibold rounded-md text-white hover:bg-white/10 transition-all">EN</button>
-      <button type="button" onclick="changeLanguage('jp')" id="langJpBtn" class="px-2 py-1 text-xs font-semibold rounded-md text-white hover:bg-white/10 transition-all">JP</button>
-    </div>
-
     <!-- Header Banner -->
     <div class="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white p-6 relative">
       <div class="flex justify-between items-start">
@@ -37,8 +30,8 @@
           <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-light text-blue-100 mb-3 border border-white/20">
             <i class="fa-solid fa-shield-halved text-xs"></i> Secure LINE Verification
           </span>
-          <h1 id="txtTitle" class="text-2xl font-bold tracking-tight">ลงทะเบียนพนักงาน</h1>
-          <p id="txtSubtitle" class="text-xs text-blue-200 mt-1 font-light">กรอกข้อมูลเพื่อเชื่อมโยง LINE ID เข้ากับระบบงานบริษัท</p>
+          <h1 class="text-2xl font-bold tracking-tight">ลงทะเบียนพนักงาน</h1>
+          <p class="text-xs text-blue-200 mt-1 font-light">กรอกข้อมูลเพื่อเชื่อมโยง LINE ID เข้ากับระบบงานบริษัท</p>
         </div>
         <div class="bg-white/10 p-3 rounded-2xl border border-white/20 backdrop-blur-md">
           <i class="fa-solid fa-user-plus text-2xl text-white"></i>
@@ -54,10 +47,10 @@
         <div class="flex justify-between items-center mb-3">
           <div class="flex items-center gap-2">
             <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
-            <span id="txtLineStatus" class="text-xs font-semibold text-blue-900">สถานะการเชื่อมต่อ LINE</span>
+            <span class="text-xs font-semibold text-blue-900">สถานะการเชื่อมต่อ LINE</span>
           </div>
           <span id="connectionBadge" class="inline-flex items-center gap-1 bg-emerald-100 text-emerald-700 text-[11px] font-medium px-2.5 py-0.5 rounded-full border border-emerald-300">
-            <i class="fa-solid fa-spinner fa-spin"></i> <span id="txtLoading">กำลังโหลด...</span>
+            <i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลด...
           </span>
         </div>
 
@@ -69,7 +62,7 @@
             </span>
           </div>
           <div class="overflow-hidden">
-            <p id="txtLineAccount" class="text-[11px] text-gray-500 font-medium">ชื่อบัญชี LINE</p>
+            <p class="text-[11px] text-gray-500 font-medium">ชื่อบัญชี LINE</p>
             <p id="userName" class="text-sm font-bold text-gray-800 truncate">กำลังโหลดข้อมูล...</p>
             <div class="mt-1 inline-flex items-center gap-1 bg-gray-100 border border-gray-200 rounded-md px-2 py-0.5">
               <i class="fa-solid fa-key text-[10px] text-blue-600"></i>
@@ -81,65 +74,65 @@
 
       <!-- Input: Employee ID -->
       <div>
-        <label id="lblEmpId" class="block text-xs font-semibold text-gray-700 mb-1">
+        <label class="block text-xs font-semibold text-gray-700 mb-1">
           <i class="fa-solid fa-id-card text-blue-600 mr-1"></i> รหัสพนักงาน <span class="text-red-500">*</span>
         </label>
         <input type="text" id="empId" placeholder="เช่น EMP-2026-001" required
           class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
-        <p id="empIdError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> <span data-translate="errEmpId">กรุณากรอกรหัสพนักงาน</span></p>
+        <p id="empIdError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกรหัสพนักงาน</p>
       </div>
 
       <!-- Input: Full Name -->
       <div>
-        <label id="lblFullName" class="block text-xs font-semibold text-gray-700 mb-1">
+        <label class="block text-xs font-semibold text-gray-700 mb-1">
           <i class="fa-solid fa-user text-blue-600 mr-1"></i> ชื่อ - นามสกุล <span class="text-red-500">*</span>
         </label>
         <input type="text" id="fullName" placeholder="นายสมชาย ใจดี" required
           class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
-        <p id="fullNameError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> <span data-translate="errName">กรุณากรอกชื่อ-นามสกุล</span></p>
+        <p id="fullNameError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกชื่อ-นามสกุล</p>
       </div>
 
       <!-- Select: Department -->
       <div>
-        <label id="lblDept" class="block text-xs font-semibold text-gray-700 mb-1">
+        <label class="block text-xs font-semibold text-gray-700 mb-1">
           <i class="fa-solid fa-sitemap text-blue-600 mr-1"></i> แผนก / ฝ่าย <span class="text-red-500">*</span>
         </label>
         <select id="department" required
           class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-gray-700">
-          <option value="" id="optSelectDept">-- เลือกแผนก / ฝ่าย --</option>
+          <option value="">-- เลือกแผนก / ฝ่าย --</option>
           <option value="Production">ฝ่ายผลิต (Production)</option>
           <option value="Quality Control">ฝ่ายควบคุมคุณภาพ (QC)</option>
           <option value="Engineering">ฝ่ายวิศวกรรม (Engineering)</option>
           <option value="Administration">ฝ่ายบริหาร/ธุรการ (Admin)</option>
           <option value="Sales & Purchasing">ฝ่ายขายและการจัดซื้อ (Sales & Purchasing)</option>
         </select>
-        <p id="deptError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> <span data-translate="errDept">กรุณาเลือกแผนก/ฝ่าย</span></p>
+        <p id="deptError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> กรุณาเลือกแผนก/ฝ่าย</p>
       </div>
 
       <!-- Input: Phone Number -->
       <div>
-        <label id="lblPhone" class="block text-xs font-semibold text-gray-700 mb-1">
+        <label class="block text-xs font-semibold text-gray-700 mb-1">
           <i class="fa-solid fa-phone text-blue-600 mr-1"></i> เบอร์โทรศัพท์ <span class="text-red-500">*</span>
         </label>
         <input type="tel" id="phone" placeholder="0812345678" maxlength="10" required
           class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
-        <p id="phoneError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> <span data-translate="errPhone">กรุณากรอกเบอร์โทรศัพท์มือถือ 10 หลัก</span></p>
+        <p id="phoneError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกเบอร์โทรศัพท์มือถือ 10 หลัก</p>
       </div>
 
       <!-- Input: Company Email (Optional) -->
       <div>
-        <label id="lblEmail" class="block text-xs font-semibold text-gray-700 mb-1">
-          <i class="fa-solid fa-envelope text-blue-600 mr-1"></i> อีเมลบริษัท <span id="lblOptional" class="text-gray-400 font-normal">(ไม่บังคับ)</span>
+        <label class="block text-xs font-semibold text-gray-700 mb-1">
+          <i class="fa-solid fa-envelope text-blue-600 mr-1"></i> อีเมลบริษัท <span class="text-gray-400 font-normal">(ไม่บังคับ)</span>
         </label>
         <input type="email" id="email" placeholder="employee@company.com"
           class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
-        <p id="emailError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> <span data-translate="errEmail">รูปแบบอีเมลไม่ถูกต้อง</span></p>
+        <p id="emailError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> รูปแบบอีเมลไม่ถูกต้อง</p>
       </div>
 
       <!-- Submit Button -->
       <button type="submit" id="submitBtn"
         class="w-full mt-2 bg-blue-700 hover:bg-blue-800 text-white font-medium py-3 px-4 rounded-xl shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all flex items-center justify-center gap-2 text-sm">
-        <i class="fa-solid fa-paper-plane text-xs"></i> <span id="txtSubmit">ยืนยันการลงทะเบียน</span>
+        <i class="fa-solid fa-paper-plane text-xs"></i> ยืนยันการลงทะเบียน
       </button>
 
     </form>
@@ -151,118 +144,6 @@
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwXG37igOgFUDQ7Sa5o6RKlax8iSsVdMy9eK_5eluQwJoDx04IJh7BzaxA2gMhRdlz0dw/exec";
     
     let lineUserId = "";
-    let currentLang = "th";
-
-    // ชุดคำแปล 3 ภาษา (ไทย, อังกฤษ, ญี่ปุ่น)
-    const translations = {
-      th: {
-        title: "ลงทะเบียนพนักงาน",
-        subtitle: "กรอกข้อมูลเพื่อเชื่อมโยง LINE ID เข้ากับระบบงานบริษัท",
-        lineStatus: "สถานะการเชื่อมต่อ LINE",
-        loading: "กำลังโหลด...",
-        lineConnected: "เชื่อมต่อบัญชีแล้ว",
-        simMode: "โหมดทดสอบ",
-        lineAccount: "ชื่อบัญชี LINE",
-        empIdLabel: 'รหัสพนักงาน <span class="text-red-500">*</span>',
-        fullNameLabel: 'ชื่อ - นามสกุล <span class="text-red-500">*</span>',
-        deptLabel: 'แผนก / ฝ่าย <span class="text-red-500">*</span>',
-        selectDept: "-- เลือกแผนก / ฝ่าย --",
-        phoneLabel: 'เบอร์โทรศัพท์ <span class="text-red-500">*</span>',
-        emailLabel: 'อีเมลบริษัท',
-        optional: '(ไม่บังคับ)',
-        submitBtn: 'ยืนยันการลงทะเบียน',
-        submitting: 'กำลังบันทึกข้อมูล...',
-        successMsg: 'บันทึกสำเร็จแล้ว',
-        alertSuccess: 'ลงทะเบียนเรียบร้อยแล้ว!',
-        alertError: 'เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง',
-        errEmpId: 'กรุณากรอกรหัสพนักงาน',
-        errName: 'กรุณากรอกชื่อ-นามสกุล',
-        errDept: 'กรุณาเลือกแผนก/ฝ่าย',
-        errPhone: 'กรุณากรอกเบอร์โทรศัพท์มือถือ 10 หลัก',
-        errEmail: 'รูปแบบอีเมลไม่ถูกต้อง'
-      },
-      en: {
-        title: "Employee Registration",
-        subtitle: "Fill in info to link your LINE ID to the company system",
-        lineStatus: "LINE Connection Status",
-        loading: "Loading...",
-        lineConnected: "LINE Connected",
-        simMode: "Simulation Mode",
-        lineAccount: "LINE Account Name",
-        empIdLabel: 'Employee ID <span class="text-red-500">*</span>',
-        fullNameLabel: 'Full Name <span class="text-red-500">*</span>',
-        deptLabel: 'Department <span class="text-red-500">*</span>',
-        selectDept: "-- Select Department --",
-        phoneLabel: 'Phone Number <span class="text-red-500">*</span>',
-        emailLabel: 'Company Email',
-        optional: '(Optional)',
-        submitBtn: 'Confirm Registration',
-        submitting: 'Saving data...',
-        successMsg: 'Saved Successfully',
-        alertSuccess: 'Registration completed successfully!',
-        alertError: 'An error occurred. Please try again.',
-        errEmpId: 'Please enter Employee ID',
-        errName: 'Please enter Full Name',
-        errDept: 'Please select Department',
-        errPhone: 'Please enter 10-digit phone number',
-        errEmail: 'Invalid email format'
-      },
-      jp: {
-        title: "社員登録",
-        subtitle: "LINE IDを社内システムに連携するために入力してください",
-        lineStatus: "LINE接続ステータス",
-        loading: "読み込み中...",
-        lineConnected: "LINE連携済み",
-        simMode: "テストモード",
-        lineAccount: "LINEアカウント名",
-        empIdLabel: '社員番号 <span class="text-red-500">*</span>',
-        fullNameLabel: '氏名 <span class="text-red-500">*</span>',
-        deptLabel: '部署 <span class="text-red-500">*</span>',
-        selectDept: "-- 部署を選択してください --",
-        phoneLabel: '電話番号 <span class="text-red-500">*</span>',
-        emailLabel: '会社メールアドレス',
-        optional: '(任意)',
-        submitBtn: '登録を確定する',
-        submitting: '保存中...',
-        successMsg: '保存完了',
-        alertSuccess: '登録が完了しました！',
-        alertError: 'エラーが発生しました。もう一度お試しください。',
-        errEmpId: '社員番号を入力してください',
-        errName: '氏名を入力してください',
-        errDept: '部署を選択してください',
-        errPhone: '10桁の電話番号を入力してください',
-        errEmail: '無効なメール形式です'
-      }
-    };
-
-    function changeLanguage(lang) {
-      currentLang = lang;
-      const t = translations[lang];
-
-      // สลับสีปุ่มเลือกภาษา
-      document.getElementById("langThBtn").className = lang === 'th' ? "px-2 py-1 text-xs font-bold rounded-md bg-white text-blue-900 shadow-sm transition-all" : "px-2 py-1 text-xs font-semibold rounded-md text-white hover:bg-white/10 transition-all";
-      document.getElementById("langEnBtn").className = lang === 'en' ? "px-2 py-1 text-xs font-bold rounded-md bg-white text-blue-900 shadow-sm transition-all" : "px-2 py-1 text-xs font-semibold rounded-md text-white hover:bg-white/10 transition-all";
-      document.getElementById("langJpBtn").className = lang === 'jp' ? "px-2 py-1 text-xs font-bold rounded-md bg-white text-blue-900 shadow-sm transition-all" : "px-2 py-1 text-xs font-semibold rounded-md text-white hover:bg-white/10 transition-all";
-
-      // อัปเดตข้อความตามภาษาที่เลือก
-      document.getElementById("txtTitle").textContent = t.title;
-      document.getElementById("txtSubtitle").textContent = t.subtitle;
-      document.getElementById("txtLineStatus").textContent = t.lineStatus;
-      document.getElementById("txtLoading").textContent = t.loading;
-      document.getElementById("txtLineAccount").textContent = t.lineAccount;
-      document.getElementById("lblEmpId").innerHTML = `<i class="fa-solid fa-id-card text-blue-600 mr-1"></i> ` + t.empIdLabel;
-      document.getElementById("lblFullName").innerHTML = `<i class="fa-solid fa-user text-blue-600 mr-1"></i> ` + t.fullNameLabel;
-      document.getElementById("lblDept").innerHTML = `<i class="fa-solid fa-sitemap text-blue-600 mr-1"></i> ` + t.deptLabel;
-      document.getElementById("optSelectDept").textContent = t.selectDept;
-      document.getElementById("lblPhone").innerHTML = `<i class="fa-solid fa-phone text-blue-600 mr-1"></i> ` + t.phoneLabel;
-      document.getElementById("lblEmail").innerHTML = `<i class="fa-solid fa-envelope text-blue-600 mr-1"></i> ` + t.emailLabel + ` <span id="lblOptional" class="text-gray-400 font-normal">` + t.optional + `</span>`;
-      document.getElementById("txtSubmit").textContent = t.submitBtn;
-
-      document.querySelectorAll("[data-translate]").forEach(el => {
-        const key = el.getAttribute("data-translate");
-        if (t[key]) el.textContent = t[key];
-      });
-    }
 
     document.addEventListener("DOMContentLoaded", function() {
       initializeLiff();
@@ -282,7 +163,7 @@
 
           const badge = document.getElementById("connectionBadge");
           badge.className = "inline-flex items-center gap-1 bg-emerald-100 text-emerald-700 text-[11px] font-medium px-2.5 py-0.5 rounded-full border border-emerald-300";
-          badge.innerHTML = `<i class="fa-brands fa-line text-xs"></i> ${translations[currentLang].lineConnected}`;
+          badge.innerHTML = `<i class="fa-brands fa-line text-xs"></i> เชื่อมต่อบัญชีแล้ว`;
         } else {
           liff.login();
         }
@@ -295,13 +176,14 @@
         
         const badge = document.getElementById("connectionBadge");
         badge.className = "inline-flex items-center gap-1 bg-amber-100 text-amber-700 text-[11px] font-medium px-2.5 py-0.5 rounded-full border border-amber-300";
-        badge.innerHTML = `<i class="fa-solid fa-vial text-xs"></i> ${translations[currentLang].simMode}`;
+        badge.innerHTML = `<i class="fa-solid fa-vial text-xs"></i> โหมดทดสอบ`;
       }
     }
 
     function validateForm() {
       let isValid = true;
 
+      // Validate Employee ID
       const empId = document.getElementById("empId").value.trim();
       if (!empId) {
         showError("empId", "empIdError");
@@ -310,6 +192,7 @@
         hideError("empId", "empIdError");
       }
 
+      // Validate Full Name
       const fullName = document.getElementById("fullName").value.trim();
       if (!fullName) {
         showError("fullName", "fullNameError");
@@ -318,6 +201,7 @@
         hideError("fullName", "fullNameError");
       }
 
+      // Validate Department
       const department = document.getElementById("department").value;
       if (!department) {
         showError("department", "deptError");
@@ -326,6 +210,7 @@
         hideError("department", "deptError");
       }
 
+      // Validate Phone (10 Digits)
       const phone = document.getElementById("phone").value.trim();
       const phoneRegex = /^0[0-9]{9}$/;
       if (!phoneRegex.test(phone)) {
@@ -335,6 +220,7 @@
         hideError("phone", "phoneError");
       }
 
+      // Validate Email (Optional: เช็คเฉพาะกรณีที่มีการกรอกเข้ามา)
       const email = document.getElementById("email").value.trim();
       if (email !== "") {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -363,7 +249,6 @@
 
     async function handleSubmit(event) {
       event.preventDefault();
-      const t = translations[currentLang];
 
       if (!validateForm()) {
         return;
@@ -371,7 +256,7 @@
 
       const btn = document.getElementById("submitBtn");
       btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> ${t.submitting}`;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> กำลังบันทึกข้อมูล...`;
 
       const formData = {
         userId: lineUserId,
@@ -394,12 +279,12 @@
         const result = await response.json();
 
         if (result.result === "success") {
-          alert(t.alertSuccess);
+          alert("ลงทะเบียนเรียบร้อยแล้ว!");
           
           if (typeof liff !== "undefined" && liff.isInClient()) {
             liff.closeWindow();
           } else {
-            btn.innerHTML = `<i class="fa-solid fa-circle-check text-xs"></i> ${t.successMsg}`;
+            btn.innerHTML = `<i class="fa-solid fa-circle-check text-xs"></i> บันทึกสำเร็จแล้ว`;
             btn.classList.replace("bg-blue-700", "bg-emerald-600");
           }
         } else {
@@ -408,9 +293,9 @@
 
       } catch (err) {
         console.error("Error submitting form:", err);
-        alert(t.alertError);
+        alert("เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง");
         btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-paper-plane text-xs"></i> ${t.submitBtn}`;
+        btn.innerHTML = `<i class="fa-solid fa-paper-plane text-xs"></i> ยืนยันการลงทะเบียน`;
       }
     }
   </script>
