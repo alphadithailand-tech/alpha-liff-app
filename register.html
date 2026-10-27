@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบลงทะเบียนพนักงาน (LINE LIFF)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- LINE LIFF SDK v2 -->
+    <script src="https://static.line-scdn.me/liff/edge/2/sdk.js"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts (Kanit & Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                            950: '#172554'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Kanit', 'Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Kanit', 'Inter', sans-serif;
+            background-color: #ffffff;
+        }
+        
+        /* Subtle custom scrollbar for pre tags & modals */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Glass / Soft Border Enhancements */
+        .blue-frame-card {
+            border: 2px solid #2563eb;
+            background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+            box-shadow: 0 4px 20px -2px rgba(37, 99, 235, 0.12), 0 2px 6px -1px rgba(37, 99, 235, 0.08);
+        }
+
+        .input-focus-ring:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-white text-slate-800 flex flex-col justify-between p-3 sm:p-6 antialiased">
+
+    <!-- Top Header Bar / Mode Switcher -->
+    <header class="max-w-xl mx-auto w-full mb-6 flex flex-wrap justify-between items-center gap-3 bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-xs">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-brand-900 flex items-center justify-center text-white font-bold shadow-md shadow-brand-900/15">
+                <i class="fa-solid fa-building text-lg"></i>
+            </div>
+            <div>
+                <h1 class="text-xs sm:text-sm font-bold text-brand-950 tracking-tight leading-tight">LINE Notification Portal</h1>
+                <p class="text-[11px] text-slate-500 font-medium">ระบบลงทะเบียนพนักงานเพื่อรับการแจ้งเตือน</p>
+            </div>
+        </div>
+        
+        <!-- Mode Switcher & Guide Button -->
+        <div class="flex items-center space-x-2">
+            <button onclick="toggleGuideModal()" class="text-xs font-semibold text-slate-700 hover:text-brand-800 bg-slate-100/80 hover:bg-brand-50 px-3 py-1.5 rounded-xl transition duration-200 flex items-center gap-1.5 border border-slate-200/80">
+                <i class="fa-solid fa-circle-info text-brand-600"></i> คู่มือการติดตั้ง
+            </button>
+            <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200/80">
+                <button id="btnModeLive" onclick="setMode('live')" class="text-[11px] px-2.5 py-1 rounded-lg font-semibold transition duration-200 text-slate-600">
+                    LIFF Live
+                </button>
+                <button id="btnModeSim" onclick="setMode('sim')" class="text-[11px] px-2.5 py-1 rounded-lg font-semibold transition duration-200 bg-white text-brand-800 shadow-xs border border-slate-200/60">
+                    Simulation
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-xl mx-auto w-full flex-grow">
+        
+        <!-- Configuration Panel for Live LIFF ID (Visible when mode is LIFF) -->
+        <div id="liffConfigPanel" class="hidden mb-5 bg-brand-50/60 border border-brand-200 p-4 rounded-2xl text-xs text-brand-950 shadow-xs">
+            <div class="flex items-center justify-between mb-2">
+                <span class="font-bold flex items-center gap-1.5 text-brand-900 text-xs">
+                    <i class="fa-solid fa-sliders text-brand-600"></i> LIFF App ID Configuration
+                </span>
+                <span class="text-[10px] bg-brand-200/80 font-bold px-2.5 py-0.5 rounded-md text-brand-950">LIFF Mode</span>
+            </div>
+            <div class="flex gap-2">
+                <input type="text" id="inputLiffId" placeholder="กรอก LIFF ID (เช่น 1234567890-AbCdEfGh)" class="flex-grow p-2.5 rounded-xl border border-brand-300 input-focus-ring text-xs bg-white">
+                <button onclick="applyLiffId()" class="bg-brand-800 hover:bg-brand-900 text-white px-4 py-2 rounded-xl font-medium transition duration-200 shadow-xs">
+                    เชื่อมต่อ
+                </button>
+            </div>
+        </div>
+
+        <!-- Mode Status Badge Banner -->
+        <div id="statusBanner" class="mb-5 text-center">
+            <span class="inline-flex items-center gap-2 text-xs font-semibold px-4 py-1.5 rounded-full bg-brand-50 text-brand-800 border border-brand-200 shadow-2xs">
+                <span class="w-2 h-2 rounded-full bg-brand-600 animate-ping"></span>
+                โหมดจำลองการทำงาน (Simulation Mode)
+            </span>
+        </div>
+
+        <!-- Main Card Container -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-xl shadow-slate-100/80 overflow-hidden relative">
+            
+            <!-- Loading Overlay -->
+            <div id="loadingOverlay" class="absolute inset-0 bg-white/95 z-20 flex flex-col items-center justify-center gap-3 backdrop-blur-xs">
+                <div class="w-11 h-11 border-4 border-brand-600 border-t-transparent rounded-full animate-spin"></div>
+                <p id="loadingText" class="text-xs font-semibold text-brand-900">กำลังโหลดข้อมูลโปรไฟล์ LINE...</p>
+            </div>
+
+            <!-- Card Header Section -->
+            <div class="bg-gradient-to-r from-brand-950 via-brand-900 to-brand-800 p-6 sm:p-7 text-white relative overflow-hidden">
+                <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-brand-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="flex items-center justify-between relative z-10">
+                    <div>
+                        <div class="inline-flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-full text-[11px] font-medium text-brand-100 border border-white/10 mb-2">
+                            <i class="fa-solid fa-shield-halved text-brand-300"></i> Secure LINE Verification
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-bold tracking-tight">ลงทะเบียนพนักงาน</h2>
+                        <p class="text-xs text-brand-100/90 mt-1 font-light">กรอกข้อมูลเพื่อเชื่อมโยง LINE ID เข้ากับระบบงานบริษัท</p>
+                    </div>
+                    <div class="hidden sm:flex w-14 h-14 bg-white/10 rounded-2xl items-center justify-center border border-white/10 shadow-inner">
+                        <i class="fa-solid fa-user-plus text-2xl text-brand-200"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-5 sm:p-7">
+                
+                <!-- ================================================================= -->
+                <!-- REQUIREMENT: LINE CONNECTED PROFILE SECTION (BLUE BORDER FRAME) -->
+                <!-- ================================================================= -->
+                <div class="mb-6 blue-frame-card p-4 sm:p-5 rounded-2xl relative overflow-hidden transition-all duration-300">
+                    
+                    <!-- Frame Label / Status Badge -->
+                    <div class="flex items-center justify-between mb-3 pb-3 border-b border-blue-200/60">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2.5 h-2.5 rounded-full bg-brand-600 animate-pulse"></div>
+                            <span class="text-xs font-bold text-brand-900 tracking-wide uppercase">สถานะการเชื่อมต่อ LINE</span>
+                        </div>
+                        <span id="lineConnectBadge" class="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                            <i class="fa-brands fa-line text-emerald-500 text-sm"></i>
+                            <span>เชื่อมต่อบัญชีแล้ว</span>
+                        </span>
+                    </div>
+
+                    <!-- Profile Details -->
+                    <div class="flex items-center space-x-4">
+                        <div class="relative shrink-0">
+                            <img id="userAvatar" src="https://placehold.co/120x120/1e3a8a/FFF?text=LINE" alt="LINE Profile" class="w-16 h-16 rounded-2xl object-cover border-2 border-brand-600 shadow-md">
+                            <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 border-2 border-white rounded-full flex items-center justify-center text-[9px] text-white">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-grow overflow-hidden">
+                            <p class="text-[11px] font-semibold text-slate-500 mb-0.5">ชื่อบัญชี LINE</p>
+                            <h3 id="userDisplayName" class="font-bold text-slate-900 text-base sm:text-lg truncate leading-tight">กำลังโหลดชื่อ...</h3>
+                            
+                            <!-- LINE User ID Badge -->
+                            <div class="mt-2 inline-flex items-center gap-2 bg-white px-3 py-1 rounded-xl border border-blue-200 shadow-2xs max-w-full">
+                                <i class="fa-solid fa-key text-brand-600 text-xs"></i>
+                                <div class="overflow-hidden">
+                                    <span class="text-[10px] text-slate-400 block leading-none">LINE User ID</span>
+                                    <span id="displayUserId" class="font-mono text-xs text-brand-950 font-bold truncate block">Uxxxxxxxxxxxx...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ================================================================= -->
+
+                <!-- Main Registration Form -->
+                <form id="regForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                    
+                    <!-- Hidden Inputs for LINE Data -->
+                    <input type="hidden" id="lineUserId" name="lineUserId" value="">
+                    <input type="hidden" id="linePictureUrl" name="linePictureUrl" value="">
+
+                    <!-- Employee ID -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-800 mb-1.5">
+                            <i class="fa-solid fa-id-card text-brand-600 mr-1"></i> รหัสพนักงาน <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="empId" required placeholder="เช่น EMP-2026-001" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 input-focus-ring text-sm transition duration-200 bg-white placeholder:text-slate-400">
+                    </div>
+
+                    <!-- Full Name -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-800 mb-1.5">
+                            <i class="fa-solid fa-user-check text-brand-600 mr-1"></i> ชื่อ - นามสกุล <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="fullName" required placeholder="นายสมชาย ใจดี" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 input-focus-ring text-sm transition duration-200 bg-white placeholder:text-slate-400">
+                    </div>
+
+                    <!-- Department -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-800 mb-1.5">
+                            <i class="fa-solid fa-sitemap text-brand-600 mr-1"></i> แผนก / ฝ่าย <span class="text-red-500">*</span>
+                        </label>
+                        <select id="department" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 input-focus-ring text-sm bg-white transition duration-200 text-slate-800">
+                            <option value="" disabled selected>-- เลือกแผนก / ฝ่าย --</option>
+                            <option value="IT & Digital Transformation">เทคโนโลยีสารสนเทศ (IT)</option>
+                            <option value="Human Resources">ทรัพยากรบุคคล (HR)</option>
+                            <option value="Finance & Accounting">การเงินและบัญชี</option>
+                            <option value="Marketing & Sales">การตลาดและฝ่ายขาย</option>
+                            <option value="Operations & Logistics">ปฏิบัติการและโลจิสติกส์</option>
+                            <option value="Customer Support">บริการลูกค้า</option>
+                        </select>
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-800 mb-1.5">
+                            <i class="fa-solid fa-phone text-brand-600 mr-1"></i> เบอร์โทรศัพท์ <span class="text-red-500">*</span>
+                        </label>
+                        <input type="tel" id="phone" pattern="[0-9]{9,10}" required placeholder="0812345678" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 input-focus-ring text-sm transition duration-200 bg-white placeholder:text-slate-400">
+                    </div>
+
+                    <!-- Company Email -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-800 mb-1.5">
+                            <i class="fa-solid fa-envelope text-brand-600 mr-1"></i> อีเมลบริษัท <span class="text-red-500">*</span>
+                        </label>
+                        <input type="email" id="email" required placeholder="employee@company.com" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 input-focus-ring text-sm transition duration-200 bg-white placeholder:text-slate-400">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="btnSubmit" class="w-full mt-6 bg-brand-800 hover:bg-brand-900 text-white font-semibold py-3.5 px-4 rounded-xl shadow-lg shadow-brand-900/20 flex items-center justify-center space-x-2 transition duration-200 transform active:scale-98 cursor-pointer">
+                        <i class="fa-solid fa-paper-plane text-brand-300"></i>
+                        <span>ยืนยันการลงทะเบียน</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modal & Payload Display -->
+    <div id="successModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 text-center shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto border border-slate-100">
+            <div class="w-16 h-16 bg-brand-50 text-brand-800 rounded-2xl flex items-center justify-center mx-auto text-3xl border border-brand-200 shadow-xs">
+                <i class="fa-solid fa-circle-check text-brand-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900">ลงทะเบียนสำเร็จ!</h3>
+            <p class="text-xs text-slate-500">ระบบได้ผูก LINE User ID สำหรับการแจ้งเตือนพนักงานเรียบร้อยแล้ว</p>
+
+            <!-- LINE Push Message Preview -->
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-left space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-bold text-brand-950 flex items-center gap-1.5">
+                        <i class="fa-brands fa-line text-emerald-500 text-base"></i> LINE Push Notification
+                    </span>
+                    <span class="text-[9px] bg-brand-100 text-brand-900 font-bold px-2 py-0.5 rounded">Automated Bot</span>
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1.5 shadow-2xs">
+                    <p class="font-bold text-brand-800 flex items-center gap-1">
+                        <i class="fa-solid fa-bell text-brand-600"></i> ยืนยันการลงทะเบียนพนักงาน
+                    </p>
+                    <p>สวัสดีคุณ <span id="resName" class="font-semibold text-slate-900"></span></p>
+                    <div class="text-[11px] text-slate-600 space-y-0.5 bg-slate-50 p-2 rounded-lg border border-slate-100 font-mono">
+                        <p>รหัสพนักงาน: <span id="resEmpId" class="text-slate-900 font-semibold"></span></p>
+                        <p>แผนก: <span id="resDept" class="text-slate-900 font-semibold"></span></p>
+                    </div>
+                    <p class="text-[10px] text-slate-400 pt-1 border-t border-slate-100">การแจ้งเตือนสำคัญจากบริษัทจะถูกส่งผ่าน LINE ช่องทางนี้</p>
+                </div>
+            </div>
+
+            <!-- JSON Payload -->
+            <div class="text-left">
+                <div class="flex items-center justify-between mb-1.5">
+                    <label class="text-[11px] font-bold text-slate-700">
+                        <i class="fa-solid fa-code text-brand-600 mr-1"></i> Webhook Backend Payload JSON:
+                    </label>
+                    <button onclick="copyPayload()" class="text-[10px] text-brand-600 font-bold hover:underline flex items-center gap-1">
+                        <i class="fa-regular fa-copy"></i> คัดลอก JSON
+                    </button>
+                </div>
+                <pre id="jsonPayload" class="bg-slate-900 text-brand-300 p-3.5 rounded-xl text-[10px] font-mono overflow-x-auto max-h-36 leading-relaxed border border-slate-800"></pre>
+            </div>
+
+            <button onclick="closeSuccessModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl transition duration-200 text-xs shadow-md">
+                ตกลง / ปิดหน้าต่าง
+            </button>
+        </div>
+    </div>
+
+    <!-- Developer & Integration Guide Modal -->
+    <div id="guideModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto text-left border border-slate-100">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="text-base font-bold text-brand-950 flex items-center gap-2">
+                    <i class="fa-solid fa-book-bookmark text-brand-600"></i> คู่มือการเชื่อมต่อ LINE LIFF & Webhook
+                </h3>
+                <button onclick="toggleGuideModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-600">
+                <!-- Step 1 -->
+                <div>
+                    <h4 class="font-bold text-brand-900 text-xs mb-1">1. การตั้งค่า LINE Developers Console</h4>
+                    <ol class="list-decimal pl-4 space-y-1 text-slate-600">
+                        <li>เข้าใช้งาน <a href="https://developers.line.biz/" target="_blank" class="text-brand-600 font-semibold underline">LINE Developers Console</a> แล้วสร้าง Provider / Messaging API</li>
+                        <li>สร้าง <b>LIFF App</b> กำหนด Endpoint URL เป็น URL ของ Web App นี้</li>
+                        <li>คัดลอก <b>LIFF ID</b> (เช่น <code>1234567890-AbCdEfGh</code>) มาวางใส่ในโหมด LIFF Live</li>
+                    </ol>
+                </div>
+
+                <!-- Step 2 -->
+                <div>
+                    <h4 class="font-bold text-brand-900 text-xs mb-1">2. ตัวอย่าง Google Apps Script (Backend Webhook)</h4>
+                    <p class="mb-1 text-slate-500">คัดลอกโค้ดนี้ลงใน Google Apps Script เพื่อรับค่าจากฟอร์มบันทึกลง Google Sheet และส่ง Push Notification หาพนักงาน:</p>
+                    <pre class="bg-slate-900 text-slate-200 p-3.5 rounded-xl text-[10px] font-mono overflow-x-auto leading-relaxed border border-slate-800">
+function doPost(e) {
+  var data = JSON.parse(e.postData.contents);
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  
+  // 1. บันทึกข้อมูลลง Google Sheet
+  sheet.appendRow([
+    new Date(),
+    data.empId,
+    data.fullName,
+    data.department,
+    data.phone,
+    data.email,
+    data.lineUserId,
+    data.linePictureUrl
+  ]);
+  
+  // 2. ส่ง Push Message กลับหา LINE User ID ที่ดักจับมาได้
+  var channelAccessToken = "YOUR_LINE_CHANNEL_ACCESS_TOKEN";
+  var url = "https://api.line.me/v2/bot/message/push";
+  
+  var payload = {
+    to: data.lineUserId,
+    messages: [{
+      type: "text",
+      text: "🔷 ลงทะเบียนพนักงานสำเร็จ!\nยินดีต้อนรับคุณ " + data.fullName + " (" + data.department + ")"
+    }]
+  };
+  
+  UrlFetchApp.fetch(url, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + channelAccessToken
+    },
+    payload: JSON.stringify(payload)
+  });
+  
+  return ContentService.createTextOutput(JSON.stringify({status: "success"}))
+    .setMimeType(ContentService.MIME.JSON);
+}
+</pre>
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 text-right">
+                <button onclick="toggleGuideModal()" class="bg-brand-800 hover:bg-brand-900 text-white px-5 py-2 rounded-xl text-xs font-semibold transition duration-200">
+                    เข้าใจแล้ว
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="max-w-xl mx-auto w-full text-center text-[11px] text-slate-400 mt-8 mb-2 font-light">
+        <p>&copy; 2026 Corporate LINE LIFF Employee Onboarding System.</p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // State variables
+        let currentMode = 'sim'; // 'sim' or 'live'
+        let liffAppId = '';
+        let currentProfile = {
+            userId: '',
+            displayName: '',
+            pictureUrl: ''
+        };
+
+        // Mock profile data for Simulation Mode
+        const mockProfile = {
+            userId: 'U' + Math.random().toString(36).substring(2, 12) + Math.random().toString(36).substring(2, 6),
+            displayName: 'สมชาย ใจดี (Simulation Test)',
+            pictureUrl: 'https://placehold.co/120x120/1e3a8a/FFF?text=LINE+User'
+        };
+
+        window.onload = function () {
+            // Default to Simulation mode for easy browser preview
+            setMode('sim');
+        };
+
+        // Switch Mode Toggle
+        function setMode(mode) {
+            currentMode = mode;
+            const btnSim = document.getElementById('btnModeSim');
+            const btnLive = document.getElementById('btnModeLive');
+            const liffPanel = document.getElementById('liffConfigPanel');
+            const statusBanner = document.getElementById('statusBanner');
+
+            if (mode === 'sim') {
+                btnSim.className = "text-[11px] px-2.5 py-1 rounded-lg font-semibold transition duration-200 bg-white text-brand-800 shadow-xs border border-slate-200/60";
+                btnLive.className = "text-[11px] px-2.5 py-1 rounded-lg font-semibold transition duration-200 text-slate-600 hover:text-slate-900";
+                liffPanel.classList.add('hidden');
+                statusBanner.innerHTML = `
+                    <span class="inline-flex items-center gap-2 text-xs font-semibold px-4 py-1.5 rounded-full bg-brand-50 text-brand-800 border border-brand-200 shadow-2xs">
+                        <span class="w-2 h-2 rounded-full bg-brand-600 animate-ping"></span>
+                        โหมดจำลองการทำงาน (Simulation Mode)
+                    </span>
+                `;
+                loadSimulatedProfile();
+            } else {
+                btnLive.className = "text-[11px] px-2.5 py-1 rounded-lg font-semibold transition duration-200 bg-white text-brand-800 shadow-xs border border-slate-200/60";
+                btnSim.className = "text-[11px] px-2.5 py-1 rounded-lg font-semibold transition duration-200 text-slate-600 hover:text-slate-900";
+                liffPanel.classList.remove('hidden');
+                statusBanner.innerHTML = `
+                    <span class="inline-flex items-center gap-2 text-xs font-semibold px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs">
+                        <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                        โหมดใช้งานจริง (LINE LIFF Live)
+                    </span>
+                `;
+                if (liffAppId) {
+                    initLiff(liffAppId);
+                } else {
+                    showLoading(false);
+                    updateProfileUI({
+                        userId: 'กรุณากรอก LIFF ID ด้านบน',
+                        displayName: 'รอการเชื่อมต่อ LIFF...',
+                        pictureUrl: 'https://placehold.co/120x120/CCCCCC/666666?text=Wait+LIFF'
+                    });
+                }
+            }
+        }
+
+        // Apply LIFF ID manually from input panel
+        function applyLiffId() {
+            const idInput = document.getElementById('inputLiffId').value.trim();
+            if (!idInput) {
+                alert('กรุณากรอก LIFF App ID');
+                return;
+            }
+            liffAppId = idInput;
+            initLiff(liffAppId);
+        }
+
+        // Load Simulated Profile Data
+        function loadSimulatedProfile() {
+            showLoading(true, "กำลังดึงข้อมูลโปรไฟล์ LINE จำลอง...");
+            setTimeout(() => {
+                currentProfile = { ...mockProfile };
+                updateProfileUI(currentProfile);
+                showLoading(false);
+            }, 500);
+        }
+
+        // Initialize Real LINE LIFF SDK
+        async function initLiff(myLiffId) {
+            showLoading(true, "กำลังเชื่อมต่อกับ LINE LIFF SDK...");
+            try {
+                await liff.init({ liffId: myLiffId });
+                if (!liff.isLoggedIn()) {
+                    showLoading(true, "กำลังนำคุณไปยังหน้าเข้าสู่ระบบ LINE...");
+                    liff.login();
+                } else {
+                    const profile = await liff.getProfile();
+                    currentProfile = {
+                        userId: profile.userId,
+                        displayName: profile.displayName,
+                        pictureUrl: profile.pictureUrl || 'https://placehold.co/120x120/1e3a8a/FFF?text=LINE'
+                    };
+                    updateProfileUI(currentProfile);
+                    showLoading(false);
+                }
+            } catch (err) {
+                console.error('LIFF Init Error', err);
+                showLoading(false);
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ LIFF: ' + err.message);
+                updateProfileUI({
+                    userId: 'ERROR: ไม่สามารถดึงข้อมูลได้',
+                    displayName: 'เชื่อมต่อล้มเหลว',
+                    pictureUrl: 'https://placehold.co/120x120/FF0000/FFF?text=Error'
+                });
+            }
+        }
+
+        // Update UI Elements with Profile Info
+        function updateProfileUI(profile) {
+            document.getElementById('userDisplayName').textContent = profile.displayName;
+            document.getElementById('displayUserId').textContent = profile.userId;
+            document.getElementById('userAvatar').src = profile.pictureUrl;
+            
+            // Set hidden form values
+            document.getElementById('lineUserId').value = profile.userId;
+            document.getElementById('linePictureUrl').value = profile.pictureUrl;
+        }
+
+        // Handle Form Submission
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const uid = document.getElementById('lineUserId').value;
+            if (!uid || uid.includes('ERROR') || uid.includes('กรุณา')) {
+                alert('ไม่พบ LINE User ID กรุณาตรวจสอบการเชื่อมต่อ LIFF หรือเลือกโหมด Simulation');
+                return;
+            }
+
+            // Gather Data
+            const formData = {
+                empId: document.getElementById('empId').value.trim(),
+                fullName: document.getElementById('fullName').value.trim(),
+                department: document.getElementById('department').value,
+                phone: document.getElementById('phone').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                lineUserId: document.getElementById('lineUserId').value,
+                linePictureUrl: document.getElementById('linePictureUrl').value,
+                registeredAt: new Date().toISOString()
+            };
+
+            // Render Results in Success Modal
+            document.getElementById('resName').textContent = formData.fullName;
+            document.getElementById('resEmpId').textContent = formData.empId;
+            document.getElementById('resDept').textContent = formData.department;
+            document.getElementById('jsonPayload').textContent = JSON.stringify(formData, null, 2);
+
+            // Open Modal
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        // Toggle Loading Spinner Overlay
+        function showLoading(show, text = "กำลังดึงข้อมูล...") {
+            const overlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            loadingText.textContent = text;
+            if (show) {
+                overlay.classList.remove('hidden');
+            } else {
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // Close Modal & Reset Form
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.getElementById('regForm').reset();
+            // Restore hidden values
+            document.getElementById('lineUserId').value = currentProfile.userId;
+            document.getElementById('linePictureUrl').value = currentProfile.pictureUrl;
+        }
+
+        // Toggle Developer Guide Modal
+        function toggleGuideModal() {
+            const modal = document.getElementById('guideModal');
+            modal.classList.toggle('hidden');
+        }
+
+        // Copy Payload JSON to Clipboard
+        function copyPayload() {
+            const payloadText = document.getElementById('jsonPayload').textContent;
+            const textarea = document.createElement('textarea');
+            textarea.value = payloadText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('คัดลอก JSON Payload เรียบร้อยแล้ว!');
+        }
+    </script>
+</body>
+</html>
