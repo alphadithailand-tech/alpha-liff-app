@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ระบบลงทะเบียนพนักงาน (LINE LIFF)</title>
+  <title>ระบบลงทะเบียนพนักงาน AIO-HR </title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons -->
@@ -77,7 +77,7 @@
         <label class="block text-xs font-semibold text-gray-700 mb-1">
           <i class="fa-solid fa-id-card text-blue-600 mr-1"></i> รหัสพนักงาน <span class="text-red-500">*</span>
         </label>
-        <input type="text" id="empId" placeholder="เช่น EMP-2026-001" required
+        <input type="text" id="empId" placeholder="เช่น 12345" required
           class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
         <p id="empIdError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกรหัสพนักงาน</p>
       </div>
@@ -85,7 +85,7 @@
       <!-- Input: Full Name -->
       <div>
         <label class="block text-xs font-semibold text-gray-700 mb-1">
-          <i class="fa-solid fa-user text-blue-600 mr-1"></i> ชื่อ - นามสกุล <span class="text-red-500">*</span>
+          <i class="fa-solid fa-user text-blue-600 mr-1"></i> ชื่อ-สกุล(ภาษาอังกฤษพิมพ์ใหญ่) <span class="text-red-500">*</span>
         </label>
         <input type="text" id="fullName" placeholder="นายสมชาย ใจดี" required
           class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
@@ -119,14 +119,14 @@
         <p id="phoneError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกเบอร์โทรศัพท์มือถือ 10 หลัก</p>
       </div>
 
-      <!-- Input: Company Email (Optional) -->
+      <!-- Input: Company Email -->
       <div>
         <label class="block text-xs font-semibold text-gray-700 mb-1">
-          <i class="fa-solid fa-envelope text-blue-600 mr-1"></i> อีเมลบริษัท <span class="text-gray-400 font-normal">(ไม่บังคับ)</span>
+          <i class="fa-solid fa-envelope text-blue-600 mr-1"></i> อีเมล(ถ้ามี) <span class="text-red-500">*</span>
         </label>
-        <input type="email" id="email" placeholder="employee@company.com"
+        <input type="email" id="email" placeholder="employee@company.com" required
           class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
-        <p id="emailError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> รูปแบบอีเมลไม่ถูกต้อง</p>
+        <p id="emailError" class="hidden text-xs text-red-500 mt-1"><i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกอีเมลให้ถูกต้อง</p>
       </div>
 
       <!-- Submit Button -->
@@ -140,7 +140,10 @@
 
   <!-- JavaScript Script -->
   <script>
-    const MY_LIFF_ID = "YOUR_LIFF_ID"; 
+    // Replace with your actual LINE LIFF ID
+    const MY_LIFF_ID = "2012053598-7keSq00Y"; 
+    
+    // Google Apps Script Web App URL
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwXG37igOgFUDQ7Sa5o6RKlax8iSsVdMy9eK_5eluQwJoDx04IJh7BzaxA2gMhRdlz0dw/exec";
     
     let lineUserId = "";
@@ -149,6 +152,7 @@
       initializeLiff();
     });
 
+    // 1. Initialize LIFF SDK & Fetch Profile
     async function initializeLiff() {
       try {
         await liff.init({ liffId: MY_LIFF_ID });
@@ -169,6 +173,7 @@
         }
       } catch (err) {
         console.warn("LIFF Initialization failed (Browser Test Mode):", err);
+        // Fallback Simulation for Local Testing
         lineUserId = "SIMULATION_USER_001";
         document.getElementById("userName").textContent = "สมชาย ใจดี (Simulation Test)";
         document.getElementById("userId").textContent = lineUserId;
@@ -180,6 +185,7 @@
       }
     }
 
+    // 2. Form Validation Logic
     function validateForm() {
       let isValid = true;
 
@@ -220,16 +226,12 @@
         hideError("phone", "phoneError");
       }
 
-      // Validate Email (Optional: เช็คเฉพาะกรณีที่มีการกรอกเข้ามา)
+      // Validate Email
       const email = document.getElementById("email").value.trim();
-      if (email !== "") {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-          showError("email", "emailError");
-          isValid = false;
-        } else {
-          hideError("email", "emailError");
-        }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showError("email", "emailError");
+        isValid = false;
       } else {
         hideError("email", "emailError");
       }
@@ -247,6 +249,7 @@
       document.getElementById(errorId).classList.add("hidden");
     }
 
+    // 3. Form Submit & Send to Google Sheets via Apps Script
     async function handleSubmit(event) {
       event.preventDefault();
 
@@ -258,6 +261,7 @@
       btn.disabled = true;
       btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> กำลังบันทึกข้อมูล...`;
 
+      // รวบรวมข้อมูลจากฟอร์ม
       const formData = {
         userId: lineUserId,
         empId: document.getElementById("empId").value.trim(),
@@ -271,7 +275,7 @@
         const response = await fetch(GAS_WEB_APP_URL, {
           method: "POST",
           headers: {
-            "Content-Type": "text/plain;charset=utf-8",
+            "Content-Type": "text/plain;charset=utf-8", // ป้องกัน CORS preflight error
           },
           body: JSON.stringify(formData)
         });
@@ -281,6 +285,7 @@
         if (result.result === "success") {
           alert("ลงทะเบียนเรียบร้อยแล้ว!");
           
+          // ปิดหน้าต่าง LIFF หากเปิดบนแอป LINE
           if (typeof liff !== "undefined" && liff.isInClient()) {
             liff.closeWindow();
           } else {
