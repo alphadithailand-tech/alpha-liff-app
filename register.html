@@ -263,7 +263,7 @@
 
       const btn = document.getElementById("submitBtn");
       btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> กำลังบันทึกข้อมูล...`;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> กำลังตรวจสอบข้อมูล...`;
 
       // รวบรวมข้อมูลจากฟอร์ม
       const formData = {
@@ -295,6 +295,16 @@
           } else {
             btn.innerHTML = `<i class="fa-solid fa-circle-check text-xs"></i> บันทึกสำเร็จแล้ว`;
             btn.classList.replace("bg-blue-700", "bg-emerald-600");
+          }
+        } else if (result.result === "duplicate") {
+          // แจ้งเตือนเมื่อพบว่า LINE ID นี้เคยลงทะเบียนไปแล้ว
+          alert(result.message);
+          btn.disabled = false;
+          btn.innerHTML = `<i class="fa-solid fa-paper-plane text-xs"></i> ยืนยันการลงทะเบียน`;
+          
+          // ถ้าเปิดใน LINE ให้ปิดหน้าต่างอัตโนมัติหลังกดแจ้งเตือน
+          if (typeof liff !== "undefined" && liff.isInClient()) {
+            liff.closeWindow();
           }
         } else {
           throw new Error(result.message || "เกิดข้อผิดพลาดในการบันทึก");
