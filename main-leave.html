@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ระบบการลาหยุดของพนักงาน</title>
+    <title id="txt-title">ระบบการลาหยุดของพนักงาน</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -77,7 +77,19 @@
         <!-- MAIN VIEW: MENU HUB -->
         <div id="view-main-menu" class="flex-1 overflow-y-auto pb-6 animate-fade-in">
             <!-- Header Profile Section -->
-            <div class="custom-bg-header text-white px-5 pt-6 pb-8 rounded-b-3xl shadow-lg relative overflow-hidden">
+            <div class="custom-bg-header text-white px-5 pt-4 pb-8 rounded-b-3xl shadow-lg relative overflow-hidden">
+
+                <!-- Language Switcher Bar (เพิ่มปุ่มสลับภาษาด้านบนสุด) -->
+                <div class="flex justify-end mb-3">
+                    <div class="inline-flex bg-black/40 backdrop-blur-md rounded-full p-1 border border-white/20">
+                        <button id="lang-th-btn" onclick="switchLanguage('th')" class="px-2.5 py-0.5 rounded-full text-xs font-semibold transition-all bg-white text-slate-900 shadow-sm">
+                            TH
+                        </button>
+                        <button id="lang-jp-btn" onclick="switchLanguage('jp')" class="px-2.5 py-0.5 rounded-full text-xs font-medium transition-all text-white hover:text-white/80">
+                            日本語
+                        </button>
+                    </div>
+                </div>
 
                 <!-- Company Branding Banner -->
                 <div class="flex items-center justify-between mb-4">
@@ -85,7 +97,7 @@
                         <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mr-1.5 animate-pulse"></span>
                         ALPHA D.I. THAILAND
                     </span>
-                    <span class="text-xs text-white bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm">รหัสพนักงาน: <strong id="emp-id" class="text-white">กำลังโหลด...</strong></span>
+                    <span class="text-xs text-white bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm"><span id="txt-emp-id-label">รหัสพนักงาน</span>: <strong id="emp-id" class="text-white">กำลังโหลด...</strong></span>
                 </div>
 
                 <!-- Profile Info Card -->
@@ -100,27 +112,27 @@
                         <h2 id="emp-name" class="text-lg font-bold text-white tracking-tight flex items-center gap-1.5 drop-shadow">
                             กำลังโหลดชื่อ...
                         </h2>
-                        <p class="text-xs text-white drop-shadow">ตำแหน่ง: <span id="emp-position">กำลังโหลด...</span></p>
-                        <p class="text-xs text-white drop-shadow">แผนก: <span id="emp-department">กำลังโหลด...</span></p>
+                        <p class="text-xs text-white drop-shadow"><span id="txt-position-label">ตำแหน่ง</span>: <span id="emp-position">กำลังโหลด...</span></p>
+                        <p class="text-xs text-white drop-shadow"><span id="txt-dept-label">แผนก</span>: <span id="emp-department">กำลังโหลด...</span></p>
                     </div>
                 </div>
 
                 <!-- Quick Balance Summary Bar (ปรับขนาดตัวเลขเพิ่มเป็น 2 เท่า) -->
                 <div class="mt-5 grid grid-cols-3 gap-2 pt-4 border-t border-white/20 text-center">
                     <div class="bg-black/30 backdrop-blur-sm rounded-xl p-2.5 border border-white/10">
-                        <p class="text-[15px] text-blue-200">สิทธิพักร้อน</p>
+                        <p id="txt-quota-al" class="text-[15px] text-blue-200">สิทธิพักร้อน</p>
                         <p class="text-3xl font-bold text-cyan-300 leading-tight mt-1"><span id="quota-al">-</span></p>
-                        <span class="text-[15px] font-normal text-blue-100">วัน</span>
+                        <span id="txt-day-unit-1" class="text-[15px] font-normal text-blue-100">วัน</span>
                     </div>
                     <div class="bg-black/30 backdrop-blur-sm rounded-xl p-2.5 border border-white/10">
-                        <p class="text-[15px] text-blue-200">สิทธิลากิจ</p>
+                        <p id="txt-quota-pl" class="text-[15px] text-blue-200">สิทธิลากิจ</p>
                         <p class="text-3xl font-bold text-amber-300 leading-tight mt-1"><span id="quota-pl">-</span></p>
-                        <span class="text-[15px] font-normal text-blue-100">วัน</span>
+                        <span id="txt-day-unit-2" class="text-[15px] font-normal text-blue-100">วัน</span>
                     </div>
                     <div class="bg-black/30 backdrop-blur-sm rounded-xl p-2.5 border border-white/10">
-                        <p class="text-[15px] text-blue-200">สิทธิลาป่วย</p>
+                        <p id="txt-quota-sl" class="text-[15px] text-blue-200">สิทธิลาป่วย</p>
                         <p class="text-3xl font-bold text-emerald-300 leading-tight mt-1"><span id="quota-sl">-</span></p>
-                        <span class="text-[15px] font-normal text-blue-100">วัน</span>
+                        <span id="txt-day-unit-3" class="text-[15px] font-normal text-blue-100">วัน</span>
                     </div>
                 </div>
             </div>
@@ -128,8 +140,8 @@
             <!-- Main Menu Buttons Grid -->
             <div class="px-5 mt-6">
                 <div class="flex items-center justify-between mb-3 px-1">
-                    <h3 class="text-sm font-semibold text-slate-700 uppercase tracking-wider">เมนูรายการ (MAIN MENU)</h3>
-                    <span class="text-xs text-slate-400">เลือกทำรายการ</span>
+                    <h3 id="txt-main-menu-title" class="text-sm font-semibold text-slate-700 uppercase tracking-wider">เมนูรายการ (MAIN MENU)</h3>
+                    <span id="txt-select-action" class="text-xs text-slate-400">เลือกทำรายการ</span>
                 </div>
 
                 <div class="grid grid-cols-1 gap-3">
@@ -144,10 +156,10 @@
                             </div>
                             <div class="flex-1">
                                 <div class="flex items-center gap-2">
-                                    <h4 class="font-bold text-base text-white">1. ยื่นใบลา</h4>
-                                    <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-light">ทำรายการ</span>
+                                    <h4 id="txt-btn-1-title" class="font-bold text-base text-white">1. ยื่นใบลา</h4>
+                                    <span id="txt-btn-1-badge" class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-light">ทำรายการ</span>
                                 </div>
-                                <p class="text-xs text-blue-100 font-light mt-0.5">กรอกแบบฟอร์มขออนุมัติลาหยุดงาน และเงื่อนไขต่างๆ</p>
+                                <p id="txt-btn-1-desc" class="text-xs text-blue-100 font-light mt-0.5">กรอกแบบฟอร์มขออนุมัติลาหยุดงาน และเงื่อนไขต่างๆ</p>
                             </div>
                             <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:translate-x-1 transition-transform">
                                 <i class="fa-solid fa-chevron-right text-sm"></i>
@@ -163,8 +175,8 @@
                                 <i class="fa-solid fa-chart-pie text-xl" style="color: #FDC12A;"></i>
                             </div>
                             <div class="flex-1">
-                                <h4 class="font-bold text-slate-800 text-sm group-hover:text-brand transition-colors">2. ตรวจสอบสิทธิการลาคงเหลือ</h4>
-                                <p class="text-xs text-slate-500 font-light mt-0.5">เช็กโควตาลาประเภทต่างๆที่คงเหลือ</p>
+                                <h4 id="txt-btn-2-title" class="font-bold text-slate-800 text-sm group-hover:text-brand transition-colors">2. ตรวจสอบสิทธิการลาคงเหลือ</h4>
+                                <p id="txt-btn-2-desc" class="text-xs text-slate-500 font-light mt-0.5">เช็กโควตาลาประเภทต่างๆที่คงเหลือ</p>
                             </div>
                             <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center group-hover:text-brand group-hover:bg-brand/10 group-hover:translate-x-1 transition-all">
                                 <i class="fa-solid fa-chevron-right text-sm"></i>
@@ -180,8 +192,8 @@
                                 <i class="fa-solid fa-clock-rotate-left text-xl" style="color: #FDC12A;"></i>
                             </div>
                             <div class="flex-1">
-                                <h4 class="font-bold text-slate-800 text-sm group-hover:text-brand transition-colors">3. ตรวจสอบประวัติการลาย้อนหลัง</h4>
-                                <p class="text-xs text-slate-500 font-light mt-0.5">ดูสถานะอนุมัติ รายการลาย้อนหลัง การส่งหลักฐานย้อนหลัง</p>
+                                <h4 id="txt-btn-3-title" class="font-bold text-slate-800 text-sm group-hover:text-brand transition-colors">3. ตรวจสอบประวัติการลาย้อนหลัง</h4>
+                                <p id="txt-btn-3-desc" class="text-xs text-slate-500 font-light mt-0.5">ดูสถานะอนุมัติ รายการลาย้อนหลัง การส่งหลักฐานย้อนหลัง</p>
                             </div>
                             <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center group-hover:text-brand group-hover:bg-brand/10 group-hover:translate-x-1 transition-all">
                                 <i class="fa-solid fa-chevron-right text-sm"></i>
@@ -197,8 +209,8 @@
                                 <i class="fa-solid fa-right-from-bracket text-xl" style="color: #FDC12A;"></i>
                             </div>
                             <div class="flex-1">
-                                <h4 class="font-bold text-slate-100 text-sm">4. กลับสู่เมนูหลัก</h4>
-                                <p class="text-xs text-slate-400 font-light mt-0.5">ย้อนกลับไปเมนูหลักของระบบ AIO-HR</p>
+                                <h4 id="txt-btn-4-title" class="font-bold text-slate-100 text-sm">4. กลับสู่เมนูหลัก</h4>
+                                <p id="txt-btn-4-desc" class="text-xs text-slate-400 font-light mt-0.5">ย้อนกลับไปเมนูหลักของระบบ AIO-HR</p>
                             </div>
                             <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center group-hover:text-white transition-colors">
                                 <i class="fa-solid fa-xmark text-sm"></i>
@@ -213,7 +225,7 @@
             <div class="px-5 mt-6">
                 <div class="bg-blue-50/70 rounded-2xl p-3.5 border border-blue-200/60 flex items-start space-x-3">
                     <i class="fa-solid fa-circle-info text-brand text-lg mt-0.5"></i>
-                    <div class="text-xs text-blue-900 leading-relaxed">
+                    <div id="txt-hr-advice" class="text-xs text-blue-900 leading-relaxed">
                         <strong class="font-semibold block mb-0.5">คำแนะนำจากฝ่ายบุคคล (HR)</strong>
                         การยื่นใบลาล่วงหน้าต้องดำเนินการอย่างน้อย 3 วันทำการ เพื่อให้ต้นสังกัดสามารถวางแผนงานได้อย่างถูกต้อง
                     </div>
@@ -229,7 +241,7 @@
                 </div>
                 <h3 id="toast-title" class="font-bold text-slate-800 text-base">กำลังพัฒนา</h3>
                 <p id="toast-message" class="text-xs text-slate-500 leading-relaxed">ระบบส่วนนี้อยู่ระหว่างการพัฒนา</p>
-                <button onclick="closeToast()" class="w-full bg-brand text-white font-medium py-2.5 rounded-xl text-xs hover:bg-brand-hover">
+                <button onclick="closeToast()" id="txt-toast-btn" class="w-full bg-brand text-white font-medium py-2.5 rounded-xl text-xs hover:bg-brand-hover">
                     ตกลง
                 </button>
             </div>
@@ -241,6 +253,110 @@
     <script>
         const LIFF_ID = "2012053598-ClINT0ab";
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwo4qrNh69G-Pz1fvTcpBIkQesKSXyEqDiGwVYpVubWYTNEvgWrECBTE1qy5LerjgzvEg/exec"; 
+
+        // คำแปลภาษาไทยและญี่ปุ่น
+        const translations = {
+            th: {
+                title: "ระบบการลาหยุดของพนักงาน",
+                empIdLabel: "รหัสพนักงาน",
+                positionLabel: "ตำแหน่ง",
+                deptLabel: "แผนก",
+                quotaAl: "สิทธิพักร้อน",
+                quotaPl: "สิทธิลากิจ",
+                quotaSl: "สิทธิลาป่วย",
+                dayUnit: "วัน",
+                mainMenuTitle: "เมนูรายการ (MAIN MENU)",
+                selectAction: "เลือกทำรายการ",
+                btn1Title: "1. ยื่นใบลา",
+                btn1Badge: "ทำรายการ",
+                btn1Desc: "กรอกแบบฟอร์มขออนุมัติลาหยุดงาน และเงื่อนไขต่างๆ",
+                btn2Title: "2. ตรวจสอบสิทธิการลาคงเหลือ",
+                btn2Desc: "เช็กโควตาลาประเภทต่างๆที่คงเหลือ",
+                btn3Title: "3. ตรวจสอบประวัติการลาย้อนหลัง",
+                btn3Desc: "ดูสถานะอนุมัติ รายการลาย้อนหลัง การส่งหลักฐานย้อนหลัง",
+                btn4Title: "4. กลับสู่เมนูหลัก",
+                btn4Desc: "ย้อนกลับไปเมนูหลักของระบบ AIO-HR",
+                hrAdviceTitle: "คำแนะนำจากฝ่ายบุคคล (HR)",
+                hrAdviceText: "การยื่นใบลาล่วงหน้าต้องดำเนินการอย่างน้อย 3 วันทำการ เพื่อให้ต้นสังกัดสามารถวางแผนงานได้อย่างถูกต้อง",
+                toastTitle: "กำลังพัฒนา",
+                toastMsg: "ระบบส่วนนี้อยู่ระหว่างการพัฒนา ขออภัยในความไม่สะดวกค่ะ",
+                toastBtn: "ตกลง"
+            },
+            jp: {
+                title: "従業員休暇申請システム",
+                empIdLabel: "社員ID",
+                positionLabel: "役職",
+                deptLabel: "部署",
+                quotaAl: "有給休暇残日数",
+                quotaPl: "私用休暇残日数",
+                quotaSl: "病気休暇残日数",
+                dayUnit: "日",
+                mainMenuTitle: "メインメニュー (MAIN MENU)",
+                selectAction: "操作を選択",
+                btn1Title: "1. 休暇申請",
+                btn1Badge: "申請",
+                btn1Desc: "休暇申請フォームおよび条件の入力を行います",
+                btn2Title: "2. 休暇残日数確認",
+                btn2Desc: "各種休暇の残余クオータを確認します",
+                btn3Title: "3. 休暇履歴確認",
+                btn3Desc: "承認ステータスや過去の休暇履歴を確認します",
+                btn4Title: "4. メインメニューに戻る",
+                btn4Desc: "AIO-HRシステムのメインメニューに戻ります",
+                hrAdviceTitle: "人事部からのご案内 (HR)",
+                hrAdviceText: "業務計画に支障をきたさないよう、休暇申請は少なくとも3営業日前までに手続きを行ってください。",
+                toastTitle: "開発中",
+                toastMsg: "この機能は現在開発中です。ご不便をおかけして申し訳ありません。",
+                toastBtn: "確認"
+            }
+        };
+
+        let currentLang = 'th';
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            const thBtn = document.getElementById('lang-th-btn');
+            const jpBtn = document.getElementById('lang-jp-btn');
+
+            if (lang === 'th') {
+                thBtn.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold transition-all bg-white text-slate-900 shadow-sm";
+                jpBtn.className = "px-2.5 py-0.5 rounded-full text-xs font-medium transition-all text-white hover:text-white/80";
+            } else {
+                jpBtn.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold transition-all bg-white text-slate-900 shadow-sm";
+                thBtn.className = "px-2.5 py-0.5 rounded-full text-xs font-medium transition-all text-white hover:text-white/80";
+            }
+
+            const t = translations[lang];
+            document.getElementById('txt-title').innerText = t.title;
+            document.getElementById('txt-emp-id-label').innerText = t.empIdLabel;
+            document.getElementById('txt-position-label').innerText = t.positionLabel;
+            document.getElementById('txt-dept-label').innerText = t.deptLabel;
+            document.getElementById('txt-quota-al').innerText = t.quotaAl;
+            document.getElementById('txt-quota-pl').innerText = t.quotaPL;
+            document.getElementById('txt-quota-sl').innerText = t.quotaSL;
+            
+            document.getElementById('txt-day-unit-1').innerText = t.dayUnit;
+            document.getElementById('txt-day-unit-2').innerText = t.dayUnit;
+            document.getElementById('txt-day-unit-3').innerText = t.dayUnit;
+
+            document.getElementById('txt-main-menu-title').innerText = t.mainMenuTitle;
+            document.getElementById('txt-select-action').innerText = t.selectAction;
+
+            document.getElementById('txt-btn-1-title').innerText = t.btn1Title;
+            document.getElementById('txt-btn-1-badge').innerText = t.btn1Badge;
+            document.getElementById('txt-btn-1-desc').innerText = t.btn1Desc;
+
+            document.getElementById('txt-btn-2-title').innerText = t.btn2Title;
+            document.getElementById('txt-btn-2-desc').innerText = t.btn2Desc;
+
+            document.getElementById('txt-btn-3-title').innerText = t.btn3Title;
+            document.getElementById('txt-btn-3-desc').innerText = t.btn3Desc;
+
+            document.getElementById('txt-btn-4-title').innerText = t.btn4Title;
+            document.getElementById('txt-btn-4-desc').innerText = t.btn4Desc;
+
+            document.getElementById('txt-hr-advice').innerHTML = `<strong class="font-semibold block mb-0.5">${t.hrAdviceTitle}</strong>${t.hrAdviceText}`;
+            document.getElementById('txt-toast-btn').innerText = t.toastBtn;
+        }
 
         window.onload = function() {
             initLiff();
@@ -308,7 +424,8 @@
         }
 
         function showUnderDevelopment() {
-            showToast('รอพัฒนาอีกหน้านึง', 'ฟังก์ชันส่วนนี้กำลังอยู่ในระหว่างการพัฒนา ขออภัยในความไม่สะดวกค่ะ', 'info');
+            const t = translations[currentLang];
+            showToast(t.toastTitle, t.toastMsg, 'info');
         }
 
         function goToMainHub() {
