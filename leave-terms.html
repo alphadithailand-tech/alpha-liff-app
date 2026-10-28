@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ข้อกำหนดและเงื่อนไขการลา</title>
+    <title id="page-title">ข้อกำหนดและเงื่อนไขการลา</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Font: Prompt -->
@@ -18,15 +18,24 @@
 <body class="flex items-center justify-center min-h-screen p-4">
 
     <!-- Container Card -->
-    <div class="w-full max-w-md bg-white rounded-3xl shadow-lg border border-blue-100 overflow-hidden flex flex-col min-h-[600px]">
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-lg border border-blue-100 overflow-hidden flex flex-col min-h-[600px] relative">
         
+        <!-- Language Switcher Bar -->
+        <div class="absolute top-4 right-4 z-10">
+            <select id="lang-selector" onchange="changeLanguage(this.value)" class="text-xs bg-slate-100 text-slate-700 font-semibold py-1.5 px-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-sm">
+                <option value="th">🇹🇭 ไทย</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="jp">🇯🇵 日本語</option>
+            </select>
+        </div>
+
         <!-- Header -->
-        <div class="p-6 text-center pb-2">
+        <div class="p-6 text-center pb-2 pt-10">
             <div class="w-24 h-24 bg-white flex items-center justify-center mx-auto mb-2 overflow-hidden p-1">
                 <img src="https://lh3.googleusercontent.com/d/1eFDDgxw2mcPwQNnxg88EwHm1PgV6SJkP" alt="ข้อกำหนดและเงื่อนไขการลา" class="w-full h-full object-contain">
             </div>
-            <h1 class="text-xl font-bold text-slate-800">ข้อกำหนดและเงื่อนไขการลา</h1>
-            <p class="text-sm text-slate-500 mt-1">กรุณาอ่านรายละเอียดก่อนยื่นใบลา</p>
+            <h1 id="header-title" class="text-xl font-bold text-slate-800">ข้อกำหนดและเงื่อนไขการลา</h1>
+            <p id="header-subtitle" class="text-sm text-slate-500 mt-1">กรุณาอ่านรายละเอียดก่อนยื่นใบลา</p>
         </div>
 
         <!-- Tabs Switcher -->
@@ -47,29 +56,29 @@
             <!-- TAB 1: เงื่อนไขการลา -->
             <div id="tab-1-content" class="flex flex-col h-full justify-between space-y-4">
                 <div class="bg-blue-50/40 p-4 rounded-2xl border border-blue-50">
-                    <h2 class="font-bold text-slate-800 mb-3 text-base flex items-center">
+                    <h2 id="t1-section-title" class="font-bold text-slate-800 mb-3 text-base flex items-center">
                         เงื่อนไขการลา (โดยสรุป)
                     </h2>
-                    <ul class="space-y-3 text-sm text-slate-600">
+                    <ul id="t1-rules-list" class="space-y-3 text-sm text-slate-600">
                         <li class="flex items-start gap-3">
                             <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">1</span>
-                            <span>การลาต้องได้รับการอนุมัติจากผู้บังคับบัญชาตามลำดับชั้น</span>
+                            <span data-rule="0">การลาต้องได้รับการอนุมัติจากผู้บังคับบัญชาตามลำดับชั้น</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">2</span>
-                            <span>กรุณายื่นใบลาก่อนวันลาอย่างน้อย 1 วันทำการ</span>
+                            <span data-rule="1">กรุณายื่นใบลาก่อนวันลาอย่างน้อย 1 วันทำการ</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">3</span>
-                            <span>กรณีลากระทันหัน ให้ระบุเหตุผลและแจ้งหัวหน้างานโดยเร็ว</span>
+                            <span data-rule="2">กรณีลากระทันหัน ให้ระบุเหตุผลและแจ้งหัวหน้างานโดยเร็ว</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">4</span>
-                            <span>การลาบางประเภทอาจต้องแนบเอกสารประกอบการพิจารณาอนุมัติ</span>
+                            <span data-rule="3">การลาบางประเภทอาจต้องแนบเอกสารประกอบการพิจารณาอนุมัติ</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">5</span>
-                            <span>บริษัทขอสงวนสิทธิในการพิจารณาอนุมัติการลา ตามระเบียบขององค์กร</span>
+                            <span data-rule="4">บริษัทขอสงวนสิทธิในการพิจารณาอนุมัติการลา ตามระเบียบขององค์กร</span>
                         </li>
                     </ul>
                 </div>
@@ -77,14 +86,14 @@
                 <!-- Checkbox -->
                 <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100 flex items-center gap-3 cursor-pointer select-none" onclick="toggleCheckbox()">
                     <input type="checkbox" id="agree-checkbox" class="w-5 h-5 text-blue-600 rounded-md border-slate-300 focus:ring-blue-500 cursor-pointer pointer-events-none" onchange="validateAcceptButton()">
-                    <label for="agree-checkbox" class="text-xs font-medium text-slate-700 cursor-pointer pointer-events-none">
+                    <label id="checkbox-label" for="agree-checkbox" class="text-xs font-medium text-slate-700 cursor-pointer pointer-events-none">
                         ฉันได้อ่านและเข้าใจข้อกำหนดและเงื่อนไขการลาแล้ว
                     </label>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="pt-2 grid grid-cols-2 gap-3 mt-auto">
-                    <button onclick="onReject()" class="py-3 px-4 bg-blue-50/80 hover:bg-blue-100 text-blue-600 font-semibold rounded-2xl transition text-sm">
+                    <button id="reject-btn" onclick="onReject()" class="py-3 px-4 bg-blue-50/80 hover:bg-blue-100 text-blue-600 font-semibold rounded-2xl transition text-sm">
                         ปฏิเสธ
                     </button>
                     <button id="accept-btn" disabled onclick="onAccept()" class="py-3 px-4 bg-blue-600 text-white font-semibold rounded-2xl transition text-sm opacity-50 cursor-not-allowed shadow-md shadow-blue-200">
@@ -102,25 +111,13 @@
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-lg">🌴</div>
                             <div>
-                                <div class="font-bold text-slate-800 text-sm">1. ลาพักร้อน</div>
-                                <div class="text-xs text-slate-400">พักผ่อนประจำปี / ฉุกเฉิน</div>
+                                <div class="font-bold text-slate-800 text-sm leave-title" data-index="0">1. ลาพักร้อน</div>
+                                <div class="text-xs text-slate-400 leave-sub" data-index="0">พักผ่อนประจำปี / ฉุกเฉิน</div>
                             </div>
                         </div>
                         <span id="acc-icon-1" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
                     </div>
-                    <div id="acc-content-1" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
-                        <div class="py-1 border-b border-slate-100"><span class="text-slate-400">รายละเอียด:</span> <span class="text-slate-700">เป็นการลาเพื่อพักผ่อนประจำปี หรือลากรณีฉุกเฉินต่างๆ</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">ระยะเวลา:</span> <span class="font-semibold text-slate-700">6 วันต่อปี สะสมจากปีก่อนได้ไม่เกิน 12 วัน</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">เงื่อนไข:</span> <span class="font-semibold text-slate-700">ลาล่วงหน้าอย่างน้อย 1 วันทำการ</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100">
-                            <span class="text-slate-400">สิทธิประโยชน์:</span> 
-                            <span>
-                                <span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, 
-                                <span class="text-emerald-600 font-semibold">ได้รับเบี้ยขยัน</span>
-                            </span>
-                        </div>
-                        <div class="flex justify-between py-1"><span class="text-slate-400">หลักฐาน:</span> <span class="font-semibold text-slate-600">ไม่ใช้หลักฐานประกอบการลา</span></div>
-                    </div>
+                    <div id="acc-content-1" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5 leave-detail" data-index="0"></div>
                 </div>
 
                 <!-- 2. ลากิจ -->
@@ -129,25 +126,13 @@
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center text-lg">🏠</div>
                             <div>
-                                <div class="font-bold text-slate-800 text-sm">2. ลากิจ</div>
-                                <div class="text-xs text-slate-400">ประกอบกิจธุระส่วนตัว</div>
+                                <div class="font-bold text-slate-800 text-sm leave-title" data-index="1">2. ลากิจ</div>
+                                <div class="text-xs text-slate-400 leave-sub" data-index="1">ประกอบกิจธุระส่วนตัว</div>
                             </div>
                         </div>
                         <span id="acc-icon-2" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
                     </div>
-                    <div id="acc-content-2" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
-                        <div class="py-1 border-b border-slate-100"><span class="text-slate-400">รายละเอียด:</span> <span class="text-slate-700">เป็นการลาเพื่อประกอบกิจธุระตามหน่วยงาน ห้างร้านต่างๆ</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">ระยะเวลา:</span> <span class="font-semibold text-slate-700">5 วันต่อปี ไม่สามารถสะสมจากปีก่อนได้</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">เงื่อนไข:</span> <span class="font-semibold text-slate-700">ลาล่วงหน้าอย่างน้อย 1 วันทำการ</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100">
-                            <span class="text-slate-400">สิทธิประโยชน์:</span> 
-                            <span>
-                                <span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, 
-                                <span class="text-rose-500 font-semibold">ไม่ได้รับเบี้ยขยัน</span>
-                            </span>
-                        </div>
-                        <div class="flex justify-between py-1"><span class="text-slate-400">หลักฐาน:</span> <span class="font-semibold text-slate-700">ใช้หลักฐานประกอบการลา</span></div>
-                    </div>
+                    <div id="acc-content-2" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5 leave-detail" data-index="1"></div>
                 </div>
 
                 <!-- 3. ลากิจ ไม่รับค่าจ้าง -->
@@ -156,25 +141,13 @@
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-lg">📂</div>
                             <div>
-                                <div class="font-bold text-slate-800 text-sm">3. ลากิจ ไม่รับค่าจ้าง</div>
-                                <div class="text-xs text-slate-400">กิจธุระส่วนตัวเพิ่มเติม</div>
+                                <div class="font-bold text-slate-800 text-sm leave-title" data-index="2">3. ลากิจ ไม่รับค่าจ้าง</div>
+                                <div class="text-xs text-slate-400 leave-sub" data-index="2">กิจธุระส่วนตัวเพิ่มเติม</div>
                             </div>
                         </div>
                         <span id="acc-icon-3" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
                     </div>
-                    <div id="acc-content-3" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
-                        <div class="py-1 border-b border-slate-100"><span class="text-slate-400">รายละเอียด:</span> <span class="text-slate-700">เป็นการลาเพื่อประกอบกิจธุระตามหน่วยงาน ห้างร้านต่างๆ</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">ระยะเวลา:</span> <span class="font-semibold text-slate-700">10 วันต่อปี ไม่สามารถสะสมจากปีก่อนได้</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">เงื่อนไข:</span> <span class="font-semibold text-slate-700">ลาล่วงหน้าอย่างน้อย 1 วันทำการ</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100">
-                            <span class="text-slate-400">สิทธิประโยชน์:</span> 
-                            <span>
-                                <span class="text-rose-500 font-semibold">ไม่ได้รับค่าจ้าง</span>, 
-                                <span class="text-rose-500 font-semibold">ไม่ได้รับเบี้ยขยัน</span>
-                            </span>
-                        </div>
-                        <div class="flex justify-between py-1"><span class="text-slate-400">หลักฐาน:</span> <span class="font-semibold text-slate-600">ไม่ใช้หลักฐานประกอบการลา</span></div>
-                    </div>
+                    <div id="acc-content-3" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5 leave-detail" data-index="2"></div>
                 </div>
 
                 <!-- 4. ลาป่วย -->
@@ -183,25 +156,13 @@
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-lg">🏥</div>
                             <div>
-                                <div class="font-bold text-slate-800 text-sm">4. ลาป่วย</div>
-                                <div class="text-xs text-slate-400">กรณีเจ็บป่วยจริง</div>
+                                <div class="font-bold text-slate-800 text-sm leave-title" data-index="3">4. ลาป่วย</div>
+                                <div class="text-xs text-slate-400 leave-sub" data-index="3">กรณีเจ็บป่วยจริง</div>
                             </div>
                         </div>
                         <span id="acc-icon-4" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
                     </div>
-                    <div id="acc-content-4" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
-                        <div class="py-1 border-b border-slate-100"><span class="text-slate-400">รายละเอียด:</span> <span class="text-slate-700">ใช้สำหรับลาในกรณีเจ็บป่วยได้เท่าที่ป่วยจริง</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">ระยะเวลา:</span> <span class="font-semibold text-slate-700">30 วันต่อปี ไม่สามารถสะสมจากปีก่อนได้</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">เงื่อนไข:</span> <span class="font-semibold text-slate-700">ลาล่วงหน้าหรือลาฉุกเฉินได้</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100">
-                            <span class="text-slate-400">สิทธิประโยชน์:</span> 
-                            <span>
-                                <span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, 
-                                <span class="text-rose-500 font-semibold">ไม่ได้รับเบี้ยขยัน</span>
-                            </span>
-                        </div>
-                        <div class="flex justify-between py-1"><span class="text-slate-400">หลักฐาน:</span> <span class="font-semibold text-slate-700">หากมีสามารถแนบเพื่อขออนุมัติได้</span></div>
-                    </div>
+                    <div id="acc-content-4" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5 leave-detail" data-index="3"></div>
                 </div>
 
                 <!-- 5. ลาคลอดบุตร -->
@@ -210,24 +171,13 @@
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-pink-50 text-pink-500 flex items-center justify-center text-lg">👶</div>
                             <div>
-                                <div class="font-bold text-slate-800 text-sm">5. ลาคลอดบุตร</div>
-                                <div class="text-xs text-slate-400">สำหรับลูกจ้างหญิงและชาย</div>
+                                <div class="font-bold text-slate-800 text-sm leave-title" data-index="4">5. ลาคลอดบุตร</div>
+                                <div class="text-xs text-slate-400 leave-sub" data-index="4">สำหรับลูกจ้างหญิงและชาย</div>
                             </div>
                         </div>
                         <span id="acc-icon-5" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
                     </div>
-                    <div id="acc-content-5" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
-                        <div class="py-1 border-b border-slate-100"><span class="text-slate-400">รายละเอียด:</span> <span class="text-slate-700">ใช้สำหรับกรณีคลอดบุตรของลูกจ้างหญิง / ช่วยเหลือสำหรับลูกจ้างชาย</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">ระยะเวลา:</span> <span class="font-semibold text-slate-700">หญิงสูงสุด 120 วัน / ชาย 15 วันต่อปี</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">เงื่อนไข:</span> <span class="font-semibold text-slate-700">ลาล่วงหน้าหรือลาฉุกเฉินได้</span></div>
-                        <div class="py-1 border-b border-slate-100">
-                            <span class="text-slate-400">สิทธิประโยชน์:</span><br>
-                            <span class="text-slate-700">• หญิงรับค่าจ้างสูงสุด 60 วัน</span><br>
-                            <span class="text-slate-700">• ชายได้รับค่าจ้าง 15 วัน</span><br>
-                            <span class="text-rose-500 font-semibold">• ไม่ได้รับเบี้ยขยัน</span>
-                        </div>
-                        <div class="flex justify-between py-1"><span class="text-slate-400">หลักฐาน:</span> <span class="font-semibold text-slate-700">ใช้หลักฐานประกอบการลา</span></div>
-                    </div>
+                    <div id="acc-content-5" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5 leave-detail" data-index="4"></div>
                 </div>
 
                 <!-- 6. ลาอุปสมบท -->
@@ -236,25 +186,13 @@
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-lg">🪷</div>
                             <div>
-                                <div class="font-bold text-slate-800 text-sm">6. ลาอุปสมบท</div>
-                                <div class="text-xs text-slate-400">กรณีอุปสมบทตามประเพณี</div>
+                                <div class="font-bold text-slate-800 text-sm leave-title" data-index="5">6. ลาอุปสมบท</div>
+                                <div class="text-xs text-slate-400 leave-sub" data-index="5">กรณีอุปสมบทตามประเพณี</div>
                             </div>
                         </div>
                         <span id="acc-icon-6" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
                     </div>
-                    <div id="acc-content-6" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
-                        <div class="py-1 border-b border-slate-100"><span class="text-slate-400">รายละเอียด:</span> <span class="text-slate-700">ใช้สำหรับลาในกรณีอุปสมบทตามประเพณี</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">ระยะเวลา:</span> <span class="font-semibold text-slate-700">15 วันต่อปี (อ้างอิงตามระเบียบองค์กร)</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">เงื่อนไข:</span> <span class="font-semibold text-slate-700">ลาล่วงหน้าตามระเบียบบริษัท</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100">
-                            <span class="text-slate-400">สิทธิประโยชน์:</span> 
-                            <span>
-                                <span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, 
-                                <span class="text-rose-500 font-semibold">ไม่ได้รับเบี้ยขยัน</span>
-                            </span>
-                        </div>
-                        <div class="flex justify-between py-1"><span class="text-slate-400">หลักฐาน:</span> <span class="font-semibold text-slate-700">ใช้หลักฐานประกอบการลา</span></div>
-                    </div>
+                    <div id="acc-content-6" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5 leave-detail" data-index="5"></div>
                 </div>
 
                 <!-- 7. ลาร่วมงานพิธีศพ -->
@@ -263,25 +201,13 @@
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center text-lg">🕊️</div>
                             <div>
-                                <div class="font-bold text-slate-800 text-sm">7. ลาร่วมงานพิธีศพ</div>
-                                <div class="text-xs text-slate-400">งานศพญาติสายตรงตามกฎหมาย</div>
+                                <div class="font-bold text-slate-800 text-sm leave-title" data-index="6">7. ลาร่วมงานพิธีศพ</div>
+                                <div class="text-xs text-slate-400 leave-sub" data-index="6">งานศพญาติสายตรงตามกฎหมาย</div>
                             </div>
                         </div>
                         <span id="acc-icon-7" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
                     </div>
-                    <div id="acc-content-7" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
-                        <div class="py-1 border-b border-slate-100"><span class="text-slate-400">รายละเอียด:</span> <span class="text-slate-700">การลาเพื่อร่วมงานศพหรือการฌาปนกิจศพบิดา มารดา คู่สมรส พี่น้องร่วมบิดามารดา และบุตรโดยชอบด้วยกฎหมาย</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">ระยะเวลา:</span> <span class="font-semibold text-slate-700">2 วันต่อปี</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">เงื่อนไข:</span> <span class="font-semibold text-slate-700">ลาล่วงหน้าหรือลาฉุกเฉินได้</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100">
-                            <span class="text-slate-400">สิทธิประโยชน์:</span> 
-                            <span>
-                                <span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, 
-                                <span class="text-emerald-600 font-semibold">ได้รับเบี้ยขยัน</span>
-                            </span>
-                        </div>
-                        <div class="flex justify-between py-1"><span class="text-slate-400">หลักฐาน:</span> <span class="font-semibold text-slate-700">ใช้หลักฐานประกอบการลา</span></div>
-                    </div>
+                    <div id="acc-content-7" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5 leave-detail" data-index="6"></div>
                 </div>
 
                 <!-- 8. ลาพิธีมงคลสมรส -->
@@ -290,25 +216,13 @@
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-500 flex items-center justify-center text-lg">💍</div>
                             <div>
-                                <div class="font-bold text-slate-800 text-sm">8. ลาพิธีมงคลสมรส</div>
-                                <div class="text-xs text-slate-400">เป็นการลาเพื่อแต่งงาน</div>
+                                <div class="font-bold text-slate-800 text-sm leave-title" data-index="7">8. ลาพิธีมงคลสมรส</div>
+                                <div class="text-xs text-slate-400 leave-sub" data-index="7">เป็นการลาเพื่อแต่งงาน</div>
                             </div>
                         </div>
                         <span id="acc-icon-8" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
                     </div>
-                    <div id="acc-content-8" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
-                        <div class="py-1 border-b border-slate-100"><span class="text-slate-400">รายละเอียด:</span> <span class="text-slate-700">เป็นการลาเพื่อแต่งงาน</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">ระยะเวลา:</span> <span class="font-semibold text-slate-700">3 วันต่อปี</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">เงื่อนไข:</span> <span class="font-semibold text-slate-700">ทำงานครบ 1 ปีนับตั้งแต่วันเริ่มทำงาน ลาล่วงหน้า 15 วัน</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100">
-                            <span class="text-slate-400">สิทธิประโยชน์:</span> 
-                            <span>
-                                <span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, 
-                                <span class="text-emerald-600 font-semibold">ได้รับเบี้ยขยัน</span>
-                            </span>
-                        </div>
-                        <div class="flex justify-between py-1"><span class="text-slate-400">หลักฐาน:</span> <span class="font-semibold text-slate-700">ใช้หลักฐานประกอบการลา</span></div>
-                    </div>
+                    <div id="acc-content-8" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5 leave-detail" data-index="7"></div>
                 </div>
 
                 <!-- 9. การลาเพื่อไปรับราชการทหารในการเรียกพล -->
@@ -317,25 +231,13 @@
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-lg">🪖</div>
                             <div>
-                                <div class="font-bold text-slate-800 text-sm">9. ลาเพื่อรับราชการทหาร</div>
-                                <div class="text-xs text-slate-400">สำหรับการเรียกทหารกองเกิน</div>
+                                <div class="font-bold text-slate-800 text-sm leave-title" data-index="8">9. ลาเพื่อรับราชการทหาร</div>
+                                <div class="text-xs text-slate-400 leave-sub" data-index="8">สำหรับการเรียกทหารกองเกิน</div>
                             </div>
                         </div>
                         <span id="acc-icon-9" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
                     </div>
-                    <div id="acc-content-9" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
-                        <div class="py-1 border-b border-slate-100"><span class="text-slate-400">รายละเอียด:</span> <span class="text-slate-700">สำหรับการเรียกทหารกองเกินเพื่อตรวจสอบพล ฝึกวิชาทหาร หรือพลรบ</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">ระยะเวลา:</span> <span class="font-semibold text-slate-700">60 วันต่อปี</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">เงื่อนไข:</span> <span class="font-semibold text-slate-700">สามารถลาได้ตลอดและนำหลักฐานมายื่น</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100">
-                            <span class="text-slate-400">สิทธิประโยชน์:</span> 
-                            <span>
-                                <span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, 
-                                <span class="text-rose-500 font-semibold">ไม่ได้รับเบี้ยขยัน</span>
-                            </span>
-                        </div>
-                        <div class="flex justify-between py-1"><span class="text-slate-400">หลักฐาน:</span> <span class="font-semibold text-slate-700">ใช้หลักฐานประกอบการลา</span></div>
-                    </div>
+                    <div id="acc-content-9" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5 leave-detail" data-index="8"></div>
                 </div>
 
                 <!-- 10. ลาเพื่อทำหมัน -->
@@ -344,25 +246,13 @@
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-violet-50 text-violet-500 flex items-center justify-center text-lg">⚕️</div>
                             <div>
-                                <div class="font-bold text-slate-800 text-sm">10. ลาเพื่อทำหมัน</div>
-                                <div class="text-xs text-slate-400">พนักงานชายและหญิง</div>
+                                <div class="font-bold text-slate-800 text-sm leave-title" data-index="9">10. ลาเพื่อทำหมัน</div>
+                                <div class="text-xs text-slate-400 leave-sub" data-index="9">พนักงานชายและหญิง</div>
                             </div>
                         </div>
                         <span id="acc-icon-10" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
                     </div>
-                    <div id="acc-content-10" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
-                        <div class="py-1 border-b border-slate-100"><span class="text-slate-400">รายละเอียด:</span> <span class="text-slate-700">พนักงานชายและหญิงมีสิทธิ์ลาเพื่อทำหมันและเนื่องจากการทำหมัน</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">ระยะเวลา:</span> <span class="font-semibold text-slate-700">ตามแพทย์ระบุ</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">เงื่อนไข:</span> <span class="font-semibold text-slate-700">ลาล่วงหน้าหรือลาฉุกเฉินได้</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100">
-                            <span class="text-slate-400">สิทธิประโยชน์:</span> 
-                            <span>
-                                <span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, 
-                                <span class="text-rose-500 font-semibold">ไม่ได้รับเบี้ยขยัน</span>
-                            </span>
-                        </div>
-                        <div class="flex justify-between py-1"><span class="text-slate-400">หลักฐาน:</span> <span class="font-semibold text-slate-700">ใช้หลักฐานประกอบการลา</span></div>
-                    </div>
+                    <div id="acc-content-10" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5 leave-detail" data-index="9"></div>
                 </div>
 
                 <!-- 11. ลาพักร้อนพิเศษ -->
@@ -371,25 +261,13 @@
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center text-lg">⭐</div>
                             <div>
-                                <div class="font-bold text-slate-800 text-sm">11. ลาพักร้อนพิเศษ</div>
-                                <div class="text-xs text-slate-400">เมื่ออายุงานครบ 5 และ 10 ปี</div>
+                                <div class="font-bold text-slate-800 text-sm leave-title" data-index="10">11. ลาพักร้อนพิเศษ</div>
+                                <div class="text-xs text-slate-400 leave-sub" data-index="10">เมื่ออายุงานครบ 5 และ 10 ปี</div>
                             </div>
                         </div>
                         <span id="acc-icon-11" class="text-slate-400 text-xs transition-transform duration-200">▼</span>
                     </div>
-                    <div id="acc-content-11" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5">
-                        <div class="py-1 border-b border-slate-100"><span class="text-slate-400">รายละเอียด:</span> <span class="text-slate-700">เป็นวันลาที่จะได้เมื่อมีอายุงานครบ 5 ปี และ 10 ปี</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">ระยะเวลา:</span> <span class="font-semibold text-slate-700">3 วันต่อปีที่ครบเงื่อนไข</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">เงื่อนไข:</span> <span class="font-semibold text-slate-700">ลาล่วงหน้าอย่างน้อย 1 วันทำการ</span></div>
-                        <div class="flex justify-between py-1 border-b border-slate-100">
-                            <span class="text-slate-400">สิทธิประโยชน์:</span> 
-                            <span>
-                                <span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, 
-                                <span class="text-emerald-600 font-semibold">ได้รับเบี้ยขยัน</span>
-                            </span>
-                        </div>
-                        <div class="flex justify-between py-1"><span class="text-slate-400">หลักฐาน:</span> <span class="font-semibold text-slate-600">ไม่ใช้หลักฐานประกอบการลา</span></div>
-                    </div>
+                    <div id="acc-content-11" class="hidden px-4 pb-3 pt-1 text-xs text-slate-600 bg-slate-50/50 border-t border-slate-100 space-y-1.5 leave-detail" data-index="10"></div>
                 </div>
 
             </div>
@@ -398,6 +276,476 @@
     </div>
 
     <script>
+        // ข้อมูล Config ประเภทลา
+        const leaveQuotaConfig = {
+            'Annual Leave': {
+                key: 'AL',
+                thName: 'ลาพักร้อน',
+                enName: 'Annual Leave',
+                jaName: '有給休暇'
+            },
+            'Personal Leave': {
+                key: 'PL',
+                thName: 'ลากิจ',
+                enName: 'Personal Leave',
+                jaName: '私用休暇'
+            },
+            'Unpaid Leave': {
+                key: 'UP',
+                thName: 'ลากิจ ไม่รับค่าจ้าง',
+                enName: 'Unpaid Leave',
+                jaName: '無給私用休暇'
+            },
+            'Sick Leave': {
+                key: 'SL',
+                thName: 'ลาป่วย',
+                enName: 'Sick Leave',
+                jaName: '病気休暇'
+            },
+            'Maternity/Paternity Leave': {
+                key: 'MP',
+                thName: 'ลาคลอดบุตร',
+                enName: 'Maternity/Paternity Leave',
+                jaName: '産前産後・育児休暇'
+            },
+            'Ordination Leave': {
+                key: 'OL',
+                thName: 'ลาอุปสมบท',
+                enName: 'Ordination Leave',
+                jaName: '出家休暇'
+            },
+            'Funeral Leave': {
+                key: 'FL',
+                thName: 'ลาร่วมงานพิธีศพ',
+                enName: 'Funeral Leave',
+                jaName: '弔事休暇'
+            },
+            'Wedding Leave': {
+                key: 'WL',
+                thName: 'ลาพิธีมงคลสมรส',
+                enName: 'Wedding Leave',
+                jaName: '結婚休暇'
+            },
+            'Military Service Leave': {
+                key: 'MS',
+                thName: 'ลาเพื่อรับราชการทหาร',
+                enName: 'Military Service Leave',
+                jaName: '兵役・召集休暇'
+            },
+            'Sterilization Leave': {
+                key: 'MF',
+                thName: 'ลาเพื่อทำหมัน',
+                enName: 'Sterilization Leave',
+                jaName: '不妊手術休暇'
+            },
+            'Special Leave (5/10 Years)': {
+                key: 'SP',
+                thName: 'ลาพักร้อนพิเศษ',
+                enName: 'Special Leave (5/10 Years)',
+                jaName: 'リフレッシュ休暇 (勤続5・10年)'
+            }
+        };
+
+        // คลังแปลภาษาหน้า UI
+        const translations = {
+            th: {
+                title: "ข้อกำหนดและเงื่อนไขการลา",
+                subtitle: "กรุณาอ่านรายละเอียดก่อนยื่นใบลา",
+                tab1: "เงื่อนไขการลา",
+                tab2: "ประเภทลา",
+                t1Title: "เงื่อนไขการลา (โดยสรุป)",
+                rules: [
+                    "การลาต้องได้รับการอนุมัติจากผู้บังคับบัญชาตามลำดับชั้น",
+                    "กรุณายื่นใบลาก่อนวันลาอย่างน้อย 1 วันทำการ",
+                    "กรณีลากระทันหัน ให้ระบุเหตุผลและแจ้งหัวหน้างานโดยเร็ว",
+                    "การลาบางประเภทอาจต้องแนบเอกสารประกอบการพิจารณาอนุมัติ",
+                    "บริษัทขอสงวนสิทธิในการพิจารณาอนุมัติการลา ตามระเบียบขององค์กร"
+                ],
+                checkbox: "ฉันได้อ่านและเข้าใจข้อกำหนดและเงื่อนไขการลาแล้ว",
+                reject: "ปฏิเสธ",
+                accept: "ยอมรับ",
+                labels: {
+                    detail: "รายละเอียด:",
+                    duration: "ระยะเวลา:",
+                    condition: "เงื่อนไข:",
+                    benefit: "สิทธิประโยชน์:",
+                    evidence: "หลักฐาน:"
+                },
+                leaves: [
+                    {
+                        title: `1. ${leaveQuotaConfig['Annual Leave'].thName}`, sub: "พักผ่อนประจำปี / ฉุกเฉิน",
+                        detail: "เป็นการลาเพื่อพักผ่อนประจำปี หรือลากรณีฉุกเฉินต่างๆ",
+                        duration: "6 วันต่อปี สะสมจากปีก่อนได้ไม่เกิน 12 วัน",
+                        condition: "ลาล่วงหน้าอย่างน้อย 1 วันทำการ",
+                        benefit: `<span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, <span class="text-emerald-600 font-semibold">ได้รับเบี้ยขยัน</span>`,
+                        evidence: "ไม่ใช้หลักฐานประกอบการลา"
+                    },
+                    {
+                        title: `2. ${leaveQuotaConfig['Personal Leave'].thName}`, sub: "ประกอบกิจธุระส่วนตัว",
+                        detail: "เป็นการลาเพื่อประกอบกิจธุระตามหน่วยงาน ห้างร้านต่างๆ",
+                        duration: "5 วันต่อปี ไม่สามารถสะสมจากปีก่อนได้",
+                        condition: "ลาล่วงหน้าอย่างน้อย 1 วันทำการ",
+                        benefit: `<span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, <span class="text-rose-500 font-semibold">ไม่ได้รับเบี้ยขยัน</span>`,
+                        evidence: "ใช้หลักฐานประกอบการลา"
+                    },
+                    {
+                        title: `3. ${leaveQuotaConfig['Unpaid Leave'].thName}`, sub: "กิจธุระส่วนตัวเพิ่มเติม",
+                        detail: "เป็นการลาเพื่อประกอบกิจธุระตามหน่วยงาน ห้างร้านต่างๆ",
+                        duration: "10 วันต่อปี ไม่สามารถสะสมจากปีก่อนได้",
+                        condition: "ลาล่วงหน้าอย่างน้อย 1 วันทำการ",
+                        benefit: `<span class="text-rose-500 font-semibold">ไม่ได้รับค่าจ้าง</span>, <span class="text-rose-500 font-semibold">ไม่ได้รับเบี้ยขยัน</span>`,
+                        evidence: "ไม่ใช้หลักฐานประกอบการลา"
+                    },
+                    {
+                        title: `4. ${leaveQuotaConfig['Sick Leave'].thName}`, sub: "กรณีเจ็บป่วยจริง",
+                        detail: "ใช้สำหรับลาในกรณีเจ็บป่วยได้เท่าที่ป่วยจริง",
+                        duration: "30 วันต่อปี ไม่สามารถสะสมจากปีก่อนได้",
+                        condition: "ลาล่วงหน้าหรือลาฉุกเฉินได้",
+                        benefit: `<span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, <span class="text-rose-500 font-semibold">ไม่ได้รับเบี้ยขยัน</span>`,
+                        evidence: "หากมีสามารถแนบเพื่อขออนุมัติได้"
+                    },
+                    {
+                        title: `5. ${leaveQuotaConfig['Maternity/Paternity Leave'].thName}`, sub: "สำหรับลูกจ้างหญิงและชาย",
+                        detail: "ใช้สำหรับกรณีคลอดบุตรของลูกจ้างหญิง / ช่วยเหลือสำหรับลูกจ้างชาย",
+                        duration: "หญิงสูงสุด 120 วัน / ชาย 15 วันต่อปี",
+                        condition: "ลาล่วงหน้าหรือลาฉุกเฉินได้",
+                        benefit: `<br><span class="text-slate-700">• หญิงรับค่าจ้างสูงสุด 60 วัน</span><br><span class="text-slate-700">• ชายได้รับค่าจ้าง 15 วัน</span><br><span class="text-rose-500 font-semibold">• ไม่ได้รับเบี้ยขยัน</span>`,
+                        evidence: "ใช้หลักฐานประกอบการลา"
+                    },
+                    {
+                        title: `6. ${leaveQuotaConfig['Ordination Leave'].thName}`, sub: "กรณีอุปสมบทตามประเพณี",
+                        detail: "ใช้สำหรับลาในกรณีอุปสมบทตามประเพณี",
+                        duration: "15 วันต่อปี (อ้างอิงตามระเบียบองค์กร)",
+                        condition: "ลาล่วงหน้าตามระเบียบบริษัท",
+                        benefit: `<span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, <span class="text-rose-500 font-semibold">ไม่ได้รับเบี้ยขยัน</span>`,
+                        evidence: "ใช้หลักฐานประกอบการลา"
+                    },
+                    {
+                        title: `7. ${leaveQuotaConfig['Funeral Leave'].thName}`, sub: "งานศพญาติสายตรงตามกฎหมาย",
+                        detail: "การลาเพื่อร่วมงานศพหรือการฌาปนกิจศพบิดา มารดา คู่สมรส พี่น้องร่วมบิดามารดา และบุตรโดยชอบด้วยกฎหมาย",
+                        duration: "2 วันต่อปี",
+                        condition: "ลาล่วงหน้าหรือลาฉุกเฉินได้",
+                        benefit: `<span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, <span class="text-emerald-600 font-semibold">ได้รับเบี้ยขยัน</span>`,
+                        evidence: "ใช้หลักฐานประกอบการลา"
+                    },
+                    {
+                        title: `8. ${leaveQuotaConfig['Wedding Leave'].thName}`, sub: "เป็นการลาเพื่อแต่งงาน",
+                        detail: "เป็นการลาเพื่อแต่งงาน",
+                        duration: "3 วันต่อปี",
+                        condition: "ทำงานครบ 1 ปีนับตั้งแต่วันเริ่มทำงาน ลาล่วงหน้า 15 วัน",
+                        benefit: `<span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, <span class="text-emerald-600 font-semibold">ได้รับเบี้ยขยัน</span>`,
+                        evidence: "ใช้หลักฐานประกอบการลา"
+                    },
+                    {
+                        title: `9. ${leaveQuotaConfig['Military Service Leave'].thName}`, sub: "สำหรับการเรียกทหารกองเกิน",
+                        detail: "สำหรับการเรียกทหารกองเกินเพื่อตรวจสอบพล ฝึกวิชาทหาร หรือพลรบ",
+                        duration: "60 วันต่อปี",
+                        condition: "สามารถลาได้ตลอดและนำหลักฐานมายื่น",
+                        benefit: `<span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, <span class="text-rose-500 font-semibold">ไม่ได้รับเบี้ยขยัน</span>`,
+                        evidence: "ใช้หลักฐานประกอบการลา"
+                    },
+                    {
+                        title: `10. ${leaveQuotaConfig['Sterilization Leave'].thName}`, sub: "พนักงานชายและหญิง",
+                        detail: "พนักงานชายและหญิงมีสิทธิ์ลาเพื่อทำหมันและเนื่องจากการทำหมัน",
+                        duration: "ตามแพทย์ระบุ",
+                        condition: "ลาล่วงหน้าหรือลาฉุกเฉินได้",
+                        benefit: `<span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, <span class="text-rose-500 font-semibold">ไม่ได้รับเบี้ยขยัน</span>`,
+                        evidence: "ใช้หลักฐานประกอบการลา"
+                    },
+                    {
+                        title: `11. ${leaveQuotaConfig['Special Leave (5/10 Years)'].thName}`, sub: "เมื่ออายุงานครบ 5 และ 10 ปี",
+                        detail: "เป็นวันลาที่จะได้เมื่อมีอายุงานครบ 5 ปี และ 10 ปี",
+                        duration: "3 วันต่อปีที่ครบเงื่อนไข",
+                        condition: "ลาล่วงหน้าอย่างน้อย 1 วันทำการ",
+                        benefit: `<span class="text-emerald-600 font-semibold">ได้รับค่าจ้าง</span>, <span class="text-emerald-600 font-semibold">ได้รับเบี้ยขยัน</span>`,
+                        evidence: "ไม่ใช้หลักฐานประกอบการลา"
+                    }
+                ]
+            },
+            en: {
+                title: "Leave Terms and Conditions",
+                subtitle: "Please read the details before submitting a leave request",
+                tab1: "Leave Conditions",
+                tab2: "Leave Types",
+                t1Title: "Leave Conditions (Summary)",
+                rules: [
+                    "Leave must be approved by the chain of command supervisors.",
+                    "Please submit the leave request at least 1 working day in advance.",
+                    "For sudden leave, state the reason and notify the supervisor as soon as possible.",
+                    "Some types of leave may require supporting documents for approval.",
+                    "The company reserves the right to approve leave according to organizational regulations."
+                ],
+                checkbox: "I have read and understood the leave terms and conditions.",
+                reject: "Reject",
+                accept: "Accept",
+                labels: {
+                    detail: "Detail:",
+                    duration: "Duration:",
+                    condition: "Condition:",
+                    benefit: "Benefits:",
+                    evidence: "Evidence:"
+                },
+                leaves: [
+                    {
+                        title: `1. ${leaveQuotaConfig['Annual Leave'].enName}`, sub: "Annual relaxation / Emergency",
+                        detail: "Leave for annual vacation or various emergency situations.",
+                        duration: "6 days per year, can be accumulated from the previous year up to 12 days.",
+                        condition: "At least 1 working day in advance notice.",
+                        benefit: `<span class="text-emerald-600 font-semibold">Paid</span>, <span class="text-emerald-600 font-semibold">Attendance Bonus Eligible</span>`,
+                        evidence: "No evidence required"
+                    },
+                    {
+                        title: `2. ${leaveQuotaConfig['Personal Leave'].enName}`, sub: "Personal affairs",
+                        detail: "Leave for conducting personal business with various agencies and stores.",
+                        duration: "5 days per year, cannot be accumulated from the previous year.",
+                        condition: "At least 1 working day in advance notice.",
+                        benefit: `<span class="text-emerald-600 font-semibold">Paid</span>, <span class="text-rose-500 font-semibold">No Attendance Bonus</span>`,
+                        evidence: "Evidence required"
+                    },
+                    {
+                        title: `3. ${leaveQuotaConfig['Unpaid Leave'].enName}`, sub: "Additional personal business",
+                        detail: "Leave for conducting personal business with various agencies and stores.",
+                        duration: "10 days per year, cannot be accumulated from the previous year.",
+                        condition: "At least 1 working day in advance notice.",
+                        benefit: `<span class="text-rose-500 font-semibold">Unpaid</span>, <span class="text-rose-500 font-semibold">No Attendance Bonus</span>`,
+                        evidence: "No evidence required"
+                    },
+                    {
+                        title: `4. ${leaveQuotaConfig['Sick Leave'].enName}`, sub: "In case of actual illness",
+                        detail: "Used for taking leave in case of illness as actually sick.",
+                        duration: "30 days per year, cannot be accumulated from the previous year.",
+                        condition: "Can be requested in advance or as an emergency.",
+                        benefit: `<span class="text-emerald-600 font-semibold">Paid</span>, <span class="text-rose-500 font-semibold">No Attendance Bonus</span>`,
+                        evidence: "Can attach if available for approval"
+                    },
+                    {
+                        title: `5. ${leaveQuotaConfig['Maternity/Paternity Leave'].enName}`, sub: "For female and male employees",
+                        detail: "Used for female employee childbirth / assistance for male employees.",
+                        duration: "Female max 120 days / Male 15 days per year",
+                        condition: "Can be requested in advance or as an emergency.",
+                        benefit: `<br><span class="text-slate-700">• Female paid up to 60 days</span><br><span class="text-slate-700">• Male paid 15 days</span><br><span class="text-rose-500 font-semibold">• No Attendance Bonus</span>`,
+                        evidence: "Evidence required"
+                    },
+                    {
+                        title: `6. ${leaveQuotaConfig['Ordination Leave'].enName}`, sub: "For traditional ordination",
+                        detail: "Used for taking leave in case of traditional ordination.",
+                        duration: "15 days per year (according to organizational regulations)",
+                        condition: "In advance according to company regulations",
+                        benefit: `<span class="text-emerald-600 font-semibold">Paid</span>, <span class="text-rose-500 font-semibold">No Attendance Bonus</span>`,
+                        evidence: "Evidence required"
+                    },
+                    {
+                        title: `7. ${leaveQuotaConfig['Funeral Leave'].enName}`, sub: "Funeral of legal immediate family",
+                        detail: "Leave to attend the funeral or cremation of father, mother, spouse, siblings, and legitimate children.",
+                        duration: "2 days per year",
+                        condition: "Can be requested in advance or as an emergency.",
+                        benefit: `<span class="text-emerald-600 font-semibold">Paid</span>, <span class="text-emerald-600 font-semibold">Attendance Bonus Eligible</span>`,
+                        evidence: "Evidence required"
+                    },
+                    {
+                        title: `8. ${leaveQuotaConfig['Wedding Leave'].enName}`, sub: "Leave for getting married",
+                        detail: "Leave for getting married.",
+                        duration: "3 days per year",
+                        condition: "Completed 1 year of service from start date, 15 days in advance notice.",
+                        benefit: `<span class="text-emerald-600 font-semibold">Paid</span>, <span class="text-emerald-600 font-semibold">Attendance Bonus Eligible</span>`,
+                        evidence: "Evidence required"
+                    },
+                    {
+                        title: `9. ${leaveQuotaConfig['Military Service Leave'].enName}`, sub: "For military reserve call-up",
+                        detail: "For calling up reserve soldiers for inspection, military training, or combat troops.",
+                        duration: "60 days per year",
+                        condition: "Can request anytime and submit evidence",
+                        benefit: `<span class="text-emerald-600 font-semibold">Paid</span>, <span class="text-rose-500 font-semibold">No Attendance Bonus</span>`,
+                        evidence: "Evidence required"
+                    },
+                    {
+                        title: `10. ${leaveQuotaConfig['Sterilization Leave'].enName}`, sub: "Male and female employees",
+                        detail: "Male and female employees have the right to take leave for sterilization and related reasons.",
+                        duration: "As prescribed by physician",
+                        condition: "Can be requested in advance or as an emergency.",
+                        benefit: `<span class="text-emerald-600 font-semibold">Paid</span>, <span class="text-rose-500 font-semibold">No Attendance Bonus</span>`,
+                        evidence: "Evidence required"
+                    },
+                    {
+                        title: `11. ${leaveQuotaConfig['Special Leave (5/10 Years)'].enName}`, sub: "Upon completing 5 and 10 years of service",
+                        detail: "Leave days granted upon completing 5 years and 10 years of service.",
+                        duration: "3 days per year upon meeting conditions",
+                        condition: "At least 1 working day in advance notice.",
+                        benefit: `<span class="text-emerald-600 font-semibold">Paid</span>, <span class="text-emerald-600 font-semibold">Attendance Bonus Eligible</span>`,
+                        evidence: "No evidence required"
+                    }
+                ]
+            },
+            jp: {
+                title: "休暇に関する規程・条件",
+                subtitle: "休暇申請を行う前に詳細をお読みください",
+                tab1: "休暇条件",
+                tab2: "休暇種類",
+                t1Title: "休暇条件（概要）",
+                rules: [
+                    "休暇は上位者の承認を得る必要があります。",
+                    "休暇取得日の少なくとも1営業日前までに申請してください。",
+                    "急な休暇の場合は、理由を明記し、できるだけ早く上司に連絡してください。",
+                    "一部の休暇には承認のための証明書類の添付が必要な場合があります。",
+                    "会社は組織の規定に従って休暇承認を審査する権利を留保します。"
+                ],
+                checkbox: "休暇の規程と条件を読み、理解しました。",
+                reject: "拒否",
+                accept: "同意する",
+                labels: {
+                    detail: "詳細:",
+                    duration: "期間:",
+                    condition: "条件:",
+                    benefit: "特典・手当:",
+                    evidence: "証明書類:"
+                },
+                leaves: [
+                    {
+                        title: `1. ${leaveQuotaConfig['Annual Leave'].jaName}`, sub: "年間休暇 / 緊急時",
+                        detail: "年次有給休暇หรือ各種緊急時の休暇です。",
+                        duration: "年間6日、前年からの繰越しは最大12日まで",
+                        condition: "少なくとも1営業日前までに申請",
+                        benefit: `<span class="text-emerald-600 font-semibold">有給</span>, <span class="text-emerald-600 font-semibold">皆勤手当支給</span>`,
+                        evidence: "証明書類不要"
+                    },
+                    {
+                        title: `2. ${leaveQuotaConfig['Personal Leave'].jaName}`, sub: "個人的な用事",
+                        detail: "各種機関や店舗などでの個人的な用事のための休暇です。",
+                        duration: "年間5日、前年からの繰越し不可",
+                        condition: "少なくとも1営業日前までに申請",
+                        benefit: `<span class="text-emerald-600 font-semibold">有給</span>, <span class="text-rose-500 font-semibold">皆勤手当なし</span>`,
+                        evidence: "証明書類必要"
+                    },
+                    {
+                        title: `3. ${leaveQuotaConfig['Unpaid Leave'].jaName}`, sub: "追加の個人的な用事",
+                        detail: "各種機関や店舗などでの個人的な用事のための休暇です。",
+                        duration: "年間10日、前年からの繰越し不可",
+                        condition: "少なくとも1営業日前までに申請",
+                        benefit: `<span class="text-rose-500 font-semibold">無給</span>, <span class="text-rose-500 font-semibold">皆勤手当なし</span>`,
+                        evidence: "証明書類不要"
+                    },
+                    {
+                        title: `4. ${leaveQuotaConfig['Sick Leave'].jaName}`, sub: "実際の傷病時",
+                        detail: "実際の傷病時に、その実日数に応じて取得できます。",
+                        duration: "年間30日、前年からの繰越し不可",
+                        condition: "事前申請または緊急申請が可能",
+                        benefit: `<span class="text-emerald-600 font-semibold">有給</span>, <span class="text-rose-500 font-semibold">皆勤手当なし</span>`,
+                        evidence: "ある場合は承認申請用に添付可能"
+                    },
+                    {
+                        title: `5. ${leaveQuotaConfig['Maternity/Paternity Leave'].jaName}`, sub: "男女従業員対象",
+                        detail: "女性従業員の出産、または男性従業員のサポートのための休暇です。",
+                        duration: "女性最大120日 / 男性年間15日",
+                        condition: "事前申請または緊急申請が可能",
+                        benefit: `<br><span class="text-slate-700">• 女性：最大60日まで有給</span><br><span class="text-slate-700">• 男性：15日間有給</span><br><span class="text-rose-500 font-semibold">• 皆勤手当なし</span>`,
+                        evidence: "証明書類必要"
+                    },
+                    {
+                        title: `6. ${leaveQuotaConfig['Ordination Leave'].jaName}`, sub: "伝統的な出家の場合",
+                        detail: "伝統的な習慣に基づく出家のための休暇です。",
+                        duration: "年間15日（社内規程に準ずる）",
+                        condition: "社内規程に従い事前申請",
+                        benefit: `<span class="text-emerald-600 font-semibold">有給</span>, <span class="text-rose-500 font-semibold">皆勤手当なし</span>`,
+                        evidence: "証明書類必要"
+                    },
+                    {
+                        title: `7. ${leaveQuotaConfig['Funeral Leave'].jaName}`, sub: "法的な直系親族の葬儀",
+                        detail: "父母、配偶者、兄弟姉妹、法的子供の葬儀または火葬に参列するための休暇です。",
+                        duration: "年間2日",
+                        condition: "事前申請または緊急申請が可能",
+                        benefit: `<span class="text-emerald-600 font-semibold">有給</span>, <span class="text-emerald-600 font-semibold">皆勤手当支給</span>`,
+                        evidence: "証明書類必要"
+                    },
+                    {
+                        title: `8. ${leaveQuotaConfig['Wedding Leave'].jaName}`, sub: "婚姻のための休暇",
+                        detail: "婚姻（結婚式等）のための休暇です。",
+                        duration: "年間3日",
+                        condition: "入社日から1年勤務完了、15日前までに事前申請",
+                        benefit: `<span class="text-emerald-600 font-semibold">有給</span>, <span class="text-emerald-600 font-semibold">皆勤手当支給</span>`,
+                        evidence: "証明書類必要"
+                    },
+                    {
+                        title: `9. ${leaveQuotaConfig['Military Service Leave'].jaName}`, sub: "予備役の兵役召集用",
+                        detail: "兵籍点検、軍事訓練、戦闘員としての予備役兵の召集用です。",
+                        duration: "年間60日",
+                        condition: "随時申請可能、証明書類を提出",
+                        benefit: `<span class="text-emerald-600 font-semibold">有給</span>, <span class="text-rose-500 font-semibold">皆勤手当なし</span>`,
+                        evidence: "証明書類必要"
+                    },
+                    {
+                        title: `10. ${leaveQuotaConfig['Sterilization Leave'].jaName}`, sub: "男女従業員対象",
+                        detail: "男女従業員は避妊・不妊手術およびそれに関連する休暇を取得する権利があります。",
+                        duration: "医師の指示による",
+                        condition: "事前申請または緊急申請が可能",
+                        benefit: `<span class="text-emerald-600 font-semibold">有給</span>, <span class="text-rose-500 font-semibold">皆勤手当なし</span>`,
+                        evidence: "証明書類必要"
+                    },
+                    {
+                        title: `11. ${leaveQuotaConfig['Special Leave (5/10 Years)'].jaName}`, sub: "勤続5年および10年達成時",
+                        detail: "勤続5年および10年を達成した場合に付与される休暇です。",
+                        duration: "条件達成時、年間3日",
+                        condition: "少なくとも1営業日前までに申請",
+                        benefit: `<span class="text-emerald-600 font-semibold">有給</span>, <span class="text-emerald-600 font-semibold">皆勤手当支給</span>`,
+                        evidence: "証明書類不要"
+                    }
+                ]
+            }
+        };
+
+        let currentLang = 'th';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+
+            // Header
+            document.getElementById('page-title').innerText = t.title;
+            document.getElementById('header-title').innerText = t.title;
+            document.getElementById('header-subtitle').innerText = t.subtitle;
+
+            // Tabs
+            document.getElementById('tab-1-btn').innerText = t.tab1;
+            document.getElementById('tab-2-btn').innerText = t.tab2;
+
+            // Tab 1 Contents
+            document.getElementById('t1-section-title').innerText = t.t1Title;
+            
+            const ruleSpans = document.querySelectorAll('#t1-rules-list span[data-rule]');
+            ruleSpans.forEach(span => {
+                const idx = span.getAttribute('data-rule');
+                span.innerText = t.rules[idx];
+            });
+
+            document.getElementById('checkbox-label').innerText = t.checkbox;
+            document.getElementById('reject-btn').innerText = t.reject;
+            document.getElementById('accept-btn').innerText = t.accept;
+
+            // Tab 2 Contents (Leave Types)
+            const titles = document.querySelectorAll('.leave-title');
+            const subs = document.querySelectorAll('.leave-sub');
+            const details = document.querySelectorAll('.leave-detail');
+
+            titles.forEach((el, idx) => {
+                el.innerText = t.leaves[idx].title;
+            });
+            subs.forEach((el, idx) => {
+                el.innerText = t.leaves[idx].sub;
+            });
+            details.forEach((el, idx) => {
+                const leave = t.leaves[idx];
+                el.innerHTML = `
+                    <div class="py-1 border-b border-slate-100"><span class="text-slate-400">${t.labels.detail}</span> <span class="text-slate-700">${leave.detail}</span></div>
+                    <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">${t.labels.duration}</span> <span class="font-semibold text-slate-700">${leave.duration}</span></div>
+                    <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-400">${t.labels.condition}</span> <span class="font-semibold text-slate-700">${leave.condition}</span></div>
+                    <div class="flex justify-between py-1 border-b border-slate-100">
+                        <span class="text-slate-400">${t.labels.benefit}</span> 
+                        <span>${leave.benefit}</span>
+                    </div>
+                    <div class="flex justify-between py-1"><span class="text-slate-400">${t.labels.evidence}</span> <span class="font-semibold text-slate-600">${leave.evidence}</span></div>
+                `;
+            });
+        }
+
         function switchTab(tabIndex) {
             const tab1Btn = document.getElementById('tab-1-btn');
             const tab2Btn = document.getElementById('tab-2-btn');
@@ -457,6 +805,11 @@
 
         function onAccept() {
             window.location.href = 'leave-form.html';
+        }
+
+        // โหลดภาษาเริ่มต้น (ไทย) เมื่อเปิดหน้าเว็บ
+        window.onload = function() {
+            changeLanguage('th');
         }
     </script>
 </body>
