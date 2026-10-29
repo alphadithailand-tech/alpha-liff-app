@@ -11,93 +11,99 @@
   <!-- LINE LIFF SDK -->
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap');
     body {
-      font-family: 'Sarabun', 'Kanit', sans-serif;
-      background-color: #F3F4F6;
+      font-family: 'Sarabun', 'Plus Jakarta Sans', sans-serif;
+      background-color: #F8FAFC;
     }
-    .font-kanit {
-      font-family: 'Kanit', sans-serif;
-    }
-    /* Switch Button Active State */
     .lang-btn.active {
       background-color: #FFFFFF;
-      color: #000000;
+      color: #0284C7;
       font-weight: 700;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+    .soft-shadow {
+      box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.1), 0 8px 10px -6px rgba(2, 132, 199, 0.1);
+    }
+    .card-shadow {
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
     }
   </style>
 </head>
-<body class="text-slate-800 min-h-screen pb-24 select-none">
+<body class="text-slate-700 min-h-screen pb-28 select-none">
 
   <!-- Loading Screen -->
-  <div id="loading" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-white">
-    <div class="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin mb-3"></div>
-    <p class="text-xs font-medium tracking-wide">กำลังโหลดข้อมูลโควตา...</p>
+  <div id="loading" class="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-50 flex flex-col items-center justify-center text-white">
+    <div class="w-10 h-10 border-3 border-white border-t-transparent rounded-full animate-spin mb-3"></div>
+    <p class="text-xs font-medium tracking-wide animate-pulse">กำลังโหลดข้อมูลวันลา...</p>
   </div>
 
-  <!-- HEADER ZONE (BLUE GRADIENT) -->
-  <header class="bg-gradient-to-b from-[#0055DA] to-[#0066FF] text-white pt-5 pb-6 px-4 shadow-md relative">
-    
-    <!-- Top Row: Badges & Language Switcher -->
-    <div class="flex items-center justify-between mb-5">
-      <div class="flex items-center space-x-2">
-        <!-- Company Tag -->
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-[#003B99]/60 text-white border border-white/20 backdrop-blur-md">
-          <span class="w-2 h-2 rounded-full bg-cyan-400 mr-1.5 animate-pulse"></span> ALPHA D.I. THAILAND
-        </span>
-      </div>
+  <!-- HEADER ZONE: MODERN SOFT GRADIENT -->
+  <header class="bg-gradient-to-br from-sky-600 via-blue-600 to-indigo-700 text-white pt-6 pb-12 px-5 rounded-b-[2.5rem] soft-shadow relative overflow-hidden">
+    <!-- Background Decorative Glow -->
+    <div class="absolute -right-12 -top-12 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+    <div class="absolute -left-12 -bottom-12 w-48 h-48 bg-cyan-400/10 rounded-full blur-2xl pointer-events-none"></div>
 
-      <div class="flex items-center space-x-2">
-        <!-- Emp ID Tag -->
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-medium bg-[#003B99]/60 text-white border border-white/20 backdrop-blur-md">
-          รหัสพนักงาน: <strong id="empIdDisplay" class="ml-1 text-yellow-300 font-bold">57201</strong>
+    <div class="max-w-md mx-auto relative z-10">
+      
+      <!-- Top Bar: Company & Language Switcher -->
+      <div class="flex items-center justify-between mb-6">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold bg-white/15 text-white backdrop-blur-md border border-white/20">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5 animate-ping"></span> ALPHA D.I. THAILAND
         </span>
 
-        <!-- Language Switcher -->
-        <div class="bg-black/30 p-0.5 rounded-full flex items-center border border-white/20 text-[11px]">
-          <button id="btnTH" onclick="switchLanguage('TH')" class="lang-btn px-2.5 py-0.5 rounded-full text-white transition-all active">TH</button>
-          <button id="btnJP" onclick="switchLanguage('JP')" class="lang-btn px-2.5 py-0.5 rounded-full text-white/80 transition-all">日本語</button>
+        <div class="flex items-center space-x-2">
+          <span class="text-[11px] text-sky-100 font-medium">รหัส: <strong id="empIdDisplay" class="text-white">57201</strong></span>
+          <!-- Language Switcher -->
+          <div class="bg-black/20 p-0.5 rounded-full flex items-center border border-white/15 text-[11px] backdrop-blur-md">
+            <button id="btnTH" onclick="switchLanguage('TH')" class="lang-btn px-2.5 py-0.5 rounded-full text-white transition-all active">TH</button>
+            <button id="btnJP" onclick="switchLanguage('JP')" class="lang-btn px-2.5 py-0.5 rounded-full text-white/80 transition-all">日本語</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- User Profile Row -->
-    <div class="flex items-center space-x-4 pl-1">
-      <!-- Profile Picture Container -->
-      <div class="relative">
-        <img id="userPicture" class="w-20 h-20 rounded-full border-2 border-white object-cover bg-white/20 shadow-lg" src="https://via.placeholder.com/150" alt="Profile">
-        <!-- Green Online Badge -->
-        <span class="absolute bottom-0 right-0 w-5 h-5 rounded-full bg-emerald-500 border-2 border-white"></span>
-      </div>
-
-      <!-- User Info Text -->
-      <div class="text-white space-y-0.5">
-        <div class="flex items-center space-x-1.5">
-          <h1 id="userName" class="text-lg font-bold tracking-tight font-kanit">PRICHAYA KAEWKLAM</h1>
-          <i class="fa-solid fa-circle-check text-cyan-300 text-sm"></i>
+      <!-- User Profile Card Row -->
+      <div class="flex items-center space-x-4">
+        <div class="relative shrink-0">
+          <img id="userPicture" class="w-18 h-18 rounded-full border-3 border-white/80 object-cover bg-white/20 shadow-md" src="https://via.placeholder.com/150" alt="Profile">
+          <span class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-emerald-400 border-2 border-white"></span>
         </div>
-        <p id="empPosition" class="text-xs text-white/90">ตำแหน่ง: <span class="font-semibold">Factory Manager</span></p>
-        <p id="empDept" class="text-xs text-white/90">แผนก: <span class="font-semibold">Administration</span></p>
-      </div>
-    </div>
 
+        <div class="text-white min-w-0 flex-1 space-y-0.5">
+          <div class="flex items-center space-x-1.5">
+            <h1 id="userName" class="text-base font-bold tracking-tight truncate">PRICHAYA KAEWKLAM</h1>
+            <i class="fa-solid fa-circle-check text-cyan-300 text-xs shrink-0"></i>
+          </div>
+          <p id="empPosition" class="text-xs text-sky-100 font-light truncate">ตำแหน่ง: Factory Manager</p>
+          <p id="empDept" class="text-xs text-sky-100/80 font-light truncate">แผนก: Administration</p>
+        </div>
+      </div>
+
+    </div>
   </header>
 
   <!-- MAIN CONTAINER: QUOTA CARDS LIST -->
-  <main class="max-w-md mx-auto px-3 pt-4 space-y-3" id="quotaListContainer">
-    <!-- Dynamic Cards will be rendered here -->
+  <main class="max-w-md mx-auto px-4 -mt-6 relative z-20 space-y-3" id="quotaListContainer">
+    <!-- Dynamic Cards Rendered Here -->
   </main>
 
+  <!-- BOTTOM FIXED ACTION BUTTON -->
+  <div class="fixed bottom-0 inset-x-0 bg-white/80 backdrop-blur-lg border-t border-slate-100 p-4 z-40">
+    <div class="max-w-md mx-auto">
+      <button onclick="openLeaveForm()" class="w-full bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white py-3.5 px-4 rounded-2xl font-bold text-xs tracking-wide shadow-xl shadow-slate-900/10 flex items-center justify-center space-x-2 transition-all">
+        <i class="fa-solid fa-paper-plane text-sky-400"></i>
+        <span id="btnApplyText">ยื่นใบลาหยุด (Apply Leave)</span>
+      </button>
+    </div>
+  </div>
+
   <script>
-    // ⚙️ CONFIGURATION
-    const LIFF_ID = 'YOUR_LIFF_ID_HERE'; // ใส่ LIFF ID ของคุณ
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxxxxxx/exec'; // URL Apps Script Web App
+    const LIFF_ID = 'YOUR_LIFF_ID_HERE';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxxxxxx/exec';
 
     let currentLang = 'TH';
     let globalUserData = null;
 
-    // Mapping ประเภทการลาทั้ง 11 ประเภท
     const LEAVE_CONFIG_LIST = [
       { code: 'AL', th: 'ลาพักร้อน', jp: '年次有給休暇', icon: '🌴', key: 'quotaAL', totalDefault: 6 },
       { code: 'PL', th: 'ลากิจส่วนตัว', jp: '私用休暇', icon: '💼', key: 'quotaPL', totalDefault: 6 },
@@ -123,15 +129,12 @@
           liff.login();
           return;
         }
-
         const profile = await liff.getProfile();
         document.getElementById('userPicture').src = profile.pictureUrl || 'https://via.placeholder.com/150';
-        
         await fetchUserQuota(profile.userId, profile.displayName);
-
       } catch (err) {
         console.error('LIFF Error:', err);
-        // กรณีทดสอบบนเว็บทั่วไปโดยไม่มี LIFF
+        // Fallback สำหรับทดสอบหน้าจอ
         fetchUserQuota('U5ac1f3e292b3bc29539113ef0fe92c52', 'PRICHAYA KAEWKLAM');
       }
     }
@@ -143,13 +146,9 @@
 
         if (result.status === 'success') {
           globalUserData = result.data;
-          
-          // อัปเดตข้อมูลบน Header
           document.getElementById('userName').textContent = globalUserData.name || displayName;
           document.getElementById('empIdDisplay').textContent = globalUserData.empId || '57201';
-          document.getElementById('empPosition').innerHTML = `${currentLang === 'TH' ? 'ตำแหน่ง' : '役職'}: <span class="font-semibold">${globalUserData.position || '-'}</span>`;
-          document.getElementById('empDept').innerHTML = `${currentLang === 'TH' ? 'แผนก' : '部署'}: <span class="font-semibold">${globalUserData.department || '-'}</span>`;
-
+          updateHeaderText();
           renderQuotaCards();
         } else {
           alert('ไม่พบข้อมูล: ' + result.message);
@@ -161,13 +160,22 @@
       }
     }
 
+    function updateHeaderText() {
+      if (!globalUserData) return;
+      const posLabel = currentLang === 'TH' ? 'ตำแหน่ง' : '役職';
+      const deptLabel = currentLang === 'TH' ? 'แผนก' : '部署';
+      document.getElementById('empPosition').textContent = `${posLabel}: ${globalUserData.position || '-'}`;
+      document.getElementById('empDept').textContent = `${deptLabel}: ${globalUserData.department || '-'}`;
+      document.getElementById('btnApplyText').textContent = currentLang === 'TH' ? 'ยื่นใบลาหยุด (Apply Leave)' : '休暇申請を行う (Apply Leave)';
+    }
+
     function renderQuotaCards() {
       const container = document.getElementById('quotaListContainer');
       container.innerHTML = '';
 
       LEAVE_CONFIG_LIST.forEach(item => {
         const remain = globalUserData ? parseFloat(globalUserData[item.key] || 0) : 0;
-        const total = item.totalDefault; // สิทธิ์ทั้งหมด
+        const total = item.totalDefault;
         const used = Math.max(0, total - remain);
         const percentUsed = Math.min(100, Math.max(0, (used / total) * 100));
 
@@ -175,33 +183,27 @@
         const remainLabel = currentLang === 'TH' ? 'โควตาคงเหลือ' : '残存日数';
         const dayLabel = currentLang === 'TH' ? 'วัน' : '日';
 
-        // โครงสร้าง Card แบบเดียวกับรูปตัวอย่างที่คุณเติ้ลส่งมาเป๊ะๆ
         const cardHtml = `
-          <div class="bg-[#0055DA] text-white rounded-2xl p-2.5 shadow-md flex items-center justify-between space-x-2 border border-blue-400/30">
+          <div class="bg-white rounded-2xl p-3.5 card-shadow border border-slate-100 flex items-center justify-between space-x-3 transition-all hover:shadow-md">
             
-            <!-- ไอคอนฝั่งซ้าย (กล่องขาวทรงเหลี่ยมขอบดำ) -->
-            <div class="w-14 h-14 bg-white border-2 border-black rounded-lg flex items-center justify-center shrink-0 shadow-inner">
-              <span class="text-2xl">${item.icon}</span>
+            <!-- ไอคอนฝั่งซ้าย (ทรงกลมละมุน) -->
+            <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl shrink-0 border border-sky-100">
+              ${item.icon}
             </div>
 
-            <!-- กลาง: ชื่อประเภทลา + Progress Bar สีแดง -->
-            <div class="flex-1 min-w-0 px-1">
-              <!-- กล่องชื่อประเภทลา (พื้นหลังขาว ตัวหนังสือดำ) -->
-              <div class="bg-white text-slate-900 font-bold px-2.5 py-1 rounded text-sm truncate font-kanit shadow-sm inline-block max-w-full">
-                ${titleText}
-              </div>
-
-              <!-- หลอด Progress Bar (แถบแดงแสดงส่วนที่ใช้ไป) -->
-              <div class="w-full bg-white/90 rounded-sm h-4 mt-2 overflow-hidden p-0.5 shadow-inner">
-                <div class="bg-[#CC0000] h-full rounded-sm transition-all duration-500" style="width: ${percentUsed}%"></div>
+            <!-- กลาง: ชื่อประเภทลา + Progress Bar นุ่มๆ -->
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-bold text-slate-800 truncate mb-1.5">${titleText}</h4>
+              <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                <div class="bg-rose-500 h-full rounded-full transition-all duration-500" style="width: ${percentUsed}%"></div>
               </div>
             </div>
 
-            <!-- ฝั่งขวา: กล่องแสดงจำนวนโควตาคงเหลือ (พื้นหลังขาว ขอบมน) -->
-            <div class="bg-white text-slate-900 rounded-xl px-3 py-1.5 text-center shrink-0 w-24 border border-slate-200 shadow-md">
-              <div class="text-[10px] font-bold text-slate-700 leading-tight">${remainLabel}</div>
-              <div class="text-2xl font-extrabold text-slate-900 font-kanit my-0.5">${remain}</div>
-              <div class="text-[11px] font-bold text-slate-700 leading-none">${dayLabel}</div>
+            <!-- ฝั่งขวา: กล่องแสดงตัวเลขโควตาคงเหลือสไตล์ Modern Minimal -->
+            <div class="bg-slate-50/80 rounded-xl px-3.5 py-1.5 text-center shrink-0 border border-slate-100 min-w-[76px]">
+              <div class="text-[9px] font-semibold text-slate-400 tracking-tight leading-none mb-0.5">${remainLabel}</div>
+              <div class="text-xl font-black text-sky-600 leading-tight">${remain}</div>
+              <div class="text-[10px] font-medium text-slate-500 leading-none">${dayLabel}</div>
             </div>
 
           </div>
@@ -210,19 +212,16 @@
       });
     }
 
-    // ฟังก์ชันสลับภาษา TH / JP
     function switchLanguage(lang) {
       currentLang = lang;
-      
       document.getElementById('btnTH').classList.toggle('active', lang === 'TH');
       document.getElementById('btnJP').classList.toggle('active', lang === 'JP');
-
-      if (globalUserData) {
-        document.getElementById('empPosition').innerHTML = `${lang === 'TH' ? 'ตำแหน่ง' : '役職'}: <span class="font-semibold">${globalUserData.position || '-'}</span>`;
-        document.getElementById('empDept').innerHTML = `${lang === 'TH' ? 'แผนก' : '部署'}: <span class="font-semibold">${globalUserData.department || '-'}</span>`;
-      }
-
+      updateHeaderText();
       renderQuotaCards();
+    }
+
+    function openLeaveForm() {
+      window.location.href = 'leave-form.html';
     }
   </script>
 </body>
