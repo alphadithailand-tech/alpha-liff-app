@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ALPHA D.I. THAILAND - Leave Quota</title>
+  <title>ตรวจสอบสิทธิการลาคงเหลือ | ALPHA D.I.</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome Icons -->
@@ -30,27 +30,27 @@
     }
   </style>
 </head>
-<body class="text-slate-700 min-h-screen pb-28 select-none">
+<body class="text-slate-700 min-h-screen pb-24 select-none">
 
   <!-- Loading Screen -->
   <div id="loading" class="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-50 flex flex-col items-center justify-center text-white">
     <div class="w-10 h-10 border-3 border-white border-t-transparent rounded-full animate-spin mb-3"></div>
-    <p class="text-xs font-medium tracking-wide animate-pulse">กำลังโหลดข้อมูลวันลา...</p>
+    <p class="text-xs font-medium tracking-wide animate-pulse">กำลังโหลดข้อมูลสิทธิการลา...</p>
   </div>
 
   <!-- HEADER ZONE: MODERN SOFT GRADIENT -->
   <header class="bg-gradient-to-br from-sky-600 via-blue-600 to-indigo-700 text-white pt-6 pb-12 px-5 rounded-b-[2.5rem] soft-shadow relative overflow-hidden">
-    <!-- Background Decorative Glow -->
     <div class="absolute -right-12 -top-12 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
     <div class="absolute -left-12 -bottom-12 w-48 h-48 bg-cyan-400/10 rounded-full blur-2xl pointer-events-none"></div>
 
     <div class="max-w-md mx-auto relative z-10">
       
-      <!-- Top Bar: Company & Language Switcher -->
+      <!-- Top Bar: Back Button & Language Switcher -->
       <div class="flex items-center justify-between mb-6">
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold bg-white/15 text-white backdrop-blur-md border border-white/20">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5 animate-ping"></span> ALPHA D.I. THAILAND
-        </span>
+        <button onclick="goBackHome()" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-white/15 text-white backdrop-blur-md border border-white/20 active:scale-95 transition-all">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span id="backText">เมนูหลัก</span>
+        </button>
 
         <div class="flex items-center space-x-2">
           <span class="text-[11px] text-sky-100 font-medium">รหัส: <strong id="empIdDisplay" class="text-white">57201</strong></span>
@@ -82,20 +82,24 @@
     </div>
   </header>
 
-  <!-- MAIN CONTAINER: QUOTA CARDS LIST -->
-  <main class="max-w-md mx-auto px-4 -mt-6 relative z-20 space-y-3" id="quotaListContainer">
-    <!-- Dynamic Cards Rendered Here -->
-  </main>
-
-  <!-- BOTTOM FIXED ACTION BUTTON -->
-  <div class="fixed bottom-0 inset-x-0 bg-white/80 backdrop-blur-lg border-t border-slate-100 p-4 z-40">
-    <div class="max-w-md mx-auto">
-      <button onclick="openLeaveForm()" class="w-full bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white py-3.5 px-4 rounded-2xl font-bold text-xs tracking-wide shadow-xl shadow-slate-900/10 flex items-center justify-center space-x-2 transition-all">
-        <i class="fa-solid fa-paper-plane text-sky-400"></i>
-        <span id="btnApplyText">ยื่นใบลาหยุด (Apply Leave)</span>
-      </button>
+  <!-- MAIN CONTAINER: LEAVE QUOTA CARDS LIST -->
+  <main class="max-w-md mx-auto px-4 -mt-6 relative z-25 space-y-3">
+    
+    <!-- Section Title -->
+    <div class="flex items-center justify-between px-1 pt-1">
+      <h2 id="sectionTitle" class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center space-x-2">
+        <i class="fa-solid fa-chart-pie text-sky-600"></i>
+        <span>สิทธิการลาคงเหลือทั้งหมด (Leave Quota Summary)</span>
+      </h2>
+      <span class="text-[11px] text-slate-400 font-medium">ปี 2026</span>
     </div>
-  </div>
+
+    <!-- Quota List Container -->
+    <div id="quotaListContainer" class="space-y-3 pb-6">
+      <!-- Dynamic Quota Cards Rendered Here -->
+    </div>
+
+  </main>
 
   <script>
     const LIFF_ID = 'YOUR_LIFF_ID_HERE';
@@ -104,18 +108,19 @@
     let currentLang = 'TH';
     let globalUserData = null;
 
+    // ข้อมูลโควตาทั้ง 11 ประเภท พร้อมกำหนดสิทธิ์ตั้งต้น (Total Default Quota)
     const LEAVE_CONFIG_LIST = [
-      { code: 'AL', th: 'ลาพักร้อน', jp: '年次有給休暇', icon: '🌴', key: 'quotaAL', totalDefault: 6 },
-      { code: 'PL', th: 'ลากิจส่วนตัว', jp: '私用休暇', icon: '💼', key: 'quotaPL', totalDefault: 6 },
-      { code: 'UP', th: 'ลากิจไม่รับค่าจ้าง', jp: '無給私用休暇', icon: '⏳', key: 'quotaUP', totalDefault: 30 },
-      { code: 'SL', th: 'ลาป่วย', jp: '病気休暇', icon: '🤒', key: 'quotaSL', totalDefault: 30 },
-      { code: 'MP', th: 'ลาคลอดบุตร', jp: '産前産後・育児休暇', icon: '👶', key: 'quotaMP', totalDefault: 98 },
-      { code: 'OL', th: 'ลาอุปสมบท', jp: '出家休暇', icon: '🙏', key: 'quotaOL', totalDefault: 15 },
-      { code: 'FL', th: 'ลาร่วมงานพิธีศพ', jp: '忌引休暇', icon: '🕊️', key: 'quotaFL', totalDefault: 5 },
-      { code: 'WL', th: 'ลาพิธีมงคลสมรส', jp: '結婚休暇', icon: '💍', key: 'quotaWL', totalDefault: 3 },
-      { code: 'MS', th: 'ลารับราชการทหาร', jp: '兵役召集休暇', icon: '🎖️', key: 'quotaMS', totalDefault: 60 },
-      { code: 'MF', th: 'ลาทำหมัน', jp: '避妊手術休暇', icon: '🏥', key: 'quotaMF', totalDefault: 1 },
-      { code: 'SP', th: 'ลาพักร้อนพิเศษ', jp: '特別休暇', icon: '⭐', key: 'quotaSP', totalDefault: 10 }
+      { code: 'AL', th: 'ลาพักร้อน (Annual Leave)', jp: '年次有給休暇', icon: '🌴', key: 'quotaAL', totalDefault: 6 },
+      { code: 'PL', th: 'ลากิจส่วนตัว (Personal Leave)', jp: '私用休暇', icon: '💼', key: 'quotaPL', totalDefault: 6 },
+      { code: 'UP', th: 'ลากิจไม่รับค่าจ้าง (Unpaid Leave)', jp: '無給私用休暇', icon: '⏳', key: 'quotaUP', totalDefault: 30 },
+      { code: 'SL', th: 'ลาป่วย (Sick Leave)', jp: '病気休暇', icon: '🤒', key: 'quotaSL', totalDefault: 30 },
+      { code: 'MP', th: 'ลาคลอดบุตร (Maternity Leave)', jp: '産前産後・育児休暇', icon: '👶', key: 'quotaMP', totalDefault: 98 },
+      { code: 'OL', th: 'ลาอุปสมบท (Ordination Leave)', jp: '出家休暇', icon: '🙏', key: 'quotaOL', totalDefault: 15 },
+      { code: 'FL', th: 'ลาร่วมงานพิธีศพ (Funeral Leave)', jp: '忌引休暇', icon: '🕊️', key: 'quotaFL', totalDefault: 5 },
+      { code: 'WL', th: 'ลาพิธีมงคลสมรส (Wedding Leave)', jp: '結婚休暇', icon: '💍', key: 'quotaWL', totalDefault: 3 },
+      { code: 'MS', th: 'ลารับราชการทหาร (Military Leave)', jp: '兵役召集休暇', icon: '🎖️', key: 'quotaMS', totalDefault: 60 },
+      { code: 'MF', th: 'ลาทำหมัน (Sterilization Leave)', jp: '避妊手術休暇', icon: '🏥', key: 'quotaMF', totalDefault: 1 },
+      { code: 'SP', th: 'ลาพักร้อนพิเศษ (Special Leave)', jp: '特別休暇', icon: '⭐', key: 'quotaSP', totalDefault: 10 }
     ];
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -134,7 +139,7 @@
         await fetchUserQuota(profile.userId, profile.displayName);
       } catch (err) {
         console.error('LIFF Error:', err);
-        // Fallback สำหรับทดสอบหน้าจอ
+        // Fallback กรณีทดสอบหน้าเว็บ
         fetchUserQuota('U5ac1f3e292b3bc29539113ef0fe92c52', 'PRICHAYA KAEWKLAM');
       }
     }
@@ -166,7 +171,8 @@
       const deptLabel = currentLang === 'TH' ? 'แผนก' : '部署';
       document.getElementById('empPosition').textContent = `${posLabel}: ${globalUserData.position || '-'}`;
       document.getElementById('empDept').textContent = `${deptLabel}: ${globalUserData.department || '-'}`;
-      document.getElementById('btnApplyText').textContent = currentLang === 'TH' ? 'ยื่นใบลาหยุด (Apply Leave)' : '休暇申請を行う (Apply Leave)';
+      document.getElementById('backText').textContent = currentLang === 'TH' ? 'เมนูหลัก' : 'メインメニュー';
+      document.getElementById('sectionTitle').innerHTML = `<i class="fa-solid fa-chart-pie text-sky-600"></i><span>${currentLang === 'TH' ? 'สิทธิการลาคงเหลือทั้งหมด (Leave Quota Summary)' : '残存有給休暇一覧'}</span>`;
     }
 
     function renderQuotaCards() {
@@ -180,26 +186,30 @@
         const percentUsed = Math.min(100, Math.max(0, (used / total) * 100));
 
         const titleText = currentLang === 'TH' ? item.th : item.jp;
-        const remainLabel = currentLang === 'TH' ? 'โควตาคงเหลือ' : '残存日数';
+        const remainLabel = currentLang === 'TH' ? 'คงเหลือ' : '残り';
         const dayLabel = currentLang === 'TH' ? 'วัน' : '日';
+        const usedText = currentLang === 'TH' ? `ใช้ไป ${used} / ${total} วัน` : `使用済み ${used} / ${total} 日`;
 
         const cardHtml = `
-          <div class="bg-white rounded-2xl p-3.5 card-shadow border border-slate-100 flex items-center justify-between space-x-3 transition-all hover:shadow-md">
+          <div class="bg-white rounded-2xl p-4 card-shadow border border-slate-100 flex items-center justify-between space-x-3 transition-all hover:shadow-md">
             
             <!-- ไอคอนฝั่งซ้าย (ทรงกลมละมุน) -->
             <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl shrink-0 border border-sky-100">
               ${item.icon}
             </div>
 
-            <!-- กลาง: ชื่อประเภทลา + Progress Bar นุ่มๆ -->
+            <!-- กลาง: ชื่อประเภทลา + สถิติการใช้ + Progress Bar -->
             <div class="flex-1 min-w-0">
-              <h4 class="text-xs font-bold text-slate-800 truncate mb-1.5">${titleText}</h4>
+              <h4 class="text-xs font-bold text-slate-800 truncate mb-1">${titleText}</h4>
+              <div class="flex justify-between text-[11px] text-slate-400 font-light mb-1.5">
+                <span>${usedText}</span>
+              </div>
               <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                <div class="bg-rose-500 h-full rounded-full transition-all duration-500" style="width: ${percentUsed}%"></div>
+                <div class="bg-sky-500 h-full rounded-full transition-all duration-500" style="width: ${percentUsed}%"></div>
               </div>
             </div>
 
-            <!-- ฝั่งขวา: กล่องแสดงตัวเลขโควตาคงเหลือสไตล์ Modern Minimal -->
+            <!-- ฝั่งขวา: กล่องตัวเลขคงเหลือเน้นๆ -->
             <div class="bg-slate-50/80 rounded-xl px-3.5 py-1.5 text-center shrink-0 border border-slate-100 min-w-[76px]">
               <div class="text-[9px] font-semibold text-slate-400 tracking-tight leading-none mb-0.5">${remainLabel}</div>
               <div class="text-xl font-black text-sky-600 leading-tight">${remain}</div>
@@ -220,8 +230,9 @@
       renderQuotaCards();
     }
 
-    function openLeaveForm() {
-      window.location.href = 'leave-form.html';
+    function goBackHome() {
+      // ลิงก์กลับไปยังหน้าเมนูหลัก
+      window.location.href = 'index.html'; 
     }
   </script>
 </body>
