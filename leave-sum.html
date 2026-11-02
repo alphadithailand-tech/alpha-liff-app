@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="txt-title">ตรวจสอบสิทธิการลาคงเหลือ</title>
+    <title>ตรวจสอบสิทธิการลาคงเหลือ</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -44,14 +44,8 @@
                 <!-- ปุ่มย้อนกลับ -->
                 <button onclick="goBack()" class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-medium bg-black/40 text-white backdrop-blur-md border border-white/20">
                     <i class="fa-solid fa-arrow-left"></i>
-                    <span id="txt-back">เมนูหลัก</span>
+                    <span>เมนูหลัก</span>
                 </button>
-
-                <!-- ปุ่มสลับภาษา -->
-                <div class="inline-flex bg-black/40 backdrop-blur-md rounded-full p-1 border border-white/20">
-                    <button id="lang-th-btn" onclick="switchLanguage('th')" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white text-slate-900 shadow-sm">TH</button>
-                    <button id="lang-jp-btn" onclick="switchLanguage('jp')" class="px-2.5 py-0.5 rounded-full text-xs font-medium text-white">日本語</button>
-                </div>
             </div>
 
             <!-- Profile Info -->
@@ -59,7 +53,7 @@
                 <img id="user-avatar" src="https://via.placeholder.com/150" class="w-14 h-14 rounded-full object-cover border-2 border-white/80 shadow-md">
                 <div>
                     <h2 id="emp-name" class="text-base font-bold text-white tracking-tight">กำลังโหลด...</h2>
-                    <p class="text-xs text-white/90"><span id="txt-emp-id">รหัส</span>: <strong id="emp-id">-</strong> | <span id="txt-dept">แผนก</span>: <span id="emp-department">-</span></p>
+                    <p class="text-xs text-white/90">รหัส: <strong id="emp-id">-</strong> | แผนก: <span id="emp-department">-</span></p>
                 </div>
             </div>
         </div>
@@ -67,13 +61,13 @@
         <!-- CONTENT: 11 LEAVE QUOTAS -->
         <div class="flex-1 overflow-y-auto p-4 space-y-3 pb-8">
             <div class="flex items-center justify-between px-1">
-                <h3 id="txt-subtitle" class="text-xs font-bold text-slate-500 uppercase tracking-wider">สิทธิการลาคงเหลือทั้งหมด (11 ประเภท)</h3>
+                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">สิทธิการลาคงเหลือทั้งหมด (11 ประเภท)</h3>
                 <span class="text-xs text-slate-400">ปี 2026</span>
             </div>
 
             <!-- Container สำหรับแสดงการ์ดโควตา 11 ประเภท -->
             <div id="quota-cards-container" class="space-y-2.5">
-                <!-- Javascript จะ gen การ์ดมาใส่ตรงนี้ -->
+                <div class="text-center py-10 text-slate-400 text-xs">กำลังดึงข้อมูลโควตา...</div>
             </div>
         </div>
 
@@ -83,27 +77,21 @@
         const LIFF_ID = "2012053598-ClINT0ab";
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwo4qrNh69G-Pz1fvTcpBIkQesKSXyEqDiGwVYpVubWYTNEvgWrECBTE1qy5LerjgzvEg/exec"; 
 
-        // ข้อมูล 11 ประเภทการลา
+        // ข้อมูล 11 ประเภทการลา (ภาษาไทย)
         const LEAVE_TYPES = [
-            { code: 'AL', th: 'ลาพักร้อน (Annual Leave)', jp: '年次有給休暇', icon: '🌴', key: 'quotaAL', total: 6 },
-            { code: 'PL', th: 'ลากิจส่วนตัว (Personal Leave)', jp: '私用休暇', icon: '💼', key: 'quotaPL', total: 6 },
-            { code: 'UP', th: 'ลากิจไม่รับค่าจ้าง (Unpaid Leave)', jp: '無給私用休暇', icon: '⏳', key: 'quotaUP', total: 30 },
-            { code: 'SL', th: 'ลาป่วย (Sick Leave)', jp: '病気休暇', icon: '🤒', key: 'quotaSL', total: 30 },
-            { code: 'MP', th: 'ลาคลอดบุตร (Maternity Leave)', jp: '産前産後・育児休暇', icon: '👶', key: 'quotaMP', total: 98 },
-            { code: 'OL', th: 'ลาอุปสมบท (Ordination Leave)', jp: '出家休暇', icon: '🙏', key: 'quotaOL', total: 15 },
-            { code: 'FL', th: 'ลาร่วมงานพิธีศพ (Funeral Leave)', jp: '忌引休暇', icon: '🕊️', key: 'quotaFL', total: 5 },
-            { code: 'WL', th: 'ลาพิธีมงคลสมรส (Wedding Leave)', jp: '結婚休暇', icon: '💍', key: 'quotaWL', total: 3 },
-            { code: 'MS', th: 'ลารับราชการทหาร (Military Leave)', jp: '兵役召集休暇', icon: '🎖️', key: 'quotaMS', total: 60 },
-            { code: 'MF', th: 'ลาทำหมัน (Sterilization Leave)', jp: '避妊手術休暇', icon: '🏥', key: 'quotaMF', total: 1 },
-            { code: 'SP', th: 'ลาพักร้อนพิเศษ (Special Leave)', jp: '特別休暇', icon: '⭐', key: 'quotaSP', total: 10 }
+            { code: 'AL', name: 'ลาพักร้อน (Annual Leave)', icon: '🌴', key: 'quotaAL', totalDefault: 6 },
+            { code: 'PL', name: 'ลากิจส่วนตัว (Personal Leave)', icon: '💼', key: 'quotaPL', totalDefault: 6 },
+            { code: 'UP', name: 'ลากิจไม่รับค่าจ้าง (Unpaid Leave)', icon: '⏳', key: 'quotaUP', totalDefault: 30 },
+            { code: 'SL', name: 'ลาป่วย (Sick Leave)', icon: '🤒', key: 'quotaSL', totalDefault: 30 },
+            { code: 'MP', name: 'ลาคลอดบุตร (Maternity Leave)', icon: '👶', key: 'quotaMP', totalDefault: 98 },
+            { code: 'OL', name: 'ลาอุปสมบท (Ordination Leave)', icon: '🙏', key: 'quotaOL', totalDefault: 15 },
+            { code: 'FL', name: 'ลาร่วมงานพิธีศพ (Funeral Leave)', icon: '🕊️', key: 'quotaFL', totalDefault: 5 },
+            { code: 'WL', name: 'ลาพิธีมงคลสมรส (Wedding Leave)', icon: '💍', key: 'quotaWL', totalDefault: 3 },
+            { code: 'MS', name: 'ลารับราชการทหาร (Military Leave)', icon: '🎖️', key: 'quotaMS', totalDefault: 60 },
+            { code: 'MF', name: 'ลาทำหมัน (Sterilization Leave)', icon: '🏥', key: 'quotaMF', totalDefault: 1 },
+            { code: 'SP', name: 'ลาพักร้อนพิเศษ (Special Leave)', icon: '⭐', key: 'quotaSP', totalDefault: 10 }
         ];
 
-        const translations = {
-            th: { title: "ตรวจสอบสิทธิการลาคงเหลือ", back: "เมนูหลัก", empId: "รหัส", dept: "แผนก", subtitle: "สิทธิการลาคงเหลือทั้งหมด (11 ประเภท)", remain: "คงเหลือ", day: "วัน" },
-            jp: { title: "休暇残日数確認", back: "メインメニュー", empId: "社員ID", dept: "部署", subtitle: "残存有給休暇一覧", remain: "残り", day: "日" }
-        };
-
-        let currentLang = 'th';
         let cachedUserData = null;
 
         window.onload = function() {
@@ -121,18 +109,22 @@
                 })
                 .catch(err => {
                     console.error("LIFF Init Error:", err);
-                    fetchUserData();
+                    fetchUserData(); 
                 });
         }
 
         async function fetchUserData() {
             try {
-                let userId = liff.isLoggedIn() ? (await liff.getProfile()).userId : "U5ac1f3e292b3bc29539113ef0fe92c52";
+                let userId = "U5ac1f3e292b3bc29539113ef0fe92c52"; 
                 if (liff.isLoggedIn()) {
-                    document.getElementById('user-avatar').src = (await liff.getProfile()).pictureUrl || 'https://via.placeholder.com/150';
+                    const profile = await liff.getProfile();
+                    userId = profile.userId;
+                    if (profile.pictureUrl) {
+                        document.getElementById('user-avatar').src = profile.pictureUrl;
+                    }
                 }
 
-                const response = await fetch(`${WEB_APP_URL}?action=getUserProfile&userId=${userId}`);
+                const response = await fetch(`${WEB_APP_URL}?action=getUserProfile&userId=${encodeURIComponent(userId)}`);
                 const res = await response.json();
 
                 if (res.status === 'success') {
@@ -142,10 +134,11 @@
                     document.getElementById('emp-department').innerText = cachedUserData.department || '-';
                     renderQuotaCards();
                 } else {
-                    alert(res.message || "ไม่พบข้อมูลพนักงาน");
+                    alert(res.message || "ไม่พบข้อมูลพนักงานในระบบ");
                 }
             } catch (error) {
                 console.error("Fetch Error:", error);
+                document.getElementById('quota-cards-container').innerHTML = `<p class="text-center text-rose-500 text-xs py-4">ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่อีกครั้ง</p>`;
             }
         }
 
@@ -155,13 +148,9 @@
 
             LEAVE_TYPES.forEach(item => {
                 const remain = cachedUserData ? parseFloat(cachedUserData[item.key] || 0) : 0;
-                const total = item.total;
+                const total = item.totalDefault;
                 const used = Math.max(0, total - remain);
                 const percent = Math.min(100, Math.max(0, (used / total) * 100));
-                
-                const title = currentLang === 'th' ? item.th : item.jp;
-                const remainLabel = translations[currentLang].remain;
-                const dayLabel = translations[currentLang].day;
 
                 const card = `
                     <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/80 flex items-center justify-between space-x-3">
@@ -169,15 +158,15 @@
                             ${item.icon}
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h4 class="text-xs font-bold text-slate-800 truncate mb-1">${title}</h4>
+                            <h4 class="text-xs font-bold text-slate-800 truncate mb-1">${item.name}</h4>
                             <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                                <div class="bg-brand h-full rounded-full" style="width: ${percent}%"></div>
+                                <div class="bg-brand h-full rounded-full transition-all duration-500" style="width: ${percent}%"></div>
                             </div>
                         </div>
                         <div class="bg-slate-50 rounded-xl px-3 py-1 text-center shrink-0 border border-slate-100 min-w-[70px]">
-                            <div class="text-[9px] font-semibold text-slate-400 uppercase leading-none mb-0.5">${remainLabel}</div>
+                            <div class="text-[9px] font-semibold text-slate-400 uppercase leading-none mb-0.5">คงเหลือ</div>
                             <div class="text-lg font-black text-brand leading-tight">${remain}</div>
-                            <div class="text-[10px] font-medium text-slate-500 leading-none">${dayLabel}</div>
+                            <div class="text-[10px] font-medium text-slate-500 leading-none">วัน</div>
                         </div>
                     </div>
                 `;
@@ -185,22 +174,8 @@
             });
         }
 
-        function switchLanguage(lang) {
-            currentLang = lang;
-            const t = translations[lang];
-            document.getElementById('lang-th-btn').className = lang === 'th' ? "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white text-slate-900 shadow-sm" : "px-2.5 py-0.5 rounded-full text-xs font-medium text-white";
-            document.getElementById('lang-jp-btn').className = lang === 'jp' ? "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white text-slate-900 shadow-sm" : "px-2.5 py-0.5 rounded-full text-xs font-medium text-white";
-            
-            document.getElementById('txt-title').innerText = t.title;
-            document.getElementById('txt-back').innerText = t.back;
-            document.getElementById('txt-emp-id').innerText = t.empId;
-            document.getElementById('txt-dept').innerText = t.dept;
-            document.getElementById('txt-subtitle').innerText = t.subtitle;
-            renderQuotaCards();
-        }
-
         function goBack() {
-            window.location.href = 'index.html'; // กลับไปหน้าเมนูหลัก
+            window.location.href = 'index.html'; 
         }
     </script>
 </body>
