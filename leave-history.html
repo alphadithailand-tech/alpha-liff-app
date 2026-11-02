@@ -74,9 +74,31 @@
 
     </div>
 
+    <!-- MODAL แนบหลักฐานย้อนหลัง -->
+    <div id="upload-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl p-5 max-w-xs w-full shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                <h3 class="font-bold text-slate-800 text-sm">แนบหลักฐานย้อนหลัง</h3>
+                <button onclick="closeUploadModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="space-y-2">
+                <p class="text-xs text-slate-500">เลือกไฟล์เอกสาร หรือรูปภาพใบรับรองแพทย์/หลักฐานประกอบการลา</p>
+                <input type="file" id="file-input" accept="image/*,.pdf" class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand/10 file:text-brand hover:file:bg-brand/20">
+            </div>
+
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeUploadModal()" class="w-1/2 py-2 rounded-xl text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200">ยกเลิก</button>
+                <button onclick="submitLateAttachment()" id="btn-upload-submit" class="w-1/2 py-2 rounded-xl text-xs font-medium text-white bg-brand hover:bg-brand-dark">อัปโหลด</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const LIFF_ID = "2012053598-ClINT0ab";
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwo4qrNh69G-Pz1fvTcpBIkQesKSXyEqDiGwVYpVubWYTNEvgWrECBTE1qy5LerjgzvEg/exec"; 
+
+        let selectedRequestId = '';
 
         window.onload = function() {
             initLiff();
@@ -108,7 +130,6 @@
                     }
                 }
 
-                // 1. ดึงข้อมูล Profile เบื้องต้นก่อน
                 const profileRes = await fetch(`${WEB_APP_URL}?action=getUserProfile&userId=${encodeURIComponent(userId)}`);
                 const profileJson = await profileRes.json();
                 if (profileJson.status === 'success') {
@@ -118,7 +139,6 @@
                     document.getElementById('emp-department').innerText = data.department || '-';
                 }
 
-                // 2. ดึงประวัติการลา
                 const response = await fetch(`${WEB_APP_URL}?action=getLeaveHistory&userId=${encodeURIComponent(userId)}`);
                 const res = await response.json();
 
@@ -157,9 +177,15 @@
                     statusBg = 'bg-amber-50 text-amber-600 border-amber-200';
                 }
 
-                const attachLink = item.attachmentUrl && item.attachmentUrl.startsWith('http') 
-                    ? `<a href="${item.attachmentUrl}" target="_blank" class="text-sky-600 underline text-[11px] font-medium"><i class="fa-solid fa-paperclip mr-1"></i>ดูหลักฐานแนบ</a>` 
-                    : `<span class="text-slate-400 text-[11px]">ไม่มีหลักฐานแนบ</span>`;
+                // เงื่อนไขตรวจสอบการแสดงผลหลักฐาน
+                let attachContent = '';
+                const hasAttachment = item.attachmentUrl && item.attachmentUrl.startsWith('http');
+
+                if (hasAttachment) {
+                    attachContent = `<a href="${item.attachmentUrl}" target="_blank" class="text-sky-600 underline text-[11px] font-medium"><i class="fa-solid fa-paperclip mr-1"></i>ดูหลักฐานแนบ</a>`;
+                } else {
+                    attachContent = `<button onclick="openUploadModal('${item.requestId}')" class="px-2.5 py-1 rounded-lg bg-brand/10 text-brand hover:bg-brand/20 font-semibold text-[11px] transition-all"><i class="fa-solid fa-cloud-arrow-up mr-1"></i>แนบหลักฐานย้อนหลัง</button>`;
+                }
 
                 const card = `
                     <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 space-y-2.5">
@@ -173,12 +199,70 @@
                         </div>
                         <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
                             <span class="text-slate-400">ยื่นเมื่อ: ${item.timestamp}</span>
-                            ${attachLink}
+                            <div>${attachContent}</div>
                         </div>
                     </div>
                 `;
                 container.insertAdjacentHTML('beforeend', card);
             });
+        }
+
+        function openUploadModal(reqId) {
+            selectedRequestId = reqId;
+            document.getElementById('file-input').value = '';
+            document.getElementById('upload-modal').classList.remove('hidden');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('upload-modal').classList.add('hidden');
+        }
+
+        async function submitLateAttachment() {
+            const fileInput = document.getElementById('file-input');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('กรุณาเลือกไฟล์หลักฐานที่ต้องการอัปโหลด');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const btnSubmit = document.getElementById('btn-upload-submit');
+            btnSubmit.innerText = 'กำลังส่ง...';
+            btnSubmit.disabled = true;
+
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64Data = e.target.result;
+                const payload = {
+                    action: 'uploadLateAttachment',
+                    requestId: selectedRequestId,
+                    fileName: file.name,
+                    mimeType: file.type,
+                    fileData: base64Data
+                };
+
+                try {
+                    const res = await fetch(WEB_APP_URL, {
+                        method: 'POST',
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await res.json();
+
+                    if (result.status === 'success') {
+                        alert('แนบหลักฐานย้อนหลังเรียบร้อยแล้ว');
+                        closeUploadModal();
+                        fetchLeaveHistory(); // โหลดรายการใหม่
+                    } else {
+                        alert('เกิดข้อผิดพลาด: ' + result.message);
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('ไม่สามารถอัปโหลดไฟล์ได้ กรุณาลองใหม่อีกครั้ง');
+                } finally {
+                    btnSubmit.innerText = 'อัปโหลด';
+                    btnSubmit.disabled = false;
+                }
+            };
+            reader.readAsDataURL(file);
         }
 
         function goBack() {
