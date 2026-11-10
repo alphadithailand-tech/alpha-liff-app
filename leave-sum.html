@@ -148,8 +148,14 @@
 
             LEAVE_TYPES.forEach(item => {
                 const remain = cachedUserData ? parseFloat(cachedUserData[item.key] || 0) : 0;
-                const total = item.totalDefault;
+                
+                // สมมติฐานค่าตั้งต้นสิทธิ์ทั้งหมด (หรือปรับให้ตรงกับค่าสูงสุดของแต่ละประเภท)
+                const total = item.totalDefault || 30; 
+                
+                // คำนวณหาส่วนที่ใช้ไปแล้ว
                 const used = Math.max(0, total - remain);
+                
+                // คำนวณเปอร์เซ็นต์ความกว้างของหลอด (ใช้ไป / ทั้งหมด)
                 const percent = Math.min(100, Math.max(0, (used / total) * 100));
 
                 const card = `
@@ -173,7 +179,6 @@
                 container.insertAdjacentHTML('beforeend', card);
             });
         }
-
         function goBack() {
             window.location.href = 'main-leave.html'; 
         }
